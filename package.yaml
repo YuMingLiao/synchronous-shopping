@@ -1,0 +1,19 @@
+name:                synchronous-shopping 
+version:             1.0.0.0
+author:              Author name here
+maintainer:          example@example.com
+copyright:           "MIT"
+
+dependencies:
+  - base
+  - containers
+  - PSQueue
+  - extra
+  - monoidal-containers
+  - pretty-simple
+  - text
+  - multiset
+executable:
+  main: app/Main.hs
+library:
+  source-dirs: src
