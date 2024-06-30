@@ -83,9 +83,6 @@ instance Eq Path where
   (==) (Path _ t1) (Path _ t2) = t1 == t2
 instance Ord Path where
   compare (Path _ t1) (Path _ t2) = compare t1 t2
-instance Semigroup Path where
-  (Path p1 t1) <> (Path p2 t2) | t1 <= t2 = Path p1 t1
-                               | otherwise = Path p2 t2 
 
 instance {-# OVERLAPPING #-} Show (M.Map (Set FishType) Time) where
   show m = show $ L.map (\(a,b) -> (S.toList a,b)) $ M.toList m 
@@ -168,7 +165,7 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
             cost = maybe (error "no cost") id $ M.lookup (u,v) edgeCostMap 
         adjs = maybe [] id $ M.lookup u adjacencyMap
         genState state u v cost = 
-          case isWorthStepping of 
+          case debug "uState" uState $ debug "vState" vState $ debug "altState" altState $ debug "vState'" vState' $ isWorthStepping of 
                True  -> Just vState' 
                False -> Nothing
           where
@@ -177,10 +174,10 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
             vFishTypes = maybe (error "no vFishTypes") id $ M.lookup v fishTypeMap
             altState = M.foldlWithKey foldlFunc M.empty uState
               where 
-                foldlFunc acc k (Path p a) =
+                foldlFunc acc k (Path p a) | debug "acc" acc $ debug "k" k $ debug "a" a $ True =
                   if | a /= 1/0 -> let vStep = M.singleton (k `S.union` vFishTypes) (Path (v:p) (a + cost))
-                                   in M.unionWithKey unionFunc acc vStep
-                     | otherwise -> M.empty 
+                                   in M.unionWithKey unionFunc vStep acc
+                     | otherwise -> acc 
 	    vState' = M.unionWithKey unionFunc altState vState
             unionFunc k a b = min a b
             isWorthStepping = 
