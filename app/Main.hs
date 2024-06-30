@@ -6,9 +6,8 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE DerivingVia #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE DataKinds #-}
+
 module Main where
 import Prelude hiding (foldl)
 import Data.Monoid
@@ -19,11 +18,7 @@ import qualified Data.Set as S
 import Data.Map
 import qualified Data.Map as M
 import Data.Tuple (swap)
-import Data.List.Extra (groupSort)
-import Text.Pretty.Simple (pShow)
 import Data.Text.Lazy (unpack)
-import Deriving.On
-
 main :: IO ()
 main = do
   interact $ processInput
@@ -74,7 +69,7 @@ data Path = Path {
 data SourceOpt = Opt {
   time :: Time,
   source :: Vertex
-} deriving (Eq, Ord) via On SourceOpt "time"
+} 
 
 
 instance Show Path where
@@ -83,6 +78,11 @@ instance Eq Path where
   (==) (Path _ t1) (Path _ t2) = t1 == t2
 instance Ord Path where
   compare (Path _ t1) (Path _ t2) = compare t1 t2
+
+instance Eq SourceOpt where
+  (==) (Opt t1 _) (Opt t2 _) = t1 == t2
+instance Ord SourceOpt where
+  compare (Opt t1 _) (Opt t2 _) = compare t1 t2
 
 instance {-# OVERLAPPING #-} Show (M.Map (Set FishType) Time) where
   show m = show $ L.map (\(a,b) -> (S.toList a,b)) $ M.toList m 
@@ -120,9 +120,9 @@ sample = Test {
   ans = Time 30
 }
 
-toAdjacencyMap edges = M.fromList (groupSort edges)
+toAdjacencyMap edges = M.fromListWith (++) $ L.map (\(a,b) -> (a,b:[])) edges
 
-shop n k centers road = undefined
+
 
 findShortestTwoPaths testData@(Test {..}) = go sortedList 
   where
@@ -178,7 +178,7 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
                   if | a /= 1/0 -> let vStep = M.singleton (k `S.union` vFishTypes) (Path (v:p) (a + cost))
                                    in M.unionWithKey unionFunc vStep acc
                      | otherwise -> acc 
-	    vState' = M.unionWithKey unionFunc altState vState
+            vState' = M.unionWithKey unionFunc altState vState
             unionFunc k a b = min a b
             isWorthStepping = 
               if | vState' == vState -> False
