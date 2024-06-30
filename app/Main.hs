@@ -48,14 +48,15 @@ debug s a b | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) b
             | otherwise = b   
 debugId s a | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) a 
             | otherwise = a   
-
+debugWhen pred | pred && debugFlag == True = debug
+               | otherwise = \_ _ b -> b 
 
 
 newtype Time = Time {
   unTime :: Float
 } deriving (Eq, Ord, Num, Fractional, RealFrac, Real)
 instance Show Time where
-  show (Time t) | t == 1/0 = show t
+  show (Time t) | t == 1/0 = "∞"
                 | otherwise =  show $ round t
 instance Semigroup Time where
   a <> b | a <= b = a
@@ -84,8 +85,14 @@ instance Eq SourceOpt where
 instance Ord SourceOpt where
   compare (Opt t1 _) (Opt t2 _) = compare t1 t2
 
-instance {-# OVERLAPPING #-} Show (M.Map (Set FishType) Time) where
+instance {-# OVERLAPPING #-} Show a => Show (M.Map (Set FishType) a) where
   show m = show $ L.map (\(a,b) -> (S.toList a,b)) $ M.toList m 
+
+instance {-# OVERLAPPING #-} Show (Set FishType) where
+  show s = show $ S.toList s
+ 
+instance {-# OVERLAPPING #-} Show (M.Map Vertex NodeState) where
+  show m = show $ M.toList m
 
 type FishType = Int
 type Vertex = Int
@@ -157,15 +164,16 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
       where
         (state', queue') {- | debugL (("u",u):("adjacencyMap",adjacencyMap):("adjs",adjs):[]) True -} = L.foldl f (state,rest) adjs
         f (state, rest) v = 
-          case debug "v" v $ genState state u v cost of
-               Just vState' -> debug "update state'" vState' $ (M.update (const (Just vState')) v state, M.insert sourceOpt sourceOpt rest)
+          case debugWhen (hasFish v) "v" v $ genState state u v cost of
+               Just vState' -> debugWhen (hasFish v) "update state'" vState' $ (M.update (const (Just vState')) v state, M.insert sourceOpt sourceOpt rest)
                  where sourceOpt = Opt (t + cost) v
                Nothing -> debug "no update" "" (state, rest)
           where
             cost = maybe (error "no cost") id $ M.lookup (u,v) edgeCostMap 
+        hasFish v = v == 166 || v == 820 || v == 928
         adjs = maybe [] id $ M.lookup u adjacencyMap
         genState state u v cost = 
-          case debug "uState" uState $ debug "vState" vState $ debug "altState" altState $ debug "vState'" vState' $ isWorthStepping of 
+          case debugWhen (hasFish v) "uState" uState $ debugWhen (hasFish v) "vState" vState $ debugWhen (hasFish v) "altState" altState $ debugWhen (hasFish v) "vState'" vState' $ isWorthStepping of 
                True  -> Just vState' 
                False -> Nothing
           where
@@ -174,9 +182,9 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
             vFishTypes = maybe (error "no vFishTypes") id $ M.lookup v fishTypeMap
             altState = M.foldlWithKey foldlFunc M.empty uState
               where 
-                foldlFunc acc k (Path p a) | debug "acc" acc $ debug "k" k $ debug "a" a $ True =
+                foldlFunc acc k path@(Path p a) | debug "acc" acc $ debug "k" k $ debug "a" a $ True =
                   if | a /= 1/0 -> let vStep = M.singleton (k `S.union` vFishTypes) (Path (v:p) (a + cost))
-                                   in M.unionWithKey unionFunc vStep acc
+                                   in debug "found /= ∞" (M.singleton k path) $ M.unionWithKey unionFunc vStep acc
                      | otherwise -> acc 
             vState' = M.unionWithKey unionFunc altState vState
             unionFunc k a b = min a b
