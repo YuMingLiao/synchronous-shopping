@@ -20,7 +20,6 @@ import Data.Map
 import qualified Data.Map as M
 import Data.Tuple (swap)
 import Data.List.Extra (groupSort)
-import qualified Data.Map.Monoidal as MM
 import Text.Pretty.Simple (pShow)
 import Data.Text.Lazy (unpack)
 import Deriving.On
@@ -88,8 +87,8 @@ instance Semigroup Path where
   (Path p1 t1) <> (Path p2 t2) | t1 <= t2 = Path p1 t1
                                | otherwise = Path p2 t2 
 
-instance {-# OVERLAPPING #-} Show (MM.MonoidalMap (Set FishType) Time) where
-  show m = show $ L.map (\(a,b) -> (S.toList a,b)) $ MM.toList m 
+instance {-# OVERLAPPING #-} Show (M.Map (Set FishType) Time) where
+  show m = show $ L.map (\(a,b) -> (S.toList a,b)) $ M.toList m 
 
 type FishType = Int
 type Vertex = Int
@@ -131,27 +130,27 @@ shop n k centers road = undefined
 findShortestTwoPaths testData@(Test {..}) = go sortedList 
   where
     finalState = debugId "finalState: " $ findFinalState testData
-    sortedList = L.sortOn ((\(Path _ t) -> t) . snd) $ MM.toList finalState
+    sortedList = L.sortOn ((\(Path _ t) -> t) . snd) $ M.toList finalState
     completions = L.filter f [(x,y) |  x <- sortedList, y <- sortedList]
     f ((s1,_),(s2,_)) = (s1 `S.union` s2) == (S.fromList [1..numFishTypes])
     go sortedList = (\((_,Path _ t1),(_,Path _ t2))-> max t1 t2) $ head $ L.sortOn sortFunc completions
     sortFunc ((_,Path _ t1),(_,Path _ t2)) = max t1 t2 
 
-findFinalState :: Test -> MM.MonoidalMap (Set FishType) Path
+findFinalState :: Test -> M.Map (Set FishType) Path
 findFinalState testData@(Test {..}) = 
  maybe (error "no final state") id $ M.lookup numNodes $ dijkstra testData 1
 
     
-type NodeState = MM.MonoidalMap (Set FishType) Path
+type NodeState = M.Map (Set FishType) Path
 
 dijkstra (Test {..}) start = go initialStateMap initialQueue 
   where
     nodeStateDef :: NodeState 
-    nodeStateDef = MM.fromList $ L.map (,Path [] (Time (1/0))) $ S.toList $ S.powerSet [1..numFishTypes] 
+    nodeStateDef = M.fromList $ L.map (,Path [] (Time (1/0))) $ S.toList $ S.powerSet [1..numFishTypes] 
     startState = mconcat (startFishState:nodeStateDef:[]) 
       where
         startFishTypes = maybe (error "no startFishTypes") id $ M.lookup start fishTypeMap 
-        startFishState = MM.singleton startFishTypes (Path [start] (Time 0)) 
+        startFishState = M.singleton startFishTypes (Path [start] (Time 0)) 
     initialStateMap = M.update (const (Just startState)) start $ M.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
     initialQueue = M.singleton s s
       where s = Opt (Time 0) start
@@ -162,31 +161,31 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
         (state', queue') {- | debugL (("u",u):("adjacencyMap",adjacencyMap):("adjs",adjs):[]) True -} = L.foldl f (state,rest) adjs
         f (state, rest) v = 
           case debug "v" v $ genState state u v cost of
-               Just state' -> debug "update state'" state' $ (M.update (const (Just state')) v state, M.insert sourceOpt sourceOpt rest)
+               Just vState' -> debug "update state'" vState' $ (M.update (const (Just vState')) v state, M.insert sourceOpt sourceOpt rest)
                  where sourceOpt = Opt (t + cost) v
                Nothing -> debug "no update" "" (state, rest)
           where
             cost = maybe (error "no cost") id $ M.lookup (u,v) edgeCostMap 
         adjs = maybe [] id $ M.lookup u adjacencyMap
         genState state u v cost = 
-          case isWorthStepping altState vState of 
-               True  -> Just (mconcat (altState:vState:[]))
+          case isWorthStepping of 
+               True  -> Just vState' 
                False -> Nothing
           where
             uState = maybe (error "no uState") id $ M.lookup u state
             vState = maybe (error "no vState") id $ M.lookup v state
             vFishTypes = maybe (error "no vFishTypes") id $ M.lookup v fishTypeMap
-            altState = MM.foldMapWithKey foldMapFunc uState
+            altState = M.foldlWithKey foldlFunc M.empty uState
               where 
-                foldMapFunc k (Path p a) =
-                  if | a /= 1/0 -> MM.singleton (k `S.union` vFishTypes) (Path (v:p) (a + cost))
-                     | otherwise -> MM.empty 
-               
-            isWorthStepping altS s = 
-              if | state' == s -> False
+                foldlFunc acc k (Path p a) =
+                  if | a /= 1/0 -> let vStep = M.singleton (k `S.union` vFishTypes) (Path (v:p) (a + cost))
+                                   in M.unionWithKey unionFunc acc vStep
+                     | otherwise -> M.empty 
+	    vState' = M.unionWithKey unionFunc altState vState
+            unionFunc k a b = min a b
+            isWorthStepping = 
+              if | vState' == vState -> False
                  | otherwise -> True 
-              where
-                state' = mconcat (altS:s:[])
 
 -- TODO: [x] NodeState needs to be MonoidalMap. 
 --       [x] And Time needs to be a newtype with customized <>.
