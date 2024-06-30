@@ -1,3 +1,5 @@
 resolver: lts-22.26
 packages:
   - .
+extra-deps:
+  - derivingvia-extras-0.1.0.0@sha256:36f1bbdffd936678d115bd81d1ab65786ec220d5ae8ca2e7bffb99d8545befd7,1086

@@ -6,11 +6,13 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE DerivingVia #-}
+{-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE DataKinds #-}
 module Main where
 import Prelude hiding (foldl)
 import Data.Monoid
 import qualified Data.List as L
-import qualified Data.PSQueue as PQ hiding (foldr)
 import Debug.Trace
 import Data.Set (Set)
 import qualified Data.Set as S
@@ -21,6 +23,7 @@ import Data.List.Extra (groupSort)
 import qualified Data.Map.Monoidal as MM
 import Text.Pretty.Simple (pShow)
 import Data.Text.Lazy (unpack)
+import Deriving.On
 
 main :: IO ()
 main = do
@@ -68,6 +71,13 @@ data Path = Path {
   path :: [Vertex],
   time :: Time
 }
+
+data SourceOpt = Opt {
+  time :: Time,
+  source :: Vertex
+} deriving (Eq, Ord) via On SourceOpt "time"
+
+
 instance Show Path where
   show (Path path time) = show (time, path)
 instance Eq Path where
@@ -143,15 +153,17 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
         startFishTypes = maybe (error "no startFishTypes") id $ M.lookup start fishTypeMap 
         startFishState = MM.singleton startFishTypes (Path [start] (Time 0)) 
     initialStateMap = M.update (const (Just startState)) start $ M.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
-    initialQueue = PQ.singleton start (Time 0)
-    go :: M.Map Vertex NodeState -> PQ.PSQ Vertex Time -> M.Map Vertex NodeState
-    go state (PQ.minView -> Nothing) = state
-    go state (PQ.minView -> Just ((u PQ.:-> t), rest)) = go state' queue'
+    initialQueue = M.singleton s s
+      where s = Opt (Time 0) start
+    go :: M.Map Vertex NodeState -> M.Map SourceOpt SourceOpt -> M.Map Vertex NodeState
+    go state (M.minView -> Nothing) = state
+    go state (M.minView -> Just ((Opt t u), rest)) = go state' queue'
       where
         (state', queue') {- | debugL (("u",u):("adjacencyMap",adjacencyMap):("adjs",adjs):[]) True -} = L.foldl f (state,rest) adjs
         f (state, rest) v = 
           case debug "v" v $ genState state u v cost of
-               Just state' -> debug "update state'" state' $ (M.update (const (Just state')) v state, PQ.insert v (t + cost) rest)
+               Just state' -> debug "update state'" state' $ (M.update (const (Just state')) v state, M.insert sourceOpt sourceOpt rest)
+                 where sourceOpt = Opt (t + cost) v
                Nothing -> debug "no update" "" (state, rest)
           where
             cost = maybe (error "no cost") id $ M.lookup (u,v) edgeCostMap 

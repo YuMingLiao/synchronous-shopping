@@ -12,7 +12,7 @@ dependencies:
   - monoidal-containers
   - pretty-simple
   - text
-  - multiset
+  - derivingvia-extras
 executable:
   main: app/Main.hs
 library:
