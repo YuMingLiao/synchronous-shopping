@@ -19,6 +19,7 @@ import Data.Map
 import qualified Data.Map as M
 import Data.Tuple (swap)
 import Data.Text.Lazy (unpack)
+import Data.Maybe (fromJust)
 main :: IO ()
 main = do
   interact $ processInput
@@ -43,7 +44,7 @@ main = do
  
 -- print $ findShortestTwoPaths example 
 
-debugFlag = False
+debugFlag = True
 debug s a b | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) b 
             | otherwise = b   
 debugId s a | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) a 
@@ -71,7 +72,9 @@ data SourceOpt = Opt {
   time :: Time,
   source :: Vertex
 } 
-
+instance Show SourceOpt where
+  show (Opt t s) | s == 166 || s == 820 || s == 928 = show (t,s)
+                 | otherwise = show ""
 
 instance Show Path where
   show (Path path time) = show (time, path)
@@ -81,10 +84,10 @@ instance Ord Path where
   compare (Path _ t1) (Path _ t2) = compare t1 t2
 
 instance Eq SourceOpt where
-  (==) (Opt t1 _) (Opt t2 _) = t1 == t2
+  (==) _ _ = False
 instance Ord SourceOpt where
-  compare (Opt t1 _) (Opt t2 _) = compare t1 t2
-
+  compare (Opt t1 v1) (Opt t2 v2) = debugWhen (eiShop v1 v2)("useCompare" ++ unwords [show v1,show t1,show v2,show t2, show (compare t1 t2)]) "" $ compare t1 t2
+    where eiShop v1 v2 =v1 `elem` ([166,820,928] :: [Vertex]) || v2 `elem` ([166,820,928] :: [Vertex])
 instance {-# OVERLAPPING #-} Show a => Show (M.Map (Set FishType) a) where
   show m = show $ L.map (\(a,b) -> (S.toList a,b)) $ M.toList m 
 
@@ -102,8 +105,8 @@ data Test = Test {
   numFishTypes :: FishType,
   fishTypeMap :: M.Map Vertex (Set FishType),
   edgeCostMap :: M.Map (Vertex, Vertex) Time,
-  adjacencyMap :: M.Map Vertex [Vertex],
-  ans :: Time
+  adjacencyMap :: M.Map Vertex [Vertex]
+  -- ans :: Time
  }
 
 example = Test {
@@ -113,8 +116,7 @@ example = Test {
   edgeCostMap = let 
       undirectedEdgeCostList = [((1,2),10),((1,3),15),((1,4),1),((3,5),5)]
     in M.fromList $ undirectedEdgeCostList ++ L.map (\(e,t) -> (swap e, t)) undirectedEdgeCostList,
-  adjacencyMap = toAdjacencyMap (M.keys (edgeCostMap example)), 
-  ans = Time 20
+  adjacencyMap = toAdjacencyMap (M.keys (edgeCostMap example)) --, ans = Time 20
 }
 sample = Test {
   numNodes = 5,
@@ -123,8 +125,7 @@ sample = Test {
   edgeCostMap = let 
       undirectedEdgeCostList = [((1,2),10), ((1,3),10), ((2,4),10), ((3,5),10), ((4,5),10)]
     in M.fromList $ undirectedEdgeCostList ++ L.map (\(e,t) -> (swap e, t)) undirectedEdgeCostList,
-  adjacencyMap = toAdjacencyMap (M.keys (edgeCostMap sample)),
-  ans = Time 30
+  adjacencyMap = toAdjacencyMap (M.keys (edgeCostMap sample)) --, ans = Time 30
 }
 
 toAdjacencyMap edges = M.fromListWith (++) $ L.map (\(a,b) -> (a,b:[])) edges
@@ -133,7 +134,7 @@ toAdjacencyMap edges = M.fromListWith (++) $ L.map (\(a,b) -> (a,b:[])) edges
 
 findShortestTwoPaths testData@(Test {..}) = go sortedList 
   where
-    finalState = debugId "finalState: " $ findFinalState testData
+    finalState = findFinalState testData
     sortedList = L.sortOn ((\(Path _ t) -> t) . snd) $ M.toList finalState
     completions = L.filter f [(x,y) |  x <- sortedList, y <- sortedList]
     f ((s1,_),(s2,_)) = (s1 `S.union` s2) == (S.fromList [1..numFishTypes])
@@ -160,31 +161,31 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
       where s = Opt (Time 0) start
     go :: M.Map Vertex NodeState -> M.Map SourceOpt SourceOpt -> M.Map Vertex NodeState
     go state (M.minView -> Nothing) = state
-    go state (M.minView -> Just ((Opt t u), rest)) = go state' queue'
+    go state (M.minView -> Just ((Opt t u), rest)) | debug "queue" ((Opt t u), rest) True = go state' queue'
       where
-        (state', queue') {- | debugL (("u",u):("adjacencyMap",adjacencyMap):("adjs",adjs):[]) True -} = L.foldl f (state,rest) adjs
+        (state', queue') = L.foldl f (state,rest) adjs
         f (state, rest) v = 
-          case debugWhen (hasFish v) "v" v $ genState state u v cost of
-               Just vState' -> debugWhen (hasFish v) "update state'" vState' $ (M.update (const (Just vState')) v state, M.insert sourceOpt sourceOpt rest)
-                 where sourceOpt = Opt (t + cost) v
-               Nothing -> debug "no update" "" (state, rest)
+          case genState state u v cost of
+               Just vState' -> (M.update (const (Just vState')) v state, M.insert sourceOpt sourceOpt rest)
+                 where 
+                   sourceOpt = Opt (t + cost) v
+               Nothing -> (state, rest)
           where
             cost = maybe (error "no cost") id $ M.lookup (u,v) edgeCostMap 
-        hasFish v = v == 166 || v == 820 || v == 928
         adjs = maybe [] id $ M.lookup u adjacencyMap
         genState state u v cost = 
-          case debugWhen (hasFish v) "uState" uState $ debugWhen (hasFish v) "vState" vState $ debugWhen (hasFish v) "altState" altState $ debugWhen (hasFish v) "vState'" vState' $ isWorthStepping of 
+          case isWorthStepping of 
                True  -> Just vState' 
                False -> Nothing
-          where
+           where
             uState = maybe (error "no uState") id $ M.lookup u state
             vState = maybe (error "no vState") id $ M.lookup v state
             vFishTypes = maybe (error "no vFishTypes") id $ M.lookup v fishTypeMap
             altState = M.foldlWithKey foldlFunc M.empty uState
               where 
-                foldlFunc acc k path@(Path p a) | debug "acc" acc $ debug "k" k $ debug "a" a $ True =
+                foldlFunc acc k path@(Path p a) =
                   if | a /= 1/0 -> let vStep = M.singleton (k `S.union` vFishTypes) (Path (v:p) (a + cost))
-                                   in debug "found /= ∞" (M.singleton k path) $ M.unionWithKey unionFunc vStep acc
+                                   in M.unionWithKey unionFunc vStep acc
                      | otherwise -> acc 
             vState' = M.unionWithKey unionFunc altState vState
             unionFunc k a b = min a b

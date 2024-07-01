@@ -13,7 +13,11 @@ dependencies:
   - pretty-simple
   - text
   - derivingvia-extras
+  - graphviz
 executable:
   main: app/Main.hs
 library:
+  exposed-modules:
+    Lib
+    LibG
   source-dirs: src
