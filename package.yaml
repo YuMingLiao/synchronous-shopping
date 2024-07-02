@@ -14,6 +14,7 @@ dependencies:
   - text
   - derivingvia-extras
   - graphviz
+  - hashtables
 executable:
   main: app/Main.hs
 library:
