@@ -222,24 +222,19 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
             uState = maybe (error "no uState") id $ M.lookup u state
             vState = maybe (error "no vState") id $ M.lookup v state
             vFishTypes = maybe (error "no vFishTypes") id $ M.lookup v fishTypeMap
-            vState' = M.foldrWithKey foldFunc vState uState
+            vState' = M.foldrWithKey foldFunc (vState, False) uState
               where
-                foldFunc k path@(Path p a) acc = 
+                foldFunc k path@(Path p a) (acc, improved) = 
                   if | a /= 1/0 -> let 
                            (k', path'@(Path p' a')) = ((k `S.union` vFishTypes), (Path (v:p) (a + cost)))
-                           alterFunc Nothing = Just path'
-                           alterFunc (Just path@(Path p a)) = Just (minOn time path path')   
+
+                           alterIfFaster k m = M.alter alterFunc k' acc
+                             where
+                               alterFunc Nothing = Just path'
+                               alterFunc (Just path@(Path p a)) = Just (minOn time path path')   
+				isFaster =  
                          in M.alter alterFunc k' acc
                      | otherwise -> acc
---                      | otherwise -> acc 
---             altState = M.foldlWithKey foldlFunc M.empty uState
---               where 
---                 foldlFunc acc k path@(Path p a) =
---                   if | a /= 1/0 -> let vStep = M.singleton (k `S.union` vFishTypes) (Path (v:p) (a + cost))
---                                    in M.unionWithKey unionFunc vStep acc
---                      | otherwise -> acc 
---             vState' = M.unionWithKey unionFunc altState vState
---             unionFunc k a b = min a b
             isWorthStepping = 
               if | vState' == vState -> False
                  | otherwise -> True 
