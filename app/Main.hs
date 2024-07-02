@@ -21,6 +21,7 @@ import Data.Tuple (swap)
 import Data.Text.Lazy (unpack)
 import Data.Maybe (fromJust)
 import Control.Exception (assert)
+import Data.Ord (comparing)
 main :: IO ()
 main = do
   interact $ processInput
@@ -45,7 +46,7 @@ main = do
  
 -- print $ findShortestTwoPaths example 
 
-debugFlag = True
+debugFlag = False
 debug s a b | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) b 
             | otherwise = b   
 debugId s a | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) a 
@@ -61,7 +62,7 @@ newtype Time = Time {
   unTime :: Float
 } deriving (Eq, Ord, Num, Fractional, RealFrac, Real)
 instance Show Time where
-  show (Time t) | t == 1/0 = "∞"
+  show (Time t) | t == 1/0 = "Infinity"
                 | otherwise =  show $ round t
 instance Semigroup Time where
   a <> b | a <= b = a
@@ -73,7 +74,7 @@ data Path = Path {
 }
 
 data SourceOpt = Opt {
-  time :: Time,
+  timeUsed :: Time,
   source :: Vertex
 } deriving Eq 
 instance Show SourceOpt where
@@ -138,6 +139,12 @@ sample = Test {
 
 toAdjacencyMap edges = M.fromListWith (++) $ L.map (\(a,b) -> (a,b:[])) edges
 
+minOn :: Ord b => (a -> b) -> a -> a -> a
+minOn f x y =
+  case comparing f x y of
+    LT -> x
+    EQ -> x
+    _ -> y
 
 
 findShortestTwoPaths testData@(Test {..}) = go sortedList 
@@ -215,14 +222,24 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
             uState = maybe (error "no uState") id $ M.lookup u state
             vState = maybe (error "no vState") id $ M.lookup v state
             vFishTypes = maybe (error "no vFishTypes") id $ M.lookup v fishTypeMap
-            altState = M.foldlWithKey foldlFunc M.empty uState
-              where 
-                foldlFunc acc k path@(Path p a) =
-                  if | a /= 1/0 -> let vStep = M.singleton (k `S.union` vFishTypes) (Path (v:p) (a + cost))
-                                   in M.unionWithKey unionFunc vStep acc
-                     | otherwise -> acc 
-            vState' = M.unionWithKey unionFunc altState vState
-            unionFunc k a b = min a b
+            vState' = M.foldrWithKey foldFunc vState uState
+              where
+                foldFunc k path@(Path p a) acc = 
+                  if | a /= 1/0 -> let 
+                           (k', path'@(Path p' a')) = ((k `S.union` vFishTypes), (Path (v:p) (a + cost)))
+                           alterFunc Nothing = Just path'
+                           alterFunc (Just path@(Path p a)) = Just (minOn time path path')   
+                         in M.alter alterFunc k' acc
+                     | otherwise -> acc
+--                      | otherwise -> acc 
+--             altState = M.foldlWithKey foldlFunc M.empty uState
+--               where 
+--                 foldlFunc acc k path@(Path p a) =
+--                   if | a /= 1/0 -> let vStep = M.singleton (k `S.union` vFishTypes) (Path (v:p) (a + cost))
+--                                    in M.unionWithKey unionFunc vStep acc
+--                      | otherwise -> acc 
+--             vState' = M.unionWithKey unionFunc altState vState
+--             unionFunc k a b = min a b
             isWorthStepping = 
               if | vState' == vState -> False
                  | otherwise -> True 

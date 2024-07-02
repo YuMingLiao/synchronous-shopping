@@ -19,5 +19,4 @@ executable:
 library:
   exposed-modules:
     Lib
-    LibG
   source-dirs: src
