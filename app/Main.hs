@@ -20,6 +20,7 @@ import qualified Data.Map as M
 import Data.Tuple (swap)
 import Data.Text.Lazy (unpack)
 import Data.Maybe (fromJust)
+import Control.Exception (assert)
 main :: IO ()
 main = do
   interact $ processInput
@@ -49,6 +50,9 @@ debug s a b | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) b
             | otherwise = b   
 debugId s a | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) a 
             | otherwise = a   
+debugView s f a | debugFlag = Debug.Trace.trace (s ++ ": " ++ show (f a)) a 
+                | otherwise = a
+
 debugWhen pred | pred && debugFlag == True = debug
                | otherwise = \_ _ b -> b 
 
@@ -71,10 +75,10 @@ data Path = Path {
 data SourceOpt = Opt {
   time :: Time,
   source :: Vertex
-} 
+} deriving Eq 
 instance Show SourceOpt where
   show (Opt t s) | s == 166 || s == 820 || s == 928 = show (t,s)
-                 | otherwise = show ""
+                 | otherwise = show (t,s)
 
 instance Show Path where
   show (Path path time) = show (time, path)
@@ -83,10 +87,10 @@ instance Eq Path where
 instance Ord Path where
   compare (Path _ t1) (Path _ t2) = compare t1 t2
 
-instance Eq SourceOpt where
-  (==) _ _ = False
 instance Ord SourceOpt where
-  compare (Opt t1 v1) (Opt t2 v2) = debugWhen (eiShop v1 v2)("useCompare" ++ unwords [show v1,show t1,show v2,show t2, show (compare t1 t2)]) "" $ compare t1 t2
+  compare (Opt t1 v1) (Opt t2 v2) | compare t1 t2 == EQ = compare v1 v2
+                                  | otherwise = compare t1 t2
+ 
     where eiShop v1 v2 =v1 `elem` ([166,820,928] :: [Vertex]) || v2 `elem` ([166,820,928] :: [Vertex])
 instance {-# OVERLAPPING #-} Show a => Show (M.Map (Set FishType) a) where
   show m = show $ L.map (\(a,b) -> (S.toList a,b)) $ M.toList m 
@@ -96,6 +100,10 @@ instance {-# OVERLAPPING #-} Show (Set FishType) where
  
 instance {-# OVERLAPPING #-} Show (M.Map Vertex NodeState) where
   show m = show $ M.toList m
+
+instance {-# OVERLAPPING #-} Show (M.Map SourceOpt SourceOpt) where
+  show m = show . keys $ M.filterWithKey f m
+    where f (Opt t v) a = v == 166 || v == 820 || v == 928 
 
 type FishType = Int
 type Vertex = Int
@@ -161,15 +169,41 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
       where s = Opt (Time 0) start
     go :: M.Map Vertex NodeState -> M.Map SourceOpt SourceOpt -> M.Map Vertex NodeState
     go state (M.minView -> Nothing) = state
-    go state (M.minView -> Just ((Opt t u), rest)) | debug "queue" ((Opt t u), rest) True = go state' queue'
+    go state (M.minView -> Just ((Opt t u), rest)) | debug "u" u $ debug "rest" rest True = go state' queue'Asserted
       where
+        uIsShop = u == 166 || u == 820 || u == 928
+        queue'Asserted = assert shopPassedRight queue'
+        shopPassedRight = (if
+              | 166 `member` rest -> 166 `member` queue'
+              | otherwise -> True)
+          ||
+          (if | 820 `member` rest -> 820 `member` queue'
+              | otherwise -> True)
+          ||
+          (if | 928 `member` rest -> 928 `member` queue'
+              | otherwise -> True)
+        member shop q = M.filter (\(Opt _ v)->(v==shop)) q /= M.empty
+
         (state', queue') = L.foldl f (state,rest) adjs
-        f (state, rest) v = 
+        f (state, queue) v | debug "v" v True = 
           case genState state u v cost of
-               Just vState' -> (M.update (const (Just vState')) v state, M.insert sourceOpt sourceOpt rest)
+               Just vState' -> (state', debugId "accQueueAsserted" accQueueAsserted)
                  where 
+                   state' = M.update (const (Just vState')) v state
                    sourceOpt = Opt (t + cost) v
-               Nothing -> (state, rest)
+                   accQueue = M.insert sourceOpt sourceOpt queue
+                   accQueueAsserted = assert shopPassedRight accQueue
+                   shopPassedRight = (if
+                     | 166 `member` queue -> 166 `member` accQueue
+                     | otherwise -> True)
+                     ||
+                     (if | 820 `member` queue -> 820 `member` accQueue
+                         | otherwise -> True)
+                     ||
+                     (if | 928 `member` queue -> 928 `member` accQueue
+                         | otherwise -> True)
+                   member shop q = M.filter (\(Opt _ v)->(v==shop)) q /= M.empty
+               Nothing -> (state, queue)
           where
             cost = maybe (error "no cost") id $ M.lookup (u,v) edgeCostMap 
         adjs = maybe [] id $ M.lookup u adjacencyMap
