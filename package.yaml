@@ -17,8 +17,10 @@ dependencies:
   - multiset
   - unordered-containers
 executable:
+  dependencies:
+    - synchronous-shopping
   main: app/Main.hs
-# library:
+library:
 #  exposed-modules:
-#   Lib
-#  source-dirs: src
+#    PiorityQueue
+  source-dirs: src

@@ -15,19 +15,18 @@ import qualified Data.List as L
 import Debug.Trace
 import Data.Set (Set)
 import qualified Data.Set as S
-import Data.Map
+import Data.Map (Map)
 import qualified Data.Map as M hiding (insertLookupWithKey)
 import qualified Data.Map.Strict as M (insertLookupWithKey)
 import Data.HashMap.Strict (HashMap)
-import Data.HashMap.Strict as HM
+import qualified Data.HashMap.Strict as HM
 import Data.Tuple (swap)
 import Data.Text.Lazy (unpack)
 import Data.Maybe (fromJust)
 import Control.Exception (assert)
 import Data.Ord (comparing)
-import Data.MultiSet (MultiSet)
-import qualified Data.MultiSet as MS
-
+import PriorityQueue (PriorityQueue)
+import qualified PriorityQueue as MS
 main :: IO ()
 main = do
   interact $ processInput
@@ -167,44 +166,20 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
         startFishTypes = maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
         startFishState = HM.singleton startFishTypes (Path [start] (Time 0)) 
     initialStateMap = HM.update (const (Just startState)) start $ HM.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
-    initialQueue = MS.singleton s
+    initialQueue = MS.singleton (Time 0) s
       where s = Opt (Time 0) start
-    go :: HashMap Vertex NodeState -> MultiSet SourceOpt -> HashMap Vertex NodeState
+    go :: HashMap Vertex NodeState -> PriorityQueue Time SourceOpt -> HashMap Vertex NodeState
     go state (MS.minView -> Nothing) = state
-    go state (MS.minView -> Just ((Opt t u), rest)) | debug "u" u $ debug "rest" rest True = go state' queue'Asserted
+    go state (MS.minView -> Just ((Opt t u), rest)) | debug "u" u True = go state' queue'
       where
-        uIsShop = u == 166 || u == 820 || u == 928
-        queue'Asserted = assert shopPassedRight queue'
-        shopPassedRight = (if
-              | 166 `member` rest -> 166 `member` queue'
-              | otherwise -> True)
-          ||
-          (if | 820 `member` rest -> 820 `member` queue'
-              | otherwise -> True)
-          ||
-          (if | 928 `member` rest -> 928 `member` queue'
-              | otherwise -> True)
-        member shop q = MS.filter (\(Opt _ v)->(v==shop)) q /= MS.empty
-
         (state', queue') = L.foldl f (state,rest) adjs
         f (state, queue) v | debug "v" v True = 
           case genState state u v cost of
-               Just vState' -> (state', debugId "accQueueAsserted" accQueueAsserted)
+               Just vState' -> (state', accQueue)
                  where 
                    state' = HM.update (const (Just vState')) v state
                    sourceOpt = Opt (t + cost) v
-                   accQueue = MS.insert sourceOpt queue
-                   accQueueAsserted = assert shopPassedRight accQueue
-                   shopPassedRight = (if
-                     | 166 `member` queue -> 166 `member` accQueue
-                     | otherwise -> True)
-                     ||
-                     (if | 820 `member` queue -> 820 `member` accQueue
-                         | otherwise -> True)
-                     ||
-                     (if | 928 `member` queue -> 928 `member` accQueue
-                         | otherwise -> True)
-                   member shop q = MS.filter (\(Opt _ v)->(v==shop)) q /= MS.empty
+                   accQueue = MS.insert (t + cost) sourceOpt queue
                Nothing -> (state, queue)
           where
             cost = maybe (error "no cost") id $ HM.lookup (u,v) edgeCostMap 
