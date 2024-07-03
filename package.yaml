@@ -15,6 +15,7 @@ dependencies:
   - derivingvia-extras
   - graphviz
   - multiset
+  - unordered-containers
 executable:
   main: app/Main.hs
 # library:
