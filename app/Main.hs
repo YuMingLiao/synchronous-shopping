@@ -142,14 +142,6 @@ sample = Test {
 
 toAdjacencyMap edges = HM.fromListWith (++) $ L.map (\(a,b) -> (a,b:[])) edges
 
-minOn :: Ord b => (a -> b) -> a -> a -> a
-minOn f x y =
-  case comparing f x y of
-    LT -> x
-    EQ -> x
-    _ -> y
-
-
 findShortestTwoPaths testData@(Test {..}) = go sortedList 
   where
     finalState = findFinalState testData
@@ -230,18 +222,18 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
                 foldFunc k path@(Path p a) (isUpdated, acc) = 
                   if | a /= 1/0 -> let 
                            (k', path'@(Path p' a')) = ((k `S.union` vFishTypes), (Path (v:p) (a + cost)))
-                           insertLookup' kx x t = HM.insertLookupWithKey f kx x t
-                           f = \_ a' a -> minOn time a a'
-                           (maybeExist, acc') = insertLookup' k' path' acc
-                           isUpdated' | isUpdated = True
-                                      | otherwise =   
-                             case maybeExist of
+                           maybeExist = HM.lookup k' acc
+                           shouldUpdate =
+                             case maybeExist of 
                                   Nothing -> True
                                   (Just origSolution) -> 
                                     case compare origSolution path' of
                                          LT -> False
                                          EQ -> False
                                          GT -> True
+                           acc' | shouldUpdate == True = HM.insert k' path' acc
+                                | otherwise = acc
+                           isUpdated' = isUpdated || shouldUpdate
                            in (isUpdated', acc')
                              
                      | otherwise -> (isUpdated, acc)
