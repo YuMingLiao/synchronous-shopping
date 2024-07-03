@@ -1,430 +1,443 @@
-	Wed Jul  3 14:33 2024 Time and Allocation Profiling Report  (Final)
+	Wed Jul  3 15:58 2024 Time and Allocation Profiling Report  (Final)
 
 	   synchronous-shopping +RTS -p -RTS
 
-	total time  =        0.03 secs   (27 ticks @ 1000 us, 1 processor)
-	total alloc =  61,981,696 bytes  (excludes profiling overheads)
+	total time  =       27.10 secs   (27097 ticks @ 1000 us, 1 processor)
+	total alloc = 57,513,926,448 bytes  (excludes profiling overheads)
 
-COST CENTRE                                       MODULE                       SRC                                               %time %alloc
+COST CENTRE                                      MODULE                 SRC                                           %time %alloc
 
-main.processInput.testData.undirectedEdgeCostList Main                         app/Main.hs:48:13-130                              25.9   43.0
-hashInt                                           Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)       14.8    1.8
-lookup#                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                   7.4    1.8
-insert                                            Data.MultiSet                Data/MultiSet.hs:318:1-45                           7.4    2.7
-hash                                              Data.Hashable.Class          src/Data/Hashable/Class.hs:1059:10-43               3.7    0.0
-unsafeInsertWithKey.go                            Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:(233,5)-(260,76)    3.7    0.8
-hash                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                   3.7    0.0
-main.processInput.inputLines                      Main                         app/Main.hs:37:9-32                                 3.7    5.3
-dijkstra.go.genState.(...).foldFunc.acc'          Main                         app/Main.hs:(234,28)-(235,49)                       3.7    0.0
-dijkstra.go.genState.(...).foldFunc               Main                         app/Main.hs:(222,17)-(239,52)                       3.7   15.0
-dijkstra.go.genState.(...)                        Main                         app/Main.hs:(220,13)-(239,52)                       3.7    3.6
-dijkstra.go.genState                              Main                         app/Main.hs:(212,9)-(239,52)                        3.7    1.3
-dijkstra.go.f.cost                                Main                         app/Main.hs:210:13-75                               3.7    0.5
-dijkstra.go.f                                     Main                         app/Main.hs:(190,9)-(210,75)                        3.7    2.4
-dijkstra.go                                       Main                         app/Main.hs:(173,5)-(239,52)                        3.7    0.4
-debug                                             Main                         app/Main.hs:(56,1)-(57,27)                          3.7    0.0
-liftHashWithSalt                                  Data.Hashable.Class          src/Data/Hashable/Class.hs:1056:5-73                0.0    2.3
-defaultHash                                       Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38                 0.0    2.2
-unsafeInsert.go                                   Data.HashMap.Internal        Data/HashMap/Internal.hs:(931,5)-(958,76)           0.0    1.5
-insertKeyExists.go                                Data.HashMap.Internal        Data/HashMap/Internal.hs:(885,5)-(901,28)           0.0    1.3
-insert'.go                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:(808,5)-(837,76)           0.0    1.0
-clone                                             Data.HashMap.Internal        Data/HashMap/Internal.hs:(2431,1)-(2432,34)         0.0    1.7
-deleteMin                                         Data.MultiSet                Data/MultiSet.hs:376:1-49                           0.0    1.7
-main.processInput.testData                        Main                         app/Main.hs:(43,9)-(51,9)                           0.0    1.9
-main                                              Main                         app/Main.hs:(32,1)-(51,9)                           0.0    1.7
+lookup#                                          Data.HashMap.Internal  Data/HashMap/Internal.hs:638:1-82              36.6   41.7
+liftHashWithSalt                                 Data.Hashable.Class    src/Data/Hashable/Class.hs:1056:5-73           11.8    9.9
+dijkstra.go.genState.(...).foldFunc              Main                   app/Main.hs:(230,17)-(247,52)                  10.7   27.9
+dijkstra.go.genState.(...)                       Main                   app/Main.hs:(228,13)-(247,52)                   7.3    0.8
+dijkstra.go.genState.(...).foldFunc.(...)        Main                   app/Main.hs:232:28-105                          7.2    4.7
+hashWithSalt                                     Data.Hashable.Class    src/Data/Hashable/Class.hs:357:5-26             3.7    0.0
+hashInt                                          Data.Hashable.LowLevel src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)    3.4    7.1
+dijkstra.go.genState.(...).foldFunc.shouldUpdate Main                   app/Main.hs:(234,28)-(241,51)                   3.1    0.0
+compare                                          Main                   app/Main.hs:101:17-19                           2.1    0.0
++                                                Main                   app/Main.hs:101:22-24                           1.5    1.1
+defaultHash                                      Data.Hashable.Class    src/Data/Hashable/Class.hs:331:1-38             1.4    2.2
+hashWithSalt1                                    Data.Hashable.Class    src/Data/Hashable/Class.hs:302:1-45             1.2    1.1
+/=                                               Main                   app/Main.hs:101:13-14                           1.2    0.0
+hashWithSalt                                     Data.Hashable.Class    src/Data/Hashable/Class.hs:1060:5-32            1.1    1.1
+dijkstra.go.genState.(...).foldFunc.maybeExist   Main                   app/Main.hs:233:28-56                           0.7    1.1
 
 
                                                                                                                                                                 individual      inherited
 COST CENTRE                                                   MODULE                       SRC                                              no.      entries  %time %alloc   %time %alloc
 
-MAIN                                                          MAIN                         <built-in>                                        793           0    0.0    0.0   100.0  100.0
- CAF                                                          GHC.Conc.Signal              <entire-module>                                  1524           0    0.0    0.0     0.0    0.0
- CAF                                                          GHC.IO.Encoding              <entire-module>                                  1488           0    0.0    0.0     0.0    0.0
- CAF                                                          GHC.IO.Encoding.Iconv        <entire-module>                                  1486           0    0.0    0.0     0.0    0.0
- CAF                                                          GHC.IO.Exception             <entire-module>                                  1480           0    0.0    0.0     0.0    0.0
- CAF                                                          GHC.IO.Handle.FD             <entire-module>                                  1477           0    0.0    0.1     0.0    0.1
- CAF                                                          GHC.IO.Handle.Internals      <entire-module>                                  1476           0    0.0    0.0     0.0    0.0
- CAF                                                          GHC.Weak.Finalize            <entire-module>                                  1440           0    0.0    0.0     0.0    0.0
- CAF:$fEqTime1                                                Main                         <no location info>                               1256           0    0.0    0.0     0.0    0.0
-  /=                                                          Main                         app/Main.hs:69:13-14                             1785           1    0.0    0.0     0.0    0.0
- CAF:$fFractionalTime3                                        Main                         <no location info>                               1297           0    0.0    0.0     0.0    0.0
-  /                                                           Main                         app/Main.hs:69:27-36                             1794           1    0.0    0.0     0.0    0.0
- CAF:$fHashable1Hashed_$chash                                 Data.Hashable.Class          src/Data/Hashable/Class.hs:356:5-8                982           0    0.0    0.0     0.0    0.0
-  hash                                                        Data.Hashable.Class          src/Data/Hashable/Class.hs:356:5-13              1603           1    0.0    0.0     0.0    0.0
- CAF:$fHashable1IntMap_$chashWithSalt                         Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-16               983           0    0.0    0.0     0.0    0.0
-  hashWithSalt                                                Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1628           1    0.0    0.0     0.0    0.0
- CAF:$fNumTime1                                               Main                         <no location info>                               1283           0    0.0    0.0     0.0    0.0
-  fromInteger                                                 Main                         app/Main.hs:69:22-24                             1803           1    0.0    0.0     0.0    0.0
- CAF:$fNumTime7                                               Main                         <no location info>                               1277           0    0.0    0.0     0.0    0.0
-  +                                                           Main                         app/Main.hs:69:22-24                             1846           1    0.0    0.0     0.0    0.0
- CAF:$fOrdPath1                                               Main                         <no location info>                               1257           0    0.0    0.0     0.0    0.0
-  compare                                                     Main                         app/Main.hs:69:17-19                             1844           1    0.0    0.0     0.0    0.0
- CAF:$fOrdTime2                                               Main                         <no location info>                               1275           0    0.0    0.0     0.0    0.0
-  max                                                         Main                         app/Main.hs:69:17-19                             1938           1    0.0    0.0     0.0    0.0
- CAF:$fShowHashMap6                                           Main                         <no location info>                               1303           0    0.0    0.0     0.0    0.0
-  show                                                        Main                         app/Main.hs:(71,3)-(72,45)                       1943           0    0.0    0.0     0.0    0.0
- CAF:$sfromList                                               Main                         <no location info>                               1328           0    0.0    0.0     0.0    0.0
-  fromList                                                    Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:1-70         1734           1    0.0    0.0     0.0    0.0
- CAF:$sfromList4                                              Main                         <no location info>                               1332           0    0.0    0.0     0.0    0.0
-  fromList                                                    Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:1-70         1615           1    0.0    0.0     0.0    0.0
- CAF:$sfromList6                                              Main                         <no location info>                               1333           0    0.0    0.0     0.0    0.0
-  fromList                                                    Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:1-70         1612           1    0.0    0.0     0.0    0.0
- CAF:$sunion1                                                 Main                         <no location info>                               1327           0    0.0    0.0     0.0    0.0
-  union                                                       Data.HashMap.Internal        Data/HashMap/Internal.hs:1586:1-23               1660           1    0.0    0.0     0.0    0.0
- CAF:bitsPerSubkey                                            Data.HashMap.Internal        Data/HashMap/Internal.hs:2444:1-13               1114           0    0.0    0.0     0.0    0.0
-  bitsPerSubkey                                               Data.HashMap.Internal        Data/HashMap/Internal.hs:2444:1-17               1634           1    0.0    0.0     0.0    0.0
- CAF:debugFlag                                                Main                         app/Main.hs:55:1-9                               1249           0    0.0    0.0     0.0    0.0
-  debugFlag                                                   Main                         app/Main.hs:55:1-17                              1729           1    0.0    0.0     0.0    0.0
- CAF:deleteFindMin1                                           Data.MultiSet                <no location info>                               1172           0    0.0    0.0     0.0    0.0
-  deleteMin                                                   Data.MultiSet                Data/MultiSet.hs:376:1-49                        1919           1    0.0    0.0     0.0    0.0
- CAF:empty                                                    Data.HashMap.Internal        Data/HashMap/Internal.hs:594:1-5                 1101           0    0.0    0.0     0.0    0.0
-  empty                                                       Data.HashMap.Internal        Data/HashMap/Internal.hs:594:1-13                1631           1    0.0    0.0     0.0    0.0
- CAF:findMin                                                  Data.MultiSet                Data/MultiSet.hs:368:1-7                         1134           0    0.0    0.0     0.0    0.0
-  findMin                                                     Data.MultiSet                Data/MultiSet.hs:368:1-34                        1725           1    0.0    0.0     0.0    0.0
- CAF:k_r7yJ                                                   Main                         <no location info>                               1348           0    0.0    0.0     0.0    0.0
-  dijkstra                                                    Main                         app/Main.hs:(161,1)-(239,52)                     1655           0    0.0    0.0     0.0    0.0
-   dijkstra.startState                                        Main                         app/Main.hs:(165,5)-(168,76)                     1656           0    0.0    0.0     0.0    0.0
-    mconcat                                                   Data.HashMap.Internal        Data/HashMap/Internal.hs:324:10-51               1657           0    0.0    0.0     0.0    0.0
-     mappend                                                  Data.HashMap.Internal        Data/HashMap/Internal.hs:327:3-16                1658           1    0.0    0.0     0.0    0.0
-      <>                                                      Data.HashMap.Internal        Data/HashMap/Internal.hs:309:3-14                1659           1    0.0    0.0     0.0    0.0
- CAF:lvl10_r7vY                                               Main                         <no location info>                               1221           0    0.0    0.0     0.0    0.0
-  main                                                        Main                         app/Main.hs:(32,1)-(51,9)                        1595           0    0.0    0.0     0.0    0.0
-   main.processInput                                          Main                         app/Main.hs:(35,5)-(51,9)                        1596           0    0.0    0.0     0.0    0.0
-    main.processInput.firstLine'                              Main                         app/Main.hs:39:9-56                              1597           0    0.0    0.0     0.0    0.0
- CAF:lvl30_r7wA                                               Main                         <no location info>                               1231           0    0.0    0.0     0.0    0.0
-  dijkstra                                                    Main                         app/Main.hs:(161,1)-(239,52)                     1701           0    0.0    0.0     0.0    0.0
-   dijkstra.startState                                        Main                         app/Main.hs:(165,5)-(168,76)                     1702           0    0.0    0.0     0.0    0.0
-    mconcat                                                   Data.HashMap.Internal        Data/HashMap/Internal.hs:324:10-51               1703           0    0.0    0.0     0.0    0.0
-     mempty                                                   Data.HashMap.Internal        Data/HashMap/Internal.hs:325:3-16                1704           1    0.0    0.0     0.0    0.0
- CAF:lvl34_r7wJ                                               Main                         <no location info>                               1234           0    0.0    0.0     0.0    0.0
-  dijkstra                                                    Main                         app/Main.hs:(161,1)-(239,52)                     1813           0    0.0    0.0     0.0    0.0
-   dijkstra.nodeStateDef                                      Main                         app/Main.hs:164:5-104                            1814           0    0.0    0.0     0.0    0.0
- CAF:lvl3_r7vC                                                Main                         <no location info>                               1213           0    0.0    0.0     0.0    0.0
-  main                                                        Main                         app/Main.hs:(32,1)-(51,9)                        1738           0    0.0    0.0     0.0    0.0
-   main.processInput                                          Main                         app/Main.hs:(35,5)-(51,9)                        1739           0    0.0    0.0     0.0    0.0
-    main.processInput.testData                                Main                         app/Main.hs:(43,9)-(51,9)                        1740           0    0.0    0.0     0.0    0.0
-     main.processInput.testData.undirectedEdgeCostList        Main                         app/Main.hs:48:13-130                            1741           0    0.0    0.0     0.0    0.0
- CAF:lvl66_r7xX                                               Main                         <no location info>                               1295           0    0.0    0.0     0.0    0.0
-  dijkstra                                                    Main                         app/Main.hs:(161,1)-(239,52)                     1796           0    0.0    0.0     0.0    0.0
-   dijkstra.go                                                Main                         app/Main.hs:(173,5)-(239,52)                     1797           0    0.0    0.0     0.0    0.0
-    dijkstra.go.(...)                                         Main                         app/Main.hs:189:9-54                             1798           0    0.0    0.0     0.0    0.0
-     dijkstra.go.f                                            Main                         app/Main.hs:(190,9)-(210,75)                     1799           0    0.0    0.0     0.0    0.0
-      dijkstra.go.genState                                    Main                         app/Main.hs:(212,9)-(239,52)                     1800           0    0.0    0.0     0.0    0.0
-       dijkstra.go.genState.(...)                             Main                         app/Main.hs:(220,13)-(239,52)                    1801           0    0.0    0.0     0.0    0.0
-        dijkstra.go.genState.(...).foldFunc                   Main                         app/Main.hs:(222,17)-(239,52)                    1802           0    0.0    0.0     0.0    0.0
-         fromInteger                                          Main                         app/Main.hs:69:22-24                             1804           0    0.0    0.0     0.0    0.0
- CAF:lvl67_r7xY                                               Main                         <no location info>                               1296           0    0.0    0.0     0.0    0.0
-  dijkstra                                                    Main                         app/Main.hs:(161,1)-(239,52)                     1805           0    0.0    0.0     0.0    0.0
-   dijkstra.go                                                Main                         app/Main.hs:(173,5)-(239,52)                     1806           0    0.0    0.0     0.0    0.0
-    dijkstra.go.(...)                                         Main                         app/Main.hs:189:9-54                             1807           0    0.0    0.0     0.0    0.0
-     dijkstra.go.f                                            Main                         app/Main.hs:(190,9)-(210,75)                     1808           0    0.0    0.0     0.0    0.0
-      dijkstra.go.genState                                    Main                         app/Main.hs:(212,9)-(239,52)                     1809           0    0.0    0.0     0.0    0.0
-       dijkstra.go.genState.(...)                             Main                         app/Main.hs:(220,13)-(239,52)                    1810           0    0.0    0.0     0.0    0.0
-        dijkstra.go.genState.(...).foldFunc                   Main                         app/Main.hs:(222,17)-(239,52)                    1811           0    0.0    0.0     0.0    0.0
-         fromInteger                                          Main                         app/Main.hs:69:22-24                             1812           0    0.0    0.0     0.0    0.0
- CAF:lvl68_r7xZ                                               Main                         <no location info>                               1298           0    0.0    0.0     0.0    0.0
-  dijkstra                                                    Main                         app/Main.hs:(161,1)-(239,52)                     1787           0    0.0    0.0     0.0    0.0
-   dijkstra.go                                                Main                         app/Main.hs:(173,5)-(239,52)                     1788           0    0.0    0.0     0.0    0.0
-    dijkstra.go.(...)                                         Main                         app/Main.hs:189:9-54                             1789           0    0.0    0.0     0.0    0.0
-     dijkstra.go.f                                            Main                         app/Main.hs:(190,9)-(210,75)                     1790           0    0.0    0.0     0.0    0.0
-      dijkstra.go.genState                                    Main                         app/Main.hs:(212,9)-(239,52)                     1791           0    0.0    0.0     0.0    0.0
-       dijkstra.go.genState.(...)                             Main                         app/Main.hs:(220,13)-(239,52)                    1792           0    0.0    0.0     0.0    0.0
-        dijkstra.go.genState.(...).foldFunc                   Main                         app/Main.hs:(222,17)-(239,52)                    1793           0    0.0    0.0     0.0    0.0
-         /                                                    Main                         app/Main.hs:69:27-36                             1795           0    0.0    0.0     0.0    0.0
- CAF:lvl7_r7vJ                                                Main                         <no location info>                               1216           0    0.0    0.0     0.0    0.0
-  main                                                        Main                         app/Main.hs:(32,1)-(51,9)                        1684           0    0.0    0.0     0.0    0.0
-   main.processInput                                          Main                         app/Main.hs:(35,5)-(51,9)                        1685           0    0.0    0.0     0.0    0.0
-    main.processInput.testData                                Main                         app/Main.hs:(43,9)-(51,9)                        1686           0    0.0    0.0     0.0    0.0
- CAF:main1                                                    Main                         <no location info>                               1360           0    0.0    0.0     0.0    0.0
-  main                                                        Main                         app/Main.hs:(32,1)-(51,9)                        1586           1    0.0    0.0     0.0    0.0
- CAF:maxChildren                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:2448:1-11               1115           0    0.0    0.0     0.0    0.0
-  maxChildren                                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:2448:1-44               1649           1    0.0    0.0     0.0    0.0
- CAF:null                                                     Data.MultiSet                Data/MultiSet.hs:278:1-4                         1129           0    0.0    0.0     0.0    0.0
-  null                                                        Data.MultiSet                Data/MultiSet.hs:278:1-22                        1718           1    0.0    0.0     0.0    0.0
- CAF:subkeyMask                                               Data.HashMap.Internal        Data/HashMap/Internal.hs:2452:1-10               1117           0    0.0    0.0     0.0    0.0
-  subkeyMask                                                  Data.HashMap.Internal        Data/HashMap/Internal.hs:2452:1-47               1633           1    0.0    0.0     0.0    0.0
- main                                                         Main                         app/Main.hs:(32,1)-(51,9)                        1587           0    0.0    1.7   100.0   99.9
-  main.processInput                                           Main                         app/Main.hs:(35,5)-(51,9)                        1588           1    0.0    0.0   100.0   98.3
-   findShortestTwoPaths                                       Main                         app/Main.hs:(145,1)-(152,54)                     1598           1    0.0    0.0    66.7   44.8
-    findShortestTwoPaths.completions                          Main                         app/Main.hs:149:5-72                             1932           1    0.0    0.0     0.0    0.0
-     findShortestTwoPaths.f                                   Main                         app/Main.hs:150:5-75                             1933           4    0.0    0.0     0.0    0.0
-    findShortestTwoPaths.finalState                           Main                         app/Main.hs:147:5-40                             1599           1    0.0    0.0    66.7   44.8
-     findFinalState                                           Main                         app/Main.hs:(155,1)-(156,77)                     1600           1    0.0    0.0    66.7   44.8
-      dijkstra                                                Main                         app/Main.hs:(161,1)-(239,52)                     1604           1    0.0    0.0    66.7   44.8
-       dijkstra.go                                            Main                         app/Main.hs:(173,5)-(239,52)                     1716        3024    3.7    0.4    66.7   44.3
-        debug                                                 Main                         app/Main.hs:(56,1)-(57,27)                       1728        6046    0.0    0.0     0.0    0.0
-        minView                                               Data.MultiSet                Data/MultiSet.hs:(415,1)-(417,38)                1717        3024    0.0    0.4     0.0    2.1
-         deleteFindMin                                        Data.MultiSet                Data/MultiSet.hs:396:1-48                        1724        3023    0.0    0.0     0.0    1.7
-          deleteMin                                           Data.MultiSet                Data/MultiSet.hs:376:1-49                        1920           0    0.0    1.7     0.0    1.7
-           deleteN                                            Data.MultiSet                Data/MultiSet.hs:(344,1)-(346,28)                1922        3023    0.0    0.0     0.0    0.0
-           unMS                                               Data.MultiSet                Data/MultiSet.hs:193:27-30                       1921        3023    0.0    0.0     0.0    0.0
-          findMin                                             Data.MultiSet                Data/MultiSet.hs:368:1-34                        1726           0    0.0    0.0     0.0    0.0
-           unMS                                               Data.MultiSet                Data/MultiSet.hs:193:27-30                       1727        3023    0.0    0.0     0.0    0.0
-         null                                                 Data.MultiSet                Data/MultiSet.hs:278:1-22                        1719           0    0.0    0.0     0.0    0.0
-          unMS                                                Data.MultiSet                Data/MultiSet.hs:193:27-30                       1720        3024    0.0    0.0     0.0    0.0
-        dijkstra.go.(...)                                     Main                         app/Main.hs:189:9-54                             1772        3023    0.0    0.1    63.0   41.9
-         dijkstra.go.f                                        Main                         app/Main.hs:(190,9)-(210,75)                     1773       12815    3.7    2.4    63.0   41.8
-          debug                                               Main                         app/Main.hs:(56,1)-(57,27)                       1774       12815    3.7    0.0     3.7    0.0
-          dijkstra.go.f.cost                                  Main                         app/Main.hs:210:13-75                            1848       12815    3.7    0.5    14.8    2.8
-           lookup#                                            Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1849       12815    0.0    0.0    11.1    2.3
-            unArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1861       39707    0.0    0.0     0.0    0.0
-            hash                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1850       12815    3.7    0.0    11.1    2.3
-             hash                                             Data.Hashable.Class          src/Data/Hashable/Class.hs:569:10-56             1851       12815    0.0    0.0     7.4    2.3
-              hash                                            Data.Hashable.Class          src/Data/Hashable/Class.hs:255:5-22              1852       12815    0.0    0.0     7.4    2.3
-               defaultHash                                    Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38              1853       12815    0.0    0.7     7.4    2.3
-                hashWithSalt                                  Data.Hashable.Class          src/Data/Hashable/Class.hs:570:5-32              1854       12815    0.0    0.0     7.4    1.7
-                 hashWithSalt1                                Data.Hashable.Class          src/Data/Hashable/Class.hs:302:1-45              1855       12815    0.0    0.0     7.4    1.7
-                  liftHashWithSalt                            Data.Hashable.Class          src/Data/Hashable/Class.hs:573:5-46              1856       12815    0.0    0.3     7.4    1.7
-                   defaultLiftHashWithSalt                    Data.Hashable.Class          src/Data/Hashable/Class.hs:314:1-60              1857       12815    0.0    0.0     7.4    1.3
-                    liftHashWithSalt2                         Data.Hashable.Class          src/Data/Hashable/Class.hs:576:5-58              1858       12815    0.0    0.7     7.4    1.3
-                     hashWithSalt                             Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1859           0    0.0    0.0     7.4    0.7
-                      hashInt                                 Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)     1860       25630    7.4    0.7     7.4    0.7
-            lookup#.\                                         Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1862       12815    0.0    0.0     0.0    0.0
-          dijkstra.go.genState                                Main                         app/Main.hs:(212,9)-(239,52)                     1775       12815    3.7    1.3    33.3   30.1
-           dijkstra.go.genState.(...)                         Main                         app/Main.hs:(220,13)-(239,52)                    1782       12815    3.7    3.6    25.9   28.8
-            unArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1783       64075    0.0    0.0     0.0    0.0
-            dijkstra.go.genState.(...).foldFunc               Main                         app/Main.hs:(222,17)-(239,52)                    1784       25630    3.7   15.0    22.2   25.1
-             dijkstra.go.genState.(...).foldFunc.(...)        Main                         app/Main.hs:224:28-105                           1825       22805    0.0    0.0     0.0    0.6
-              +                                               Main                         app/Main.hs:69:22-24                             1847           0    0.0    0.6     0.0    0.6
-             dijkstra.go.genState.(...).foldFunc.isUpdated'   Main                         app/Main.hs:236:28-65                            1815       22805    0.0    0.0     0.0    0.0
-             dijkstra.go.genState.(...).foldFunc.k'           Main                         app/Main.hs:224:28-105                           1824       22805    0.0    0.0     0.0    0.0
-             dijkstra.go.genState.(...).foldFunc.maybeExist   Main                         app/Main.hs:225:28-56                            1816       22805    0.0    0.6    11.1    7.6
-              lookup#                                         Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1817       22805    3.7    1.8    11.1    7.0
-               unArray                                        Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1839       45610    0.0    0.0     0.0    0.0
-               hash                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1818       22805    0.0    0.0     7.4    5.2
-                hash                                          Data.Hashable.Class          src/Data/Hashable/Class.hs:1059:10-43            1819       22805    3.7    0.0     7.4    5.2
-                 hash                                         Data.Hashable.Class          src/Data/Hashable/Class.hs:255:5-22              1820       22805    0.0    0.0     3.7    5.2
-                  defaultHash                                 Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38              1821       22805    0.0    1.2     3.7    5.2
-                   hashWithSalt                               Data.Hashable.Class          src/Data/Hashable/Class.hs:1060:5-32             1822       22805    0.0    0.6     3.7    4.0
-                    hashWithSalt1                             Data.Hashable.Class          src/Data/Hashable/Class.hs:302:1-45              1823       22805    0.0    0.6     3.7    3.4
-                     liftHashWithSalt                         Data.Hashable.Class          src/Data/Hashable/Class.hs:1056:5-73             1831       22805    0.0    2.0     3.7    2.8
-                      hashWithSalt                            Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1832           0    0.0    0.0     3.7    0.8
-                       hashInt                                Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)     1833       32890    3.7    0.8     3.7    0.8
-               lookup#.\                                      Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1840       22805    0.0    0.0     0.0    0.0
-             dijkstra.go.genState.(...).foldFunc.path'        Main                         app/Main.hs:224:28-105                           1843       22805    0.0    0.0     0.0    0.0
-             dijkstra.go.genState.(...).foldFunc.shouldUpdate Main                         app/Main.hs:(226,28)-(233,51)                    1841       22805    0.0    0.0     0.0    0.0
-              compare                                         Main                         app/Main.hs:95:3-49                              1842       22805    0.0    0.0     0.0    0.0
-             dijkstra.go.genState.(...).foldFunc.acc'         Main                         app/Main.hs:(234,28)-(235,49)                    1873       13012    3.7    0.0     7.4    1.9
-              insert                                          Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:179:1-27         1874        3204    0.0    0.1     3.7    1.9
-               insert                                         Data.HashMap.Internal        Data/HashMap/Internal.hs:802:1-37                1875        3204    0.0    0.0     3.7    1.8
-                hash                                          Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1876        3204    0.0    0.0     3.7    0.8
-                 hash                                         Data.Hashable.Class          src/Data/Hashable/Class.hs:1059:10-43            1877        3204    0.0    0.0     3.7    0.8
-                  hash                                        Data.Hashable.Class          src/Data/Hashable/Class.hs:255:5-22              1878        3204    0.0    0.0     3.7    0.8
-                   defaultHash                                Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38              1879        3204    0.0    0.2     3.7    0.8
-                    hashWithSalt                              Data.Hashable.Class          src/Data/Hashable/Class.hs:1060:5-32             1880        3204    0.0    0.1     3.7    0.6
-                     hashWithSalt1                            Data.Hashable.Class          src/Data/Hashable/Class.hs:302:1-45              1881        3204    0.0    0.1     3.7    0.5
-                      liftHashWithSalt                        Data.Hashable.Class          src/Data/Hashable/Class.hs:1056:5-73             1882        3204    0.0    0.3     3.7    0.4
-                       hashWithSalt                           Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1883           0    0.0    0.0     3.7    0.1
-                        hashInt                               Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)     1884        5101    3.7    0.1     3.7    0.1
-                insert'                                       Data.HashMap.Internal        Data/HashMap/Internal.hs:(806,1)-(837,76)        1885        3204    0.0    0.0     0.0    1.0
-                 insert'.go                                   Data.HashMap.Internal        Data/HashMap/Internal.hs:(808,5)-(837,76)        1886        9612    0.0    1.0     0.0    1.0
-                  unArray                                     Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1892       12816    0.0    0.0     0.0    0.0
-                  unMArray                                    Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1893       12816    0.0    0.0     0.0    0.0
-                  insert'.go.i                                Data.HashMap.Internal        Data/HashMap/Internal.hs:827:13-31               1888        6408    0.0    0.0     0.0    0.0
-                  insert'.go.m                                Data.HashMap.Internal        Data/HashMap/Internal.hs:826:13-24               1887        6408    0.0    0.0     0.0    0.0
-                  insert'.go.st                               Data.HashMap.Internal        Data/HashMap/Internal.hs:821:17-36               1889        6408    0.0    0.0     0.0    0.0
-                   unArray                                    Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1890        6408    0.0    0.0     0.0    0.0
-                  insert'.go.st'                              Data.HashMap.Internal        Data/HashMap/Internal.hs:822:17-48               1891        6408    0.0    0.0     0.0    0.0
-             /=                                               Main                         app/Main.hs:69:13-14                             1786           0    0.0    0.0     0.0    0.0
-           dijkstra.go.genState.isWorthStepping               Main                         app/Main.hs:(220,13)-(239,52)                    1781       12815    0.0    0.0     0.0    0.0
-           dijkstra.go.genState.uState                        Main                         app/Main.hs:217:13-69                            1776       12815    0.0    0.0     0.0    0.0
-            lookup#                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1777       12815    0.0    0.0     0.0    0.0
-             unArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1779       25630    0.0    0.0     0.0    0.0
-             hash                                             Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1778       12815    0.0    0.0     0.0    0.0
-             lookup#.\                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1780       12815    0.0    0.0     0.0    0.0
-           dijkstra.go.genState.vFishTypes                    Main                         app/Main.hs:219:13-83                            1826       12815    0.0    0.0     3.7    0.0
-            lookup#                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1827       12815    3.7    0.0     3.7    0.0
-             unArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1829       25630    0.0    0.0     0.0    0.0
-             hash                                             Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1828       12815    0.0    0.0     0.0    0.0
-             lookup#.\                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1830       12815    0.0    0.0     0.0    0.0
-           dijkstra.go.genState.vState                        Main                         app/Main.hs:218:13-69                            1834       12815    0.0    0.0     0.0    0.0
-            lookup#                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1835       12815    0.0    0.0     0.0    0.0
-             unArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1837       25630    0.0    0.0     0.0    0.0
-             hash                                             Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1836       12815    0.0    0.0     0.0    0.0
-             lookup#.\                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1838       12815    0.0    0.0     0.0    0.0
-           dijkstra.go.genState.vState'                       Main                         app/Main.hs:(220,13)-(239,52)                    1872        3022    0.0    0.0     0.0    0.0
-          debugId                                             Main                         app/Main.hs:(58,1)-(59,27)                       1913        3022    0.0    0.0     0.0    0.0
-          dijkstra.go.f.accQueue                              Main                         app/Main.hs:196:20-55                            1916        3022    0.0    0.0     7.4    2.7
-           insert                                             Data.MultiSet                Data/MultiSet.hs:318:1-45                        1917        3022    7.4    2.7     7.4    2.7
-            compare                                           Main                         app/Main.hs:(98,3)-(101,102)                     1923       29645    0.0    0.0     0.0    0.0
-            unMS                                              Data.MultiSet                Data/MultiSet.hs:193:27-30                       1918        3022    0.0    0.0     0.0    0.0
-          dijkstra.go.f.accQueueAsserted                      Main                         app/Main.hs:197:20-69                            1915        3022    0.0    0.0     0.0    0.0
-          dijkstra.go.f.sourceOpt                             Main                         app/Main.hs:195:20-47                            1914        3022    0.0    0.0     0.0    0.1
-           +                                                  Main                         app/Main.hs:69:22-24                             1925           0    0.0    0.1     0.0    0.1
-          dijkstra.go.f.state'                                Main                         app/Main.hs:194:20-68                            1863        3022    0.0    0.1     0.0    3.7
-           update                                             Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:296:1-24         1864        3022    0.0    0.2     0.0    3.6
-            alter                                             Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:(308,1)-(320,60) 1865        3022    0.0    0.3     0.0    3.4
-             alter.h                                          Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:309:9-19         1866        3022    0.0    0.0     0.0    0.0
-              hash                                            Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1867        3022    0.0    0.0     0.0    0.0
-             alter.lookupRes                                  Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:310:9-51         1868        3022    0.0    0.0     0.0    0.0
-              lookupRecordCollision#                          Data.HashMap.Internal        Data/HashMap/Internal.hs:(689,1)-(690,78)        1869        3022    0.0    0.0     0.0    0.0
-               unArray                                        Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1870        6044    0.0    0.0     0.0    0.0
-               lookupRecordCollision#.\                       Data.HashMap.Internal        Data/HashMap/Internal.hs:690:52-69               1871        3022    0.0    0.0     0.0    0.0
-             insertKeyExists                                  Data.HashMap.Internal        Data/HashMap/Internal.hs:(883,1)-(914,28)        1894        3022    0.0    0.0     0.0    3.1
-              insertKeyExists.go                              Data.HashMap.Internal        Data/HashMap/Internal.hs:(885,5)-(901,28)        1895        9066    0.0    1.3     0.0    3.1
-               unMArray                                       Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1907       12088    0.0    0.0     0.0    0.0
-               unArray                                        Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1906        4500    0.0    0.0     0.0    0.0
-               clone                                          Data.HashMap.Internal        Data/HashMap/Internal.hs:(2431,1)-(2432,34)      1908        3794    0.0    1.7     0.0    1.7
-                unArray                                       Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1909        3794    0.0    0.0     0.0    0.0
-               insertKeyExists.go.i                           Data.HashMap.Internal        Data/HashMap/Internal.hs:897:13-34               1897        3794    0.0    0.0     0.0    0.0
-               insertKeyExists.go.st                          Data.HashMap.Internal        Data/HashMap/Internal.hs:894:13-32               1896        3794    0.0    0.0     0.0    0.0
-                unArray                                       Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1898        3794    0.0    0.0     0.0    0.0
-               insertKeyExists.go.st'                         Data.HashMap.Internal        Data/HashMap/Internal.hs:895:13-60               1899        3794    0.0    0.1     0.0    0.1
-               insertKeyExists.go.i                           Data.HashMap.Internal        Data/HashMap/Internal.hs:892:13-31               1901        2250    0.0    0.0     0.0    0.0
-               insertKeyExists.go.m                           Data.HashMap.Internal        Data/HashMap/Internal.hs:891:13-33               1900        2250    0.0    0.0     0.0    0.0
-               insertKeyExists.go.st                          Data.HashMap.Internal        Data/HashMap/Internal.hs:888:13-32               1902        2250    0.0    0.0     0.0    0.0
-                unArray                                       Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1903        2250    0.0    0.0     0.0    0.0
-               insertKeyExists.go.st'                         Data.HashMap.Internal        Data/HashMap/Internal.hs:889:13-60               1904        2250    0.0    0.0     0.0    0.0
-                insertKeyExists.go.st'                        Data.HashMap.Internal        Data/HashMap/Internal.hs:895:13-60               1905           0    0.0    0.0     0.0    0.0
-        dijkstra.go.adjs                                      Main                         app/Main.hs:211:9-53                             1730        3023    0.0    0.0     0.0    0.0
-         lookup#                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1731        3023    0.0    0.0     0.0    0.0
-          unArray                                             Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1770        6046    0.0    0.0     0.0    0.0
-          hash                                                Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1732        3023    0.0    0.0     0.0    0.0
-          lookup#.\                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1771        3023    0.0    0.0     0.0    0.0
-        dijkstra.go.queue'                                    Main                         app/Main.hs:189:9-54                             1912        3023    0.0    0.0     0.0    0.0
-        dijkstra.go.queue'Asserted                            Main                         app/Main.hs:177:9-54                             1911        3023    0.0    0.0     0.0    0.0
-        dijkstra.go.state'                                    Main                         app/Main.hs:189:9-54                             1910        3023    0.0    0.0     0.0    0.0
-       dijkstra.initialQueue                                  Main                         app/Main.hs:(170,5)-(171,34)                     1721           1    0.0    0.0     0.0    0.0
-        dijkstra.initialQueue.s                               Main                         app/Main.hs:171:13-34                            1723           1    0.0    0.0     0.0    0.0
-        singleton                                             Data.MultiSet                Data/MultiSet.hs:310:1-36                        1722           1    0.0    0.0     0.0    0.0
-       dijkstra.initialStateMap                               Main                         app/Main.hs:169:5-127                            1605           1    0.0    0.2     0.0    0.5
-        update                                                Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:296:1-24         1606           1    0.0    0.0     0.0    0.0
-         alter                                                Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:(308,1)-(320,60) 1607           1    0.0    0.0     0.0    0.0
-          alter.h                                             Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:309:9-19         1608           1    0.0    0.0     0.0    0.0
-           hash                                               Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1609           1    0.0    0.0     0.0    0.0
-          alter.lookupRes                                     Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:310:9-51         1610           1    0.0    0.0     0.0    0.0
-           lookupRecordCollision#                             Data.HashMap.Internal        Data/HashMap/Internal.hs:(689,1)-(690,78)        1611           1    0.0    0.0     0.0    0.0
-            unArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1651           2    0.0    0.0     0.0    0.0
-            lookupRecordCollision#.\                          Data.HashMap.Internal        Data/HashMap/Internal.hs:690:52-69               1652           1    0.0    0.0     0.0    0.0
-          insertKeyExists                                     Data.HashMap.Internal        Data/HashMap/Internal.hs:(883,1)-(914,28)        1707           1    0.0    0.0     0.0    0.0
-           insertKeyExists.go                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:(885,5)-(901,28)        1708           3    0.0    0.0     0.0    0.0
-            unMArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1715           4    0.0    0.0     0.0    0.0
-            clone                                             Data.HashMap.Internal        Data/HashMap/Internal.hs:(2431,1)-(2432,34)      1713           2    0.0    0.0     0.0    0.0
-             unArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1714           2    0.0    0.0     0.0    0.0
-            insertKeyExists.go.i                              Data.HashMap.Internal        Data/HashMap/Internal.hs:897:13-34               1710           2    0.0    0.0     0.0    0.0
-            insertKeyExists.go.st                             Data.HashMap.Internal        Data/HashMap/Internal.hs:894:13-32               1709           2    0.0    0.0     0.0    0.0
-             unArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1711           2    0.0    0.0     0.0    0.0
-            insertKeyExists.go.st'                            Data.HashMap.Internal        Data/HashMap/Internal.hs:895:13-60               1712           2    0.0    0.0     0.0    0.0
-        fromList                                              Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:1-70         1613           0    0.0    0.0     0.0    0.3
-         fromList.\                                           Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:40-60        1636        1000    0.0    0.0     0.0    0.3
-          unsafeInsert                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:(928,1)-(958,76)        1637        1000    0.0    0.0     0.0    0.3
-           unsafeInsert.go                                    Data.HashMap.Internal        Data/HashMap/Internal.hs:(931,5)-(958,76)        1640        1968    0.0    0.3     0.0    0.3
-            unMArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1641        2968    0.0    0.0     0.0    0.0
-            unArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1644        2902    0.0    0.0     0.0    0.0
-            copy                                              Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(297,1)-(302,30)  1645        1932    0.0    0.0     0.0    0.0
-             copy.\                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(301,9)-(302,30)  1646        1932    0.0    0.0     0.0    0.0
-              unArray                                         Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1647        1932    0.0    0.0     0.0    0.0
-              unMArray                                        Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1648        1932    0.0    0.0     0.0    0.0
-            unsafeInsert.go.i                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:955:13-25               1650         968    0.0    0.0     0.0    0.0
-            unsafeInsert.go.i                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:949:13-31               1643         966    0.0    0.0     0.0    0.0
-            unsafeInsert.go.m                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:948:13-24               1642         966    0.0    0.0     0.0    0.0
-           unsafeInsert.h0                                    Data.HashMap.Internal        Data/HashMap/Internal.hs:930:5-16                1638        1000    0.0    0.0     0.0    0.0
-            hash                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1639        1000    0.0    0.0     0.0    0.0
-       dijkstra.nodeStateDef                                  Main                         app/Main.hs:164:5-104                            1614           1    0.0    0.0     0.0    0.0
-        fromList                                              Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:1-70         1616           0    0.0    0.0     0.0    0.0
-         fromList.\                                           Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:40-60        1618           2    0.0    0.0     0.0    0.0
-          unsafeInsert                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:(928,1)-(958,76)        1619           2    0.0    0.0     0.0    0.0
-           unsafeInsert.go                                    Data.HashMap.Internal        Data/HashMap/Internal.hs:(931,5)-(958,76)        1632           2    0.0    0.0     0.0    0.0
-            unMArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1635           3    0.0    0.0     0.0    0.0
-           unsafeInsert.h0                                    Data.HashMap.Internal        Data/HashMap/Internal.hs:930:5-16                1620           2    0.0    0.0     0.0    0.0
-            hash                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1621           2    0.0    0.0     0.0    0.0
-             hash                                             Data.Hashable.Class          src/Data/Hashable/Class.hs:1059:10-43            1622           2    0.0    0.0     0.0    0.0
-              hash                                            Data.Hashable.Class          src/Data/Hashable/Class.hs:255:5-22              1623           2    0.0    0.0     0.0    0.0
-               defaultHash                                    Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38              1624           2    0.0    0.0     0.0    0.0
-                hashWithSalt                                  Data.Hashable.Class          src/Data/Hashable/Class.hs:1060:5-32             1625           2    0.0    0.0     0.0    0.0
-                 hashWithSalt1                                Data.Hashable.Class          src/Data/Hashable/Class.hs:302:1-45              1626           2    0.0    0.0     0.0    0.0
-                  liftHashWithSalt                            Data.Hashable.Class          src/Data/Hashable/Class.hs:1056:5-73             1627           2    0.0    0.0     0.0    0.0
-                   hashWithSalt                               Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1629           0    0.0    0.0     0.0    0.0
-                    hashInt                                   Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)     1630           3    0.0    0.0     0.0    0.0
-       dijkstra.startState                                    Main                         app/Main.hs:(165,5)-(168,76)                     1653           1    0.0    0.0     0.0    0.0
-        dijkstra.startState.startFishState                    Main                         app/Main.hs:168:9-76                             1689           1    0.0    0.0     0.0    0.0
-         singleton                                            Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:170:1-33         1690           1    0.0    0.0     0.0    0.0
-          singleton                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:598:1-37                1691           1    0.0    0.0     0.0    0.0
-           hash                                               Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1692           1    0.0    0.0     0.0    0.0
-            hash                                              Data.Hashable.Class          src/Data/Hashable/Class.hs:1059:10-43            1693           1    0.0    0.0     0.0    0.0
-             hash                                             Data.Hashable.Class          src/Data/Hashable/Class.hs:255:5-22              1694           1    0.0    0.0     0.0    0.0
-              defaultHash                                     Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38              1695           1    0.0    0.0     0.0    0.0
-               hashWithSalt                                   Data.Hashable.Class          src/Data/Hashable/Class.hs:1060:5-32             1696           1    0.0    0.0     0.0    0.0
-                hashWithSalt1                                 Data.Hashable.Class          src/Data/Hashable/Class.hs:302:1-45              1697           1    0.0    0.0     0.0    0.0
-                 liftHashWithSalt                             Data.Hashable.Class          src/Data/Hashable/Class.hs:1056:5-73             1698           1    0.0    0.0     0.0    0.0
-                  hashWithSalt                                Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1699           0    0.0    0.0     0.0    0.0
-                   hashInt                                    Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)     1700           1    0.0    0.0     0.0    0.0
-        dijkstra.startState.startFishTypes                    Main                         app/Main.hs:167:9-91                             1663           1    0.0    0.0     0.0    0.0
-         lookup#                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1664           1    0.0    0.0     0.0    0.0
-          unArray                                             Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1687           2    0.0    0.0     0.0    0.0
-          hash                                                Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1665           1    0.0    0.0     0.0    0.0
-          lookup#.\                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1688           1    0.0    0.0     0.0    0.0
-        mconcat                                               Data.HashMap.Internal        Data/HashMap/Internal.hs:324:10-51               1654           1    0.0    0.0     0.0    0.0
-         mappend                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:327:3-16                1661           0    0.0    0.0     0.0    0.0
-          union                                               Data.HashMap.Internal        Data/HashMap/Internal.hs:1586:1-23               1662           0    0.0    0.0     0.0    0.0
-           unArray                                            Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1705           6    0.0    0.0     0.0    0.0
-           unMArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1706           4    0.0    0.0     0.0    0.0
-      lookup#                                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1601           1    0.0    0.0     0.0    0.0
-       unArray                                                Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1926           2    0.0    0.0     0.0    0.0
-       hash                                                   Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1602           1    0.0    0.0     0.0    0.0
-       lookup#.\                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1927           1    0.0    0.0     0.0    0.0
-    findShortestTwoPaths.go                                   Main                         app/Main.hs:151:5-103                            1935           1    0.0    0.0     0.0    0.0
-     findShortestTwoPaths.sortFunc                            Main                         app/Main.hs:152:5-54                             1937           3    0.0    0.0     0.0    0.0
-     findShortestTwoPaths.go.\                                Main                         app/Main.hs:151:55-63                            1940           1    0.0    0.0     0.0    0.0
-    findShortestTwoPaths.sortedList                           Main                         app/Main.hs:148:5-75                             1928           1    0.0    0.0     0.0    0.0
-     unArray                                                  Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1929           5    0.0    0.0     0.0    0.0
-     findShortestTwoPaths.sortedList.\                        Main                         app/Main.hs:148:44                               1931           2    0.0    0.0     0.0    0.0
-    findShortestTwoPaths.f                                    Main                         app/Main.hs:150:5-75                             1934           0    0.0    0.0     0.0    0.0
-   main.processInput.(...)                                    Main                         app/Main.hs:42:9-49                              1668           1    0.0    0.2     0.0    0.2
-   main.processInput.(...)                                    Main                         app/Main.hs:38:9-50                              1593           1    0.0    0.0     0.0    0.0
-   main.processInput.cityLines                                Main                         app/Main.hs:42:9-49                              1667           1    0.0    0.0     0.0    0.0
-   main.processInput.edgeLines                                Main                         app/Main.hs:42:9-49                              1736           1    0.0    0.0     0.0    0.0
-   main.processInput.firstLine                                Main                         app/Main.hs:38:9-50                              1591           1    0.0    0.0     0.0    0.0
-   main.processInput.firstLine'                               Main                         app/Main.hs:39:9-56                              1594           1    0.0    0.0     0.0    0.0
-   main.processInput.inputLines                               Main                         app/Main.hs:37:9-32                              1592           1    3.7    5.3     3.7    5.3
-   main.processInput.k                                        Main                         app/Main.hs:41:9-27                              1617           1    0.0    0.0     0.0    0.0
-   main.processInput.n                                        Main                         app/Main.hs:40:9-27                              1590           1    0.0    0.0     0.0    0.0
-   main.processInput.rest                                     Main                         app/Main.hs:38:9-50                              1669           1    0.0    0.0     0.0    0.0
-   main.processInput.testData                                 Main                         app/Main.hs:(43,9)-(51,9)                        1589           1    0.0    1.9    29.6   47.9
-    unArray                                                   Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1753        6383    0.0    0.0     0.0    0.0
-    main.processInput.testData.\                              Main                         app/Main.hs:49:73-83                             1752        2000    0.0    0.1     0.0    0.1
-    $sel:edgeCostMap:Test                                     Main                         app/Main.hs:119:3-13                             1733           1    0.0    0.0     0.0    0.0
-    main.processInput.testData.undirectedEdgeCostList         Main                         app/Main.hs:48:13-130                            1735           1   25.9   43.0    25.9   43.0
-     main.processInput.testData.undirectedEdgeCostList.\      Main                         app/Main.hs:48:60-88                             1737        2000    0.0    0.1     0.0    0.1
-    toAdjacencyMap                                            Main                         app/Main.hs:143:1-78                             1754           1    0.0    0.2     3.7    1.0
-     toAdjacencyMap.\                                         Main                         app/Main.hs:143:64-71                            1755        4000    0.0    0.0     0.0    0.0
-     unsafeInsertWith                                         Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:225:1-68         1756        4000    0.0    0.0     3.7    0.9
-      unsafeInsertWithKey                                     Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:(230,1)-(260,76) 1757        4000    0.0    0.1     3.7    0.9
-       unsafeInsertWithKey.go                                 Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:(233,5)-(260,76) 1760       10967    3.7    0.8     3.7    0.8
-        unMArray                                              Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1761       14966    0.0    0.0     0.0    0.0
-        unArray                                               Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1764       14900    0.0    0.0     0.0    0.0
-        unsafeInsertWithKey.go.i                              Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:257:13-25        1769        4025    0.0    0.0     0.0    0.0
-        unsafeInsertWithKey.go.i                              Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:251:13-31        1763        3908    0.0    0.0     0.0    0.0
-        unsafeInsertWithKey.go.m                              Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:250:13-24        1762        3908    0.0    0.0     0.0    0.0
-        copy                                                  Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(297,1)-(302,30)  1765        1932    0.0    0.0     0.0    0.0
-         copy.\                                               Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(301,9)-(302,30)  1766        1932    0.0    0.0     0.0    0.0
-          unArray                                             Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1767        1932    0.0    0.0     0.0    0.0
-          unMArray                                            Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1768        1932    0.0    0.0     0.0    0.0
-       unsafeInsertWithKey.h0                                 Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:232:5-16         1758        4000    0.0    0.0     0.0    0.0
-        hash                                                  Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1759        4000    0.0    0.0     0.0    0.0
-    fromList                                                  Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:1-70         1666           0    0.0    0.0     0.0    1.9
-     fromList.\                                               Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:40-60        1670        5000    0.0    0.0     0.0    1.9
-      unsafeInsert                                            Data.HashMap.Internal        Data/HashMap/Internal.hs:(928,1)-(958,76)        1671        5000    0.0    0.0     0.0    1.9
-       unsafeInsert.go                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:(931,5)-(958,76)        1674       13125    0.0    1.1     0.0    1.1
-        unMArray                                              Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1675       22473    0.0    0.0     0.0    0.0
-        unArray                                               Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1678       20074    0.0    0.0     0.0    0.0
-        copy                                                  Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(297,1)-(302,30)  1679        7648    0.0    0.0     0.0    0.0
-         copy.\                                               Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(301,9)-(302,30)  1680        7648    0.0    0.0     0.0    0.0
-          unArray                                             Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1681        7648    0.0    0.0     0.0    0.0
-          unMArray                                            Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1682        7648    0.0    0.0     0.0    0.0
-        unsafeInsert.go.i                                     Data.HashMap.Internal        Data/HashMap/Internal.hs:949:13-31               1677        6541    0.0    0.0     0.0    0.0
-        unsafeInsert.go.m                                     Data.HashMap.Internal        Data/HashMap/Internal.hs:948:13-24               1676        6541    0.0    0.0     0.0    0.0
-        unsafeInsert.go.i                                     Data.HashMap.Internal        Data/HashMap/Internal.hs:955:13-25               1683        5408    0.0    0.0     0.0    0.0
-       unsafeInsert.h0                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:930:5-16                1672        5000    0.0    0.0     0.0    0.7
-        hash                                                  Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1673        5000    0.0    0.0     0.0    0.7
-         hash                                                 Data.Hashable.Class          src/Data/Hashable/Class.hs:569:10-56             1742        4000    0.0    0.0     0.0    0.7
-          hash                                                Data.Hashable.Class          src/Data/Hashable/Class.hs:255:5-22              1743        4000    0.0    0.0     0.0    0.7
-           defaultHash                                        Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38              1744        4000    0.0    0.2     0.0    0.7
-            hashWithSalt                                      Data.Hashable.Class          src/Data/Hashable/Class.hs:570:5-32              1745        4000    0.0    0.0     0.0    0.5
-             hashWithSalt1                                    Data.Hashable.Class          src/Data/Hashable/Class.hs:302:1-45              1746        4000    0.0    0.0     0.0    0.5
-              liftHashWithSalt                                Data.Hashable.Class          src/Data/Hashable/Class.hs:573:5-46              1747        4000    0.0    0.1     0.0    0.5
-               defaultLiftHashWithSalt                        Data.Hashable.Class          src/Data/Hashable/Class.hs:314:1-60              1748        4000    0.0    0.0     0.0    0.4
-                liftHashWithSalt2                             Data.Hashable.Class          src/Data/Hashable/Class.hs:576:5-58              1749        4000    0.0    0.2     0.0    0.4
-                 hashWithSalt                                 Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1750           0    0.0    0.0     0.0    0.2
-                  hashInt                                     Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)     1751        8000    0.0    0.2     0.0    0.2
-   show                                                       Main                         app/Main.hs:(71,3)-(72,45)                       1942           1    0.0    0.0     0.0    0.0
+MAIN                                                          MAIN                         <built-in>                                        735           0    0.0    0.0   100.0  100.0
+ CAF                                                          GHC.Conc.Signal              <entire-module>                                  1408           0    0.0    0.0     0.0    0.0
+ CAF                                                          GHC.IO.Encoding              <entire-module>                                  1372           0    0.0    0.0     0.0    0.0
+ CAF                                                          GHC.IO.Encoding.Iconv        <entire-module>                                  1370           0    0.0    0.0     0.0    0.0
+ CAF                                                          GHC.IO.Exception             <entire-module>                                  1364           0    0.0    0.0     0.0    0.0
+ CAF                                                          GHC.IO.Handle.FD             <entire-module>                                  1361           0    0.0    0.0     0.0    0.0
+ CAF                                                          GHC.IO.Handle.Internals      <entire-module>                                  1360           0    0.0    0.0     0.0    0.0
+ CAF                                                          GHC.Weak.Finalize            <entire-module>                                  1324           0    0.0    0.0     0.0    0.0
+ CAF:$fEqTime1                                                Main                         <no location info>                               1142           0    0.0    0.0     0.0    0.0
+  /=                                                          Main                         app/Main.hs:101:13-14                            1682           1    0.0    0.0     0.0    0.0
+ CAF:$fFractionalTime3                                        Main                         <no location info>                               1183           0    0.0    0.0     0.0    0.0
+  /                                                           Main                         app/Main.hs:101:27-36                            1693           1    0.0    0.0     0.0    0.0
+ CAF:$fHashable1Hashed_$chash                                 Data.Hashable.Class          src/Data/Hashable/Class.hs:356:5-8                924           0    0.0    0.0     0.0    0.0
+  hash                                                        Data.Hashable.Class          src/Data/Hashable/Class.hs:356:5-13              1487           1    0.0    0.0     0.0    0.0
+ CAF:$fHashable1IntMap_$chashWithSalt                         Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-16               925           0    0.0    0.0     0.0    0.0
+  hashWithSalt                                                Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1514           1    0.0    0.0     0.0    0.0
+ CAF:$fNumTime1                                               Main                         <no location info>                               1169           0    0.0    0.0     0.0    0.0
+  fromInteger                                                 Main                         app/Main.hs:101:22-24                            1702           1    0.0    0.0     0.0    0.0
+ CAF:$fNumTime7                                               Main                         <no location info>                               1163           0    0.0    0.0     0.0    0.0
+  +                                                           Main                         app/Main.hs:101:22-24                            1743           1    0.0    0.0     0.0    0.0
+ CAF:$fOrdPath1                                               Main                         <no location info>                               1143           0    0.0    0.0     0.0    0.0
+  compare                                                     Main                         app/Main.hs:101:17-19                            1741           1    0.0    0.0     0.0    0.0
+ CAF:$fOrdTime2                                               Main                         <no location info>                               1161           0    0.0    0.0     0.0    0.0
+  max                                                         Main                         app/Main.hs:101:17-19                            1842           1    0.0    0.0     0.0    0.0
+ CAF:$fOrdTime5                                               Main                         <no location info>                               1157           0    0.0    0.0     0.0    0.0
+  <=                                                          Main                         app/Main.hs:101:17-19                            1820           1    0.0    0.0     0.0    0.0
+ CAF:$fShowHashMap6                                           Main                         <no location info>                               1189           0    0.0    0.0     0.0    0.0
+  show                                                        Main                         app/Main.hs:(103,3)-(104,45)                     1847           0    0.0    0.0     0.0    0.0
+ CAF:$sfromList                                               Main                         <no location info>                               1203           0    0.0    0.0     0.0    0.0
+  fromList                                                    Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:1-70         1501           1    0.0    0.0     0.0    0.0
+ CAF:$sfromList4                                              Main                         <no location info>                               1205           0    0.0    0.0     0.0    0.0
+  fromList                                                    Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:1-70         1631           1    0.0    0.0     0.0    0.0
+ CAF:$sfromList6                                              Main                         <no location info>                               1208           0    0.0    0.0     0.0    0.0
+  fromList                                                    Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:1-70         1498           1    0.0    0.0     0.0    0.0
+ CAF:$sunion1                                                 Main                         <no location info>                               1237           0    0.0    0.0     0.0    0.0
+  union                                                       Data.HashMap.Internal        Data/HashMap/Internal.hs:1586:1-23               1554           1    0.0    0.0     0.0    0.0
+ CAF:bitsPerSubkey                                            Data.HashMap.Internal        Data/HashMap/Internal.hs:2444:1-13               1056           0    0.0    0.0     0.0    0.0
+  bitsPerSubkey                                               Data.HashMap.Internal        Data/HashMap/Internal.hs:2444:1-17               1520           1    0.0    0.0     0.0    0.0
+ CAF:debugFlag                                                Main                         app/Main.hs:87:1-9                               1131           0    0.0    0.0     0.0    0.0
+  debugFlag                                                   Main                         app/Main.hs:87:1-17                              1625           1    0.0    0.0     0.0    0.0
+ CAF:empty                                                    Data.HashMap.Internal        Data/HashMap/Internal.hs:594:1-5                 1043           0    0.0    0.0     0.0    0.0
+  empty                                                       Data.HashMap.Internal        Data/HashMap/Internal.hs:594:1-13                1517           1    0.0    0.0     0.0    0.0
+ CAF:k_r7rl                                                   Main                         <no location info>                               1242           0    0.0    0.0     0.0    0.0
+  dijkstra                                                    Main                         app/Main.hs:(193,1)-(247,52)                     1549           0    0.0    0.0     0.0    0.0
+   dijkstra.startState                                        Main                         app/Main.hs:(197,5)-(200,76)                     1550           0    0.0    0.0     0.0    0.0
+    mconcat                                                   Data.HashMap.Internal        Data/HashMap/Internal.hs:324:10-51               1551           0    0.0    0.0     0.0    0.0
+     mappend                                                  Data.HashMap.Internal        Data/HashMap/Internal.hs:327:3-16                1552           1    0.0    0.0     0.0    0.0
+      <>                                                      Data.HashMap.Internal        Data/HashMap/Internal.hs:309:3-14                1553           1    0.0    0.0     0.0    0.0
+ CAF:lvl10_r7oe                                               Main                         <no location info>                               1105           0    0.0    0.0     0.0    0.0
+  main                                                        Main                         app/Main.hs:(64,1)-(83,9)                        1479           0    0.0    0.0     0.0    0.0
+   main.processInput                                          Main                         app/Main.hs:(67,5)-(83,9)                        1480           0    0.0    0.0     0.0    0.0
+    main.processInput.firstLine'                              Main                         app/Main.hs:71:9-56                              1481           0    0.0    0.0     0.0    0.0
+ CAF:lvl31_r7pn                                               Main                         <no location info>                               1115           0    0.0    0.0     0.0    0.0
+  dijkstra                                                    Main                         app/Main.hs:(193,1)-(247,52)                     1595           0    0.0    0.0     0.0    0.0
+   dijkstra.startState                                        Main                         app/Main.hs:(197,5)-(200,76)                     1596           0    0.0    0.0     0.0    0.0
+    mconcat                                                   Data.HashMap.Internal        Data/HashMap/Internal.hs:324:10-51               1597           0    0.0    0.0     0.0    0.0
+     mempty                                                   Data.HashMap.Internal        Data/HashMap/Internal.hs:325:3-16                1598           1    0.0    0.0     0.0    0.0
+ CAF:lvl35_r7pw                                               Main                         <no location info>                               1118           0    0.0    0.0     0.0    0.0
+  dijkstra                                                    Main                         app/Main.hs:(193,1)-(247,52)                     1684           0    0.0    0.0     0.0    0.0
+   dijkstra.nodeStateDef                                      Main                         app/Main.hs:196:5-104                            1685           0    0.0    0.0     0.0    0.0
+ CAF:lvl3_r7nS                                                Main                         <no location info>                               1097           0    0.0    0.0     0.0    0.0
+  main                                                        Main                         app/Main.hs:(64,1)-(83,9)                        1635           0    0.0    0.0     0.0    0.0
+   main.processInput                                          Main                         app/Main.hs:(67,5)-(83,9)                        1636           0    0.0    0.0     0.0    0.0
+    main.processInput.testData                                Main                         app/Main.hs:(75,9)-(83,9)                        1637           0    0.0    0.0     0.0    0.0
+     main.processInput.testData.undirectedEdgeCostList        Main                         app/Main.hs:80:13-130                            1638           0    0.0    0.0     0.0    0.0
+ CAF:lvl65_r7qm                                               Main                         <no location info>                               1170           0    0.0    0.0     0.0    0.0
+  dijkstra                                                    Main                         app/Main.hs:(193,1)-(247,52)                     1695           0    0.0    0.0     0.0    0.0
+   dijkstra.go                                                Main                         app/Main.hs:(205,5)-(247,52)                     1696           0    0.0    0.0     0.0    0.0
+    dijkstra.go.(...)                                         Main                         app/Main.hs:208:9-54                             1697           0    0.0    0.0     0.0    0.0
+     dijkstra.go.f                                            Main                         app/Main.hs:(209,9)-(218,75)                     1698           0    0.0    0.0     0.0    0.0
+      dijkstra.go.genState                                    Main                         app/Main.hs:(220,9)-(247,52)                     1699           0    0.0    0.0     0.0    0.0
+       dijkstra.go.genState.(...)                             Main                         app/Main.hs:(228,13)-(247,52)                    1700           0    0.0    0.0     0.0    0.0
+        dijkstra.go.genState.(...).foldFunc                   Main                         app/Main.hs:(230,17)-(247,52)                    1701           0    0.0    0.0     0.0    0.0
+         fromInteger                                          Main                         app/Main.hs:101:22-24                            1703           0    0.0    0.0     0.0    0.0
+ CAF:lvl66_r7qn                                               Main                         <no location info>                               1171           0    0.0    0.0     0.0    0.0
+  dijkstra                                                    Main                         app/Main.hs:(193,1)-(247,52)                     1704           0    0.0    0.0     0.0    0.0
+   dijkstra.go                                                Main                         app/Main.hs:(205,5)-(247,52)                     1705           0    0.0    0.0     0.0    0.0
+    dijkstra.go.(...)                                         Main                         app/Main.hs:208:9-54                             1706           0    0.0    0.0     0.0    0.0
+     dijkstra.go.f                                            Main                         app/Main.hs:(209,9)-(218,75)                     1707           0    0.0    0.0     0.0    0.0
+      dijkstra.go.genState                                    Main                         app/Main.hs:(220,9)-(247,52)                     1708           0    0.0    0.0     0.0    0.0
+       dijkstra.go.genState.(...)                             Main                         app/Main.hs:(228,13)-(247,52)                    1709           0    0.0    0.0     0.0    0.0
+        dijkstra.go.genState.(...).foldFunc                   Main                         app/Main.hs:(230,17)-(247,52)                    1710           0    0.0    0.0     0.0    0.0
+         fromInteger                                          Main                         app/Main.hs:101:22-24                            1711           0    0.0    0.0     0.0    0.0
+ CAF:lvl67_r7qo                                               Main                         <no location info>                               1184           0    0.0    0.0     0.0    0.0
+  dijkstra                                                    Main                         app/Main.hs:(193,1)-(247,52)                     1686           0    0.0    0.0     0.0    0.0
+   dijkstra.go                                                Main                         app/Main.hs:(205,5)-(247,52)                     1687           0    0.0    0.0     0.0    0.0
+    dijkstra.go.(...)                                         Main                         app/Main.hs:208:9-54                             1688           0    0.0    0.0     0.0    0.0
+     dijkstra.go.f                                            Main                         app/Main.hs:(209,9)-(218,75)                     1689           0    0.0    0.0     0.0    0.0
+      dijkstra.go.genState                                    Main                         app/Main.hs:(220,9)-(247,52)                     1690           0    0.0    0.0     0.0    0.0
+       dijkstra.go.genState.(...)                             Main                         app/Main.hs:(228,13)-(247,52)                    1691           0    0.0    0.0     0.0    0.0
+        dijkstra.go.genState.(...).foldFunc                   Main                         app/Main.hs:(230,17)-(247,52)                    1692           0    0.0    0.0     0.0    0.0
+         /                                                    Main                         app/Main.hs:101:27-36                            1694           0    0.0    0.0     0.0    0.0
+ CAF:lvl77_r7qR                                               Main                         <no location info>                               1229           0    0.0    0.0     0.0    0.0
+  insert'                                                     Data.HashMap.Internal        Data/HashMap/Internal.hs:(806,1)-(837,76)        1796           0    0.0    0.0     0.0    0.0
+   insert'.go                                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:(808,5)-(837,76)        1797           0    0.0    0.0     0.0    0.0
+    clone                                                     Data.HashMap.Internal        Data/HashMap/Internal.hs:(2431,1)-(2432,34)      1798           0    0.0    0.0     0.0    0.0
+ CAF:lvl7_r7nZ                                                Main                         <no location info>                               1100           0    0.0    0.0     0.0    0.0
+  main                                                        Main                         app/Main.hs:(64,1)-(83,9)                        1564           0    0.0    0.0     0.0    0.0
+   main.processInput                                          Main                         app/Main.hs:(67,5)-(83,9)                        1565           0    0.0    0.0     0.0    0.0
+    main.processInput.testData                                Main                         app/Main.hs:(75,9)-(83,9)                        1566           0    0.0    0.0     0.0    0.0
+ CAF:lvl84_r7r9                                               Main                         <no location info>                               1234           0    0.0    0.0     0.0    0.0
+  union                                                       Data.HashMap.Internal        Data/HashMap/Internal.hs:1586:1-23               1602           0    0.0    0.0     0.0    0.0
+   clone                                                      Data.HashMap.Internal        Data/HashMap/Internal.hs:(2431,1)-(2432,34)      1603           0    0.0    0.0     0.0    0.0
+ CAF:main1                                                    Main                         <no location info>                               1246           0    0.0    0.0     0.0    0.0
+  main                                                        Main                         app/Main.hs:(64,1)-(83,9)                        1470           1    0.0    0.0     0.0    0.0
+ CAF:maxChildren                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:2448:1-11               1057           0    0.0    0.0     0.0    0.0
+  maxChildren                                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:2448:1-44               1529           1    0.0    0.0     0.0    0.0
+ CAF:subkeyMask                                               Data.HashMap.Internal        Data/HashMap/Internal.hs:2452:1-10               1059           0    0.0    0.0     0.0    0.0
+  subkeyMask                                                  Data.HashMap.Internal        Data/HashMap/Internal.hs:2452:1-47               1519           1    0.0    0.0     0.0    0.0
+ main                                                         Main                         app/Main.hs:(64,1)-(83,9)                        1471           0    0.0    0.0   100.0  100.0
+  main.processInput                                           Main                         app/Main.hs:(67,5)-(83,9)                        1472           1    0.0    0.0   100.0  100.0
+   findShortestTwoPaths                                       Main                         app/Main.hs:(177,1)-(184,54)                     1482           1    0.0    0.0    99.9   99.9
+    findShortestTwoPaths.completions                          Main                         app/Main.hs:181:5-72                             1836           1    0.0    0.0     0.1    0.2
+     findShortestTwoPaths.f                                   Main                         app/Main.hs:182:5-75                             1837      262144    0.1    0.2     0.1    0.2
+    findShortestTwoPaths.finalState                           Main                         app/Main.hs:179:5-40                             1483           1    0.0    0.0    99.8   99.7
+     findFinalState                                           Main                         app/Main.hs:(187,1)-(188,77)                     1484           1    0.0    0.0    99.8   99.7
+      dijkstra                                                Main                         app/Main.hs:(193,1)-(247,52)                     1488           1    0.0    0.0    99.8   99.7
+       dijkstra.go                                            Main                         app/Main.hs:(205,5)-(247,52)                     1621       26730    0.0    0.0    99.8   99.7
+        minView                                               Main                         app/Main.hs:(47,1)-(48,46)                       1622       26730    0.0    0.0     0.4    0.0
+         union                                                Main                         app/Main.hs:(51,1)-(55,26)                       1626      355032    0.1    0.0     0.4    0.0
+          link                                                Main                         app/Main.hs:(57,1)-(58,54)                       1828      355026    0.1    0.0     0.1    0.0
+          <=                                                  Main                         app/Main.hs:101:17-19                            1827           0    0.2    0.0     0.2    0.0
+        debug                                                 Main                         app/Main.hs:(88,1)-(89,27)                       1624       26729    0.0    0.0     0.0    0.0
+        dijkstra.go.(...)                                     Main                         app/Main.hs:208:9-54                             1669       26729    0.1    0.0    99.3   99.7
+         dijkstra.go.f                                        Main                         app/Main.hs:(209,9)-(218,75)                     1670      198578    0.1    0.0    99.3   99.7
+          debug                                               Main                         app/Main.hs:(88,1)-(89,27)                       1671      198578    0.0    0.0     0.0    0.0
+          dijkstra.go.f.cost                                  Main                         app/Main.hs:218:13-75                            1745      198578    0.0    0.0     0.5    0.0
+           lookup#                                            Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1746      198578    0.4    0.0     0.5    0.0
+            unArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1758      610383    0.0    0.0     0.0    0.0
+            hash                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1747      198578    0.0    0.0     0.1    0.0
+             hash                                             Data.Hashable.Class          src/Data/Hashable/Class.hs:569:10-56             1748      198578    0.0    0.0     0.1    0.0
+              hash                                            Data.Hashable.Class          src/Data/Hashable/Class.hs:255:5-22              1749      198578    0.0    0.0     0.1    0.0
+               defaultHash                                    Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38              1750      198578    0.0    0.0     0.1    0.0
+                hashWithSalt                                  Data.Hashable.Class          src/Data/Hashable/Class.hs:570:5-32              1751      198578    0.0    0.0     0.0    0.0
+                 hashWithSalt1                                Data.Hashable.Class          src/Data/Hashable/Class.hs:302:1-45              1752      198578    0.0    0.0     0.0    0.0
+                  liftHashWithSalt                            Data.Hashable.Class          src/Data/Hashable/Class.hs:573:5-46              1753      198578    0.0    0.0     0.0    0.0
+                   defaultLiftHashWithSalt                    Data.Hashable.Class          src/Data/Hashable/Class.hs:314:1-60              1754      198578    0.0    0.0     0.0    0.0
+                    liftHashWithSalt2                         Data.Hashable.Class          src/Data/Hashable/Class.hs:576:5-58              1755      198578    0.0    0.0     0.0    0.0
+                     hashWithSalt                             Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1756           0    0.0    0.0     0.0    0.0
+                      hashInt                                 Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)     1757      397156    0.0    0.0     0.0    0.0
+            lookup#.\                                         Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1759      198578    0.0    0.0     0.0    0.0
+          dijkstra.go.genState                                Main                         app/Main.hs:(220,9)-(247,52)                     1672      198578    0.1    0.0    98.6   99.6
+           dijkstra.go.genState.(...)                         Main                         app/Main.hs:(228,13)-(247,52)                    1679      198578    7.3    0.8    97.9   99.5
+            unArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1680   152706482    0.6    0.0     0.6    0.0
+            dijkstra.go.genState.(...).foldFunc               Main                         app/Main.hs:(230,17)-(247,52)                    1681   101671936   10.7   27.9    90.0   98.8
+             dijkstra.go.genState.(...).foldFunc.(...)        Main                         app/Main.hs:232:28-105                           1722    39331290    7.2    4.7     8.7    5.8
+              +                                               Main                         app/Main.hs:101:22-24                            1744           0    1.5    1.1     1.5    1.1
+             dijkstra.go.genState.(...).foldFunc.isUpdated'   Main                         app/Main.hs:244:28-65                            1712    39331290    0.6    0.0     0.6    0.0
+             dijkstra.go.genState.(...).foldFunc.k'           Main                         app/Main.hs:232:28-105                           1721    39331290    0.4    0.0     0.4    0.0
+             dijkstra.go.genState.(...).foldFunc.maybeExist   Main                         app/Main.hs:233:28-56                            1713    39331290    0.7    1.1    59.9   64.1
+              lookup#                                         Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1714    39331290   35.6   41.7    59.2   63.0
+               unArray                                        Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1736    93855654    0.0    0.0     0.0    0.0
+               hash                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1715    39331290    0.7    0.0    23.6   21.2
+                hash                                          Data.Hashable.Class          src/Data/Hashable/Class.hs:1059:10-43            1716    39331290    0.3    0.0    22.9   21.2
+                 hash                                         Data.Hashable.Class          src/Data/Hashable/Class.hs:255:5-22              1717    39331290    0.3    0.0    22.6   21.2
+                  defaultHash                                 Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38              1718    39331290    1.4    2.2    22.3   21.2
+                   hashWithSalt                               Data.Hashable.Class          src/Data/Hashable/Class.hs:1060:5-32             1719    39331290    1.0    1.1    21.0   19.0
+                    hashWithSalt1                             Data.Hashable.Class          src/Data/Hashable/Class.hs:302:1-45              1720    39331290    1.2    1.1    19.9   17.9
+                     liftHashWithSalt                         Data.Hashable.Class          src/Data/Hashable/Class.hs:1056:5-73             1728    39331290   11.7    9.8    18.7   16.8
+                      hashWithSalt                            Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1729           0    3.6    0.0     7.0    7.1
+                       hashInt                                Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)     1730   253645183    3.4    7.1     3.4    7.1
+               lookup#.\                                      Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1737    39331290    0.0    0.0     0.0    0.0
+             dijkstra.go.genState.(...).foldFunc.path'        Main                         app/Main.hs:232:28-105                           1740    39331290    0.7    0.0     0.7    0.0
+             dijkstra.go.genState.(...).foldFunc.shouldUpdate Main                         app/Main.hs:(234,28)-(241,51)                    1738    39331290    3.1    0.0     6.2    0.0
+              compare                                         Main                         app/Main.hs:127:3-49                             1739    39331290    0.9    0.0     3.1    0.0
+               compare                                        Main                         app/Main.hs:101:17-19                            1742           0    2.1    0.0     2.1    0.0
+             dijkstra.go.genState.(...).foldFunc.acc'         Main                         app/Main.hs:(242,28)-(243,49)                    1770    39159440    0.7    0.0     1.6    1.0
+              insert                                          Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:179:1-27         1771      425101    0.0    0.0     0.9    1.0
+               insert                                         Data.HashMap.Internal        Data/HashMap/Internal.hs:802:1-37                1772      425101    0.0    0.0     0.9    1.0
+                hash                                          Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1773      425101    0.0    0.0     0.2    0.2
+                 hash                                         Data.Hashable.Class          src/Data/Hashable/Class.hs:1059:10-43            1774      425101    0.0    0.0     0.2    0.2
+                  hash                                        Data.Hashable.Class          src/Data/Hashable/Class.hs:255:5-22              1775      425101    0.0    0.0     0.2    0.2
+                   defaultHash                                Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38              1776      425101    0.0    0.0     0.2    0.2
+                    hashWithSalt                              Data.Hashable.Class          src/Data/Hashable/Class.hs:1060:5-32             1777      425101    0.0    0.0     0.2    0.2
+                     hashWithSalt1                            Data.Hashable.Class          src/Data/Hashable/Class.hs:302:1-45              1778      425101    0.0    0.0     0.2    0.2
+                      liftHashWithSalt                        Data.Hashable.Class          src/Data/Hashable/Class.hs:1056:5-73             1779      425101    0.1    0.1     0.2    0.2
+                       hashWithSalt                           Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1780           0    0.0    0.0     0.1    0.1
+                        hashInt                               Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)     1781     2698507    0.0    0.1     0.0    0.1
+                insert'                                       Data.HashMap.Internal        Data/HashMap/Internal.hs:(806,1)-(837,76)        1782      425101    0.0    0.0     0.6    0.8
+                 insert'.go                                   Data.HashMap.Internal        Data/HashMap/Internal.hs:(808,5)-(837,76)        1783     1437464    0.5    0.6     0.6    0.8
+                  unMArray                                    Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1794     2024726    0.0    0.0     0.0    0.0
+                  unArray                                     Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1793     1174524    0.0    0.0     0.0    0.0
+                  insert'.go.i                                Data.HashMap.Internal        Data/HashMap/Internal.hs:827:13-31               1789      587262    0.0    0.0     0.0    0.0
+                  insert'.go.m                                Data.HashMap.Internal        Data/HashMap/Internal.hs:826:13-24               1788      587262    0.0    0.0     0.0    0.0
+                  insert'.go.st                               Data.HashMap.Internal        Data/HashMap/Internal.hs:821:17-36               1790      587262    0.0    0.0     0.0    0.0
+                   unArray                                    Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1791      587262    0.0    0.0     0.0    0.0
+                  insert'.go.st'                              Data.HashMap.Internal        Data/HashMap/Internal.hs:822:17-48               1792      587262    0.0    0.0     0.0    0.0
+                  clone                                       Data.HashMap.Internal        Data/HashMap/Internal.hs:(2431,1)-(2432,34)      1795      425101    0.0    0.2     0.0    0.2
+                   unArray                                    Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1799      425101    0.0    0.0     0.0    0.0
+                  insert'.go.i                                Data.HashMap.Internal        Data/HashMap/Internal.hs:834:13-25               1785      425101    0.0    0.0     0.0    0.0
+                  insert'.go.st                               Data.HashMap.Internal        Data/HashMap/Internal.hs:829:13-32               1784      425101    0.0    0.0     0.0    0.0
+                   unArray                                    Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1786      425101    0.0    0.0     0.0    0.0
+                  insert'.go.st'                              Data.HashMap.Internal        Data/HashMap/Internal.hs:830:13-44               1787      425101    0.0    0.0     0.0    0.0
+             /=                                               Main                         app/Main.hs:101:13-14                            1683           0    1.2    0.0     1.2    0.0
+           dijkstra.go.genState.isWorthStepping               Main                         app/Main.hs:(228,13)-(247,52)                    1678      198578    0.0    0.0     0.0    0.0
+           dijkstra.go.genState.uState                        Main                         app/Main.hs:225:13-69                            1673      198578    0.0    0.0     0.1    0.0
+            lookup#                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1674      198578    0.1    0.0     0.1    0.0
+             unArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1676      397156    0.0    0.0     0.0    0.0
+             hash                                             Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1675      198578    0.0    0.0     0.0    0.0
+             lookup#.\                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1677      198578    0.0    0.0     0.0    0.0
+           dijkstra.go.genState.vFishTypes                    Main                         app/Main.hs:227:13-83                            1723      198578    0.0    0.0     0.2    0.0
+            lookup#                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1724      198578    0.2    0.0     0.2    0.0
+             unArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1726      397156    0.0    0.0     0.0    0.0
+             hash                                             Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1725      198578    0.0    0.0     0.0    0.0
+             lookup#.\                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1727      198578    0.0    0.0     0.0    0.0
+           dijkstra.go.genState.vState                        Main                         app/Main.hs:226:13-69                            1731      198578    0.0    0.0     0.2    0.0
+            lookup#                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1732      198578    0.2    0.0     0.2    0.0
+             unArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1734      397156    0.0    0.0     0.0    0.0
+             hash                                             Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1733      198578    0.0    0.0     0.0    0.0
+             lookup#.\                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1735      198578    0.0    0.0     0.0    0.0
+           dijkstra.go.genState.vState'                       Main                         app/Main.hs:(228,13)-(247,52)                    1769       26728    0.0    0.0     0.0    0.0
+          dijkstra.go.f.accQueue                              Main                         app/Main.hs:215:20-63                            1816       26728    0.0    0.0     0.1    0.0
+           insert                                             Main                         app/Main.hs:61:1-38                              1817       26728    0.0    0.0     0.1    0.0
+            union                                             Main                         app/Main.hs:(51,1)-(55,26)                       1819      222114    0.0    0.0     0.1    0.0
+             link                                             Main                         app/Main.hs:(57,1)-(58,54)                       1823      222113    0.0    0.0     0.0    0.0
+             <=                                               Main                         app/Main.hs:101:17-19                            1821           0    0.0    0.0     0.0    0.0
+            singleton                                         Main                         app/Main.hs:39:1-34                              1818       26728    0.0    0.0     0.0    0.0
+           +                                                  Main                         app/Main.hs:101:22-24                            1822           0    0.0    0.0     0.0    0.0
+          dijkstra.go.f.sourceOpt                             Main                         app/Main.hs:214:20-47                            1826       26728    0.0    0.0     0.0    0.0
+           +                                                  Main                         app/Main.hs:101:22-24                            1829           0    0.0    0.0     0.0    0.0
+          dijkstra.go.f.state'                                Main                         app/Main.hs:213:20-68                            1760       26728    0.0    0.0     0.1    0.0
+           update                                             Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:296:1-24         1761       26728    0.0    0.0     0.1    0.0
+            alter                                             Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:(308,1)-(320,60) 1762       26728    0.0    0.0     0.1    0.0
+             alter.h                                          Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:309:9-19         1763       26728    0.0    0.0     0.0    0.0
+              hash                                            Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1764       26728    0.0    0.0     0.0    0.0
+             alter.lookupRes                                  Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:310:9-51         1765       26728    0.0    0.0     0.0    0.0
+              lookupRecordCollision#                          Data.HashMap.Internal        Data/HashMap/Internal.hs:(689,1)-(690,78)        1766       26728    0.0    0.0     0.0    0.0
+               unArray                                        Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1767       53456    0.0    0.0     0.0    0.0
+               lookupRecordCollision#.\                       Data.HashMap.Internal        Data/HashMap/Internal.hs:690:52-69               1768       26728    0.0    0.0     0.0    0.0
+             insertKeyExists                                  Data.HashMap.Internal        Data/HashMap/Internal.hs:(883,1)-(914,28)        1800       26728    0.0    0.0     0.0    0.0
+              insertKeyExists.go                              Data.HashMap.Internal        Data/HashMap/Internal.hs:(885,5)-(901,28)        1801       80184    0.0    0.0     0.0    0.0
+               unMArray                                       Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1813      106912    0.0    0.0     0.0    0.0
+               unArray                                        Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1812       53456    0.0    0.0     0.0    0.0
+               clone                                          Data.HashMap.Internal        Data/HashMap/Internal.hs:(2431,1)-(2432,34)      1814       26728    0.0    0.0     0.0    0.0
+                unArray                                       Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1815       26728    0.0    0.0     0.0    0.0
+               insertKeyExists.go.i                           Data.HashMap.Internal        Data/HashMap/Internal.hs:892:13-31               1807       26728    0.0    0.0     0.0    0.0
+               insertKeyExists.go.i                           Data.HashMap.Internal        Data/HashMap/Internal.hs:897:13-34               1803       26728    0.0    0.0     0.0    0.0
+               insertKeyExists.go.m                           Data.HashMap.Internal        Data/HashMap/Internal.hs:891:13-33               1806       26728    0.0    0.0     0.0    0.0
+               insertKeyExists.go.st                          Data.HashMap.Internal        Data/HashMap/Internal.hs:888:13-32               1808       26728    0.0    0.0     0.0    0.0
+                unArray                                       Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1809       26728    0.0    0.0     0.0    0.0
+               insertKeyExists.go.st                          Data.HashMap.Internal        Data/HashMap/Internal.hs:894:13-32               1802       26728    0.0    0.0     0.0    0.0
+                unArray                                       Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1804       26728    0.0    0.0     0.0    0.0
+               insertKeyExists.go.st'                         Data.HashMap.Internal        Data/HashMap/Internal.hs:889:13-60               1810       26728    0.0    0.0     0.0    0.0
+                insertKeyExists.go.st'                        Data.HashMap.Internal        Data/HashMap/Internal.hs:895:13-60               1811           0    0.0    0.0     0.0    0.0
+               insertKeyExists.go.st'                         Data.HashMap.Internal        Data/HashMap/Internal.hs:895:13-60               1805       26728    0.0    0.0     0.0    0.0
+        dijkstra.go.adjs                                      Main                         app/Main.hs:219:9-53                             1627       26729    0.0    0.0     0.1    0.0
+         lookup#                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1628       26729    0.1    0.0     0.1    0.0
+          unArray                                             Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1667       53458    0.0    0.0     0.0    0.0
+          hash                                                Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1629       26729    0.0    0.0     0.0    0.0
+          lookup#.\                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1668       26729    0.0    0.0     0.0    0.0
+        dijkstra.go.queue'                                    Main                         app/Main.hs:208:9-54                             1825       26729    0.0    0.0     0.0    0.0
+        dijkstra.go.state'                                    Main                         app/Main.hs:208:9-54                             1824       26729    0.0    0.0     0.0    0.0
+       dijkstra.initialQueue                                  Main                         app/Main.hs:(202,5)-(203,34)                     1489           1    0.0    0.0     0.0    0.0
+        dijkstra.initialQueue.s                               Main                         app/Main.hs:203:13-34                            1623           1    0.0    0.0     0.0    0.0
+        singleton                                             Main                         app/Main.hs:39:1-34                              1490           1    0.0    0.0     0.0    0.0
+       dijkstra.initialStateMap                               Main                         app/Main.hs:201:5-127                            1491           1    0.0    0.0     0.0    0.0
+        update                                                Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:296:1-24         1492           1    0.0    0.0     0.0    0.0
+         alter                                                Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:(308,1)-(320,60) 1493           1    0.0    0.0     0.0    0.0
+          alter.h                                             Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:309:9-19         1494           1    0.0    0.0     0.0    0.0
+           hash                                               Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1495           1    0.0    0.0     0.0    0.0
+          alter.lookupRes                                     Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:310:9-51         1496           1    0.0    0.0     0.0    0.0
+           lookupRecordCollision#                             Data.HashMap.Internal        Data/HashMap/Internal.hs:(689,1)-(690,78)        1497           1    0.0    0.0     0.0    0.0
+            unArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1545           2    0.0    0.0     0.0    0.0
+            lookupRecordCollision#.\                          Data.HashMap.Internal        Data/HashMap/Internal.hs:690:52-69               1546           1    0.0    0.0     0.0    0.0
+          insertKeyExists                                     Data.HashMap.Internal        Data/HashMap/Internal.hs:(883,1)-(914,28)        1605           1    0.0    0.0     0.0    0.0
+           insertKeyExists.go                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:(885,5)-(901,28)        1606           3    0.0    0.0     0.0    0.0
+            unMArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1618           4    0.0    0.0     0.0    0.0
+            unArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1617           2    0.0    0.0     0.0    0.0
+            clone                                             Data.HashMap.Internal        Data/HashMap/Internal.hs:(2431,1)-(2432,34)      1619           1    0.0    0.0     0.0    0.0
+             unArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1620           1    0.0    0.0     0.0    0.0
+            insertKeyExists.go.i                              Data.HashMap.Internal        Data/HashMap/Internal.hs:892:13-31               1612           1    0.0    0.0     0.0    0.0
+            insertKeyExists.go.i                              Data.HashMap.Internal        Data/HashMap/Internal.hs:897:13-34               1608           1    0.0    0.0     0.0    0.0
+            insertKeyExists.go.m                              Data.HashMap.Internal        Data/HashMap/Internal.hs:891:13-33               1611           1    0.0    0.0     0.0    0.0
+            insertKeyExists.go.st                             Data.HashMap.Internal        Data/HashMap/Internal.hs:888:13-32               1613           1    0.0    0.0     0.0    0.0
+             unArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1614           1    0.0    0.0     0.0    0.0
+            insertKeyExists.go.st                             Data.HashMap.Internal        Data/HashMap/Internal.hs:894:13-32               1607           1    0.0    0.0     0.0    0.0
+             unArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1609           1    0.0    0.0     0.0    0.0
+            insertKeyExists.go.st'                            Data.HashMap.Internal        Data/HashMap/Internal.hs:889:13-60               1615           1    0.0    0.0     0.0    0.0
+             insertKeyExists.go.st'                           Data.HashMap.Internal        Data/HashMap/Internal.hs:895:13-60               1616           0    0.0    0.0     0.0    0.0
+            insertKeyExists.go.st'                            Data.HashMap.Internal        Data/HashMap/Internal.hs:895:13-60               1610           1    0.0    0.0     0.0    0.0
+        fromList                                              Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:1-70         1499           0    0.0    0.0     0.0    0.0
+         fromList.\                                           Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:40-60        1531         600    0.0    0.0     0.0    0.0
+          unsafeInsert                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:(928,1)-(958,76)        1532         600    0.0    0.0     0.0    0.0
+           unsafeInsert.go                                    Data.HashMap.Internal        Data/HashMap/Internal.hs:(931,5)-(958,76)        1535        1168    0.0    0.0     0.0    0.0
+            unMArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1536        1768    0.0    0.0     0.0    0.0
+            unArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1539        1702    0.0    0.0     0.0    0.0
+            copy                                              Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(297,1)-(302,30)  1540        1132    0.0    0.0     0.0    0.0
+             copy.\                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(301,9)-(302,30)  1541        1132    0.0    0.0     0.0    0.0
+              unArray                                         Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1542        1132    0.0    0.0     0.0    0.0
+              unMArray                                        Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1543        1132    0.0    0.0     0.0    0.0
+            unsafeInsert.go.i                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:955:13-25               1544         568    0.0    0.0     0.0    0.0
+            unsafeInsert.go.i                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:949:13-31               1538         566    0.0    0.0     0.0    0.0
+            unsafeInsert.go.m                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:948:13-24               1537         566    0.0    0.0     0.0    0.0
+           unsafeInsert.h0                                    Data.HashMap.Internal        Data/HashMap/Internal.hs:930:5-16                1533         600    0.0    0.0     0.0    0.0
+            hash                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1534         600    0.0    0.0     0.0    0.0
+       dijkstra.nodeStateDef                                  Main                         app/Main.hs:196:5-104                            1500           1    0.0    0.0     0.0    0.0
+        fromList                                              Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:1-70         1502           0    0.0    0.0     0.0    0.0
+         fromList.\                                           Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:40-60        1504         512    0.0    0.0     0.0    0.0
+          unsafeInsert                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:(928,1)-(958,76)        1505         512    0.0    0.0     0.0    0.0
+           unsafeInsert.go                                    Data.HashMap.Internal        Data/HashMap/Internal.hs:(931,5)-(958,76)        1518        1102    0.0    0.0     0.0    0.0
+            unMArray                                          Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1521        1820    0.0    0.0     0.0    0.0
+            unArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1524        1564    0.0    0.0     0.0    0.0
+            copy                                              Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(297,1)-(302,30)  1525         768    0.0    0.0     0.0    0.0
+             copy.\                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(301,9)-(302,30)  1526         768    0.0    0.0     0.0    0.0
+              unArray                                         Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1527         768    0.0    0.0     0.0    0.0
+              unMArray                                        Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1528         768    0.0    0.0     0.0    0.0
+            unsafeInsert.go.i                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:949:13-31               1523         610    0.0    0.0     0.0    0.0
+            unsafeInsert.go.m                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:948:13-24               1522         610    0.0    0.0     0.0    0.0
+            unsafeInsert.go.i                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:955:13-25               1530         364    0.0    0.0     0.0    0.0
+           unsafeInsert.h0                                    Data.HashMap.Internal        Data/HashMap/Internal.hs:930:5-16                1506         512    0.0    0.0     0.0    0.0
+            hash                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1507         512    0.0    0.0     0.0    0.0
+             hash                                             Data.Hashable.Class          src/Data/Hashable/Class.hs:1059:10-43            1508         512    0.0    0.0     0.0    0.0
+              hash                                            Data.Hashable.Class          src/Data/Hashable/Class.hs:255:5-22              1509         512    0.0    0.0     0.0    0.0
+               defaultHash                                    Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38              1510         512    0.0    0.0     0.0    0.0
+                hashWithSalt                                  Data.Hashable.Class          src/Data/Hashable/Class.hs:1060:5-32             1511         512    0.0    0.0     0.0    0.0
+                 hashWithSalt1                                Data.Hashable.Class          src/Data/Hashable/Class.hs:302:1-45              1512         512    0.0    0.0     0.0    0.0
+                  liftHashWithSalt                            Data.Hashable.Class          src/Data/Hashable/Class.hs:1056:5-73             1513         512    0.0    0.0     0.0    0.0
+                   hashWithSalt                               Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1515           0    0.0    0.0     0.0    0.0
+                    hashInt                                   Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)     1516        2816    0.0    0.0     0.0    0.0
+       dijkstra.startState                                    Main                         app/Main.hs:(197,5)-(200,76)                     1547           1    0.0    0.0     0.0    0.0
+        dijkstra.startState.startFishState                    Main                         app/Main.hs:200:9-76                             1583           1    0.0    0.0     0.0    0.0
+         singleton                                            Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:170:1-33         1584           1    0.0    0.0     0.0    0.0
+          singleton                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:598:1-37                1585           1    0.0    0.0     0.0    0.0
+           hash                                               Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1586           1    0.0    0.0     0.0    0.0
+            hash                                              Data.Hashable.Class          src/Data/Hashable/Class.hs:1059:10-43            1587           1    0.0    0.0     0.0    0.0
+             hash                                             Data.Hashable.Class          src/Data/Hashable/Class.hs:255:5-22              1588           1    0.0    0.0     0.0    0.0
+              defaultHash                                     Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38              1589           1    0.0    0.0     0.0    0.0
+               hashWithSalt                                   Data.Hashable.Class          src/Data/Hashable/Class.hs:1060:5-32             1590           1    0.0    0.0     0.0    0.0
+                hashWithSalt1                                 Data.Hashable.Class          src/Data/Hashable/Class.hs:302:1-45              1591           1    0.0    0.0     0.0    0.0
+                 liftHashWithSalt                             Data.Hashable.Class          src/Data/Hashable/Class.hs:1056:5-73             1592           1    0.0    0.0     0.0    0.0
+                  hashWithSalt                                Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1593           0    0.0    0.0     0.0    0.0
+                   hashInt                                    Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)     1594           2    0.0    0.0     0.0    0.0
+        dijkstra.startState.startFishTypes                    Main                         app/Main.hs:199:9-91                             1557           1    0.0    0.0     0.0    0.0
+         lookup#                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1558           1    0.0    0.0     0.0    0.0
+          unArray                                             Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1581           2    0.0    0.0     0.0    0.0
+          hash                                                Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1559           1    0.0    0.0     0.0    0.0
+          lookup#.\                                           Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1582           1    0.0    0.0     0.0    0.0
+        mconcat                                               Data.HashMap.Internal        Data/HashMap/Internal.hs:324:10-51               1548           1    0.0    0.0     0.0    0.0
+         mappend                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:327:3-16                1555           0    0.0    0.0     0.0    0.0
+          union                                               Data.HashMap.Internal        Data/HashMap/Internal.hs:1586:1-23               1556           0    0.0    0.0     0.0    0.0
+           unArray                                            Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1599           4    0.0    0.0     0.0    0.0
+           unMArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1600           4    0.0    0.0     0.0    0.0
+           clone                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:(2431,1)-(2432,34)      1601           1    0.0    0.0     0.0    0.0
+            unArray                                           Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1604           1    0.0    0.0     0.0    0.0
+      lookup#                                                 Data.HashMap.Internal        Data/HashMap/Internal.hs:638:1-82                1485           1    0.0    0.0     0.0    0.0
+       unArray                                                Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1830           2    0.0    0.0     0.0    0.0
+       hash                                                   Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1486           1    0.0    0.0     0.0    0.0
+       lookup#.\                                              Data.HashMap.Internal        Data/HashMap/Internal.hs:638:58-66               1831           1    0.0    0.0     0.0    0.0
+    findShortestTwoPaths.go                                   Main                         app/Main.hs:183:5-103                            1839           1    0.0    0.0     0.0    0.0
+     findShortestTwoPaths.sortFunc                            Main                         app/Main.hs:184:5-54                             1841       19683    0.0    0.0     0.0    0.0
+     findShortestTwoPaths.go.\                                Main                         app/Main.hs:183:55-63                            1844           1    0.0    0.0     0.0    0.0
+     compare                                                  Main                         app/Main.hs:101:17-19                            1840           0    0.0    0.0     0.0    0.0
+    findShortestTwoPaths.sortedList                           Main                         app/Main.hs:180:5-75                             1832           1    0.0    0.0     0.0    0.0
+     unArray                                                  Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1833         769    0.0    0.0     0.0    0.0
+     findShortestTwoPaths.sortedList.\                        Main                         app/Main.hs:180:44                               1835         512    0.0    0.0     0.0    0.0
+    findShortestTwoPaths.f                                    Main                         app/Main.hs:182:5-75                             1838           0    0.0    0.0     0.0    0.0
+   main.processInput.(...)                                    Main                         app/Main.hs:74:9-49                              1562           1    0.0    0.0     0.0    0.0
+   main.processInput.(...)                                    Main                         app/Main.hs:70:9-50                              1477           1    0.0    0.0     0.0    0.0
+   main.processInput.cityLines                                Main                         app/Main.hs:74:9-49                              1561           1    0.0    0.0     0.0    0.0
+   main.processInput.edgeLines                                Main                         app/Main.hs:74:9-49                              1633           1    0.0    0.0     0.0    0.0
+   main.processInput.firstLine                                Main                         app/Main.hs:70:9-50                              1475           1    0.0    0.0     0.0    0.0
+   main.processInput.firstLine'                               Main                         app/Main.hs:71:9-56                              1478           1    0.0    0.0     0.0    0.0
+   main.processInput.inputLines                               Main                         app/Main.hs:69:9-32                              1476           1    0.0    0.0     0.0    0.0
+   main.processInput.k                                        Main                         app/Main.hs:73:9-27                              1503           1    0.0    0.0     0.0    0.0
+   main.processInput.n                                        Main                         app/Main.hs:72:9-27                              1474           1    0.0    0.0     0.0    0.0
+   main.processInput.rest                                     Main                         app/Main.hs:70:9-50                              1563           1    0.0    0.0     0.0    0.0
+   main.processInput.testData                                 Main                         app/Main.hs:(75,9)-(83,9)                        1473           1    0.0    0.0     0.0    0.1
+    unArray                                                   Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1650        6287    0.0    0.0     0.0    0.0
+    main.processInput.testData.\                              Main                         app/Main.hs:81:73-83                             1649        2000    0.0    0.0     0.0    0.0
+    $sel:edgeCostMap:Test                                     Main                         app/Main.hs:151:3-13                             1630           1    0.0    0.0     0.0    0.0
+    main.processInput.testData.undirectedEdgeCostList         Main                         app/Main.hs:80:13-130                            1632           1    0.0    0.0     0.0    0.0
+     main.processInput.testData.undirectedEdgeCostList.\      Main                         app/Main.hs:80:60-88                             1634        2000    0.0    0.0     0.0    0.0
+    toAdjacencyMap                                            Main                         app/Main.hs:175:1-78                             1651           1    0.0    0.0     0.0    0.0
+     toAdjacencyMap.\                                         Main                         app/Main.hs:175:64-71                            1652        4000    0.0    0.0     0.0    0.0
+     unsafeInsertWith                                         Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:225:1-68         1653        4000    0.0    0.0     0.0    0.0
+      unsafeInsertWithKey                                     Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:(230,1)-(260,76) 1654        4000    0.0    0.0     0.0    0.0
+       unsafeInsertWithKey.go                                 Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:(233,5)-(260,76) 1657       11367    0.0    0.0     0.0    0.0
+        unMArray                                              Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1658       15366    0.0    0.0     0.0    0.0
+        unArray                                               Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1661       15300    0.0    0.0     0.0    0.0
+        unsafeInsertWithKey.go.i                              Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:251:13-31        1660        4098    0.0    0.0     0.0    0.0
+        unsafeInsertWithKey.go.m                              Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:250:13-24        1659        4098    0.0    0.0     0.0    0.0
+        unsafeInsertWithKey.go.i                              Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:257:13-25        1666        3835    0.0    0.0     0.0    0.0
+        copy                                                  Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(297,1)-(302,30)  1662        1132    0.0    0.0     0.0    0.0
+         copy.\                                               Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(301,9)-(302,30)  1663        1132    0.0    0.0     0.0    0.0
+          unArray                                             Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1664        1132    0.0    0.0     0.0    0.0
+          unMArray                                            Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1665        1132    0.0    0.0     0.0    0.0
+       unsafeInsertWithKey.h0                                 Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:232:5-16         1655        4000    0.0    0.0     0.0    0.0
+        hash                                                  Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1656        4000    0.0    0.0     0.0    0.0
+    fromList                                                  Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:1-70         1560           0    0.0    0.0     0.0    0.0
+     fromList.\                                               Data.HashMap.Internal.Strict Data/HashMap/Internal/Strict.hs:645:40-60        1567        4600    0.0    0.0     0.0    0.0
+      unsafeInsert                                            Data.HashMap.Internal        Data/HashMap/Internal.hs:(928,1)-(958,76)        1568        4600    0.0    0.0     0.0    0.0
+       unsafeInsert.go                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:(931,5)-(958,76)        1571       12300    0.0    0.0     0.0    0.0
+        unMArray                                              Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1572       21175    0.0    0.0     0.0    0.0
+        unArray                                               Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1575       18850    0.0    0.0     0.0    0.0
+        copy                                                  Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(297,1)-(302,30)  1576        6900    0.0    0.0     0.0    0.0
+         copy.\                                               Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:(301,9)-(302,30)  1577        6900    0.0    0.0     0.0    0.0
+          unArray                                             Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:126:7-13          1578        6900    0.0    0.0     0.0    0.0
+          unMArray                                            Data.HashMap.Internal.Array  Data/HashMap/Internal/Array.hs:158:7-14          1579        6900    0.0    0.0     0.0    0.0
+        unsafeInsert.go.i                                     Data.HashMap.Internal        Data/HashMap/Internal.hs:949:13-31               1574        6338    0.0    0.0     0.0    0.0
+        unsafeInsert.go.m                                     Data.HashMap.Internal        Data/HashMap/Internal.hs:948:13-24               1573        6338    0.0    0.0     0.0    0.0
+        unsafeInsert.go.i                                     Data.HashMap.Internal        Data/HashMap/Internal.hs:955:13-25               1580        4812    0.0    0.0     0.0    0.0
+       unsafeInsert.h0                                        Data.HashMap.Internal        Data/HashMap/Internal.hs:930:5-16                1569        4600    0.0    0.0     0.0    0.0
+        hash                                                  Data.HashMap.Internal        Data/HashMap/Internal.hs:183:1-28                1570        4600    0.0    0.0     0.0    0.0
+         hash                                                 Data.Hashable.Class          src/Data/Hashable/Class.hs:569:10-56             1639        4000    0.0    0.0     0.0    0.0
+          hash                                                Data.Hashable.Class          src/Data/Hashable/Class.hs:255:5-22              1640        4000    0.0    0.0     0.0    0.0
+           defaultHash                                        Data.Hashable.Class          src/Data/Hashable/Class.hs:331:1-38              1641        4000    0.0    0.0     0.0    0.0
+            hashWithSalt                                      Data.Hashable.Class          src/Data/Hashable/Class.hs:570:5-32              1642        4000    0.0    0.0     0.0    0.0
+             hashWithSalt1                                    Data.Hashable.Class          src/Data/Hashable/Class.hs:302:1-45              1643        4000    0.0    0.0     0.0    0.0
+              liftHashWithSalt                                Data.Hashable.Class          src/Data/Hashable/Class.hs:573:5-46              1644        4000    0.0    0.0     0.0    0.0
+               defaultLiftHashWithSalt                        Data.Hashable.Class          src/Data/Hashable/Class.hs:314:1-60              1645        4000    0.0    0.0     0.0    0.0
+                liftHashWithSalt2                             Data.Hashable.Class          src/Data/Hashable/Class.hs:576:5-58              1646        4000    0.0    0.0     0.0    0.0
+                 hashWithSalt                                 Data.Hashable.Class          src/Data/Hashable/Class.hs:357:5-26              1647           0    0.0    0.0     0.0    0.0
+                  hashInt                                     Data.Hashable.LowLevel       src/Data/Hashable/LowLevel.hs:(64,1)-(80,31)     1648        8000    0.0    0.0     0.0    0.0
+   show                                                       Main                         app/Main.hs:(103,3)-(104,45)                     1846           1    0.0    0.0     0.0    0.0

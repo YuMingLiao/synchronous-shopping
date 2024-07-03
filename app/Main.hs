@@ -25,8 +25,41 @@ import Data.Text.Lazy (unpack)
 import Data.Maybe (fromJust)
 import Control.Exception (assert)
 import Data.Ord (comparing)
-import PriorityQueue (PriorityQueue)
-import qualified PriorityQueue as MS
+import Data.Hashable
+{- Hackerrank needs it.
+instance Hashable v => Hashable (S.Set v) where
+    hashWithSalt salt x = S.foldl' hashWithSalt (hashWithSalt salt (S.size x)) x 
+-}
+data PriorityQueue k a = Nil | Branch k a (PriorityQueue k a) (PriorityQueue k a)
+
+empty :: Ord k => PriorityQueue k a
+empty = Nil
+
+singleton :: Ord k => k -> a -> PriorityQueue k a
+singleton k a = Branch k a Nil Nil
+
+minKeyValue :: Ord k => PriorityQueue k a -> (k, a)
+minKeyValue Nil              = error "empty queue"
+minKeyValue (Branch k a _ _) = (k, a)
+
+
+minView :: Ord k => PriorityQueue k a -> Maybe (a, PriorityQueue k a)
+minView Nil              = Nothing
+minView (Branch _ a l r) = Just (a, union l r)
+
+union :: Ord k => PriorityQueue k a -> PriorityQueue k a -> PriorityQueue k a
+union l Nil = l
+union Nil r = r
+union l@(Branch kl _ _ _) r@(Branch kr _ _ _)
+    | kl <= kr  = link l r
+    | otherwise = link r l
+
+link (Branch k a Nil m) r = Branch k a r m
+link (Branch k a ll lr) r = Branch k a lr (union ll r)
+
+insert :: Ord k => k -> a -> PriorityQueue k a -> PriorityQueue k a
+insert k a q = union (singleton k a) q
+
 main :: IO ()
 main = do
   interact $ processInput
@@ -166,11 +199,11 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
         startFishTypes = maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
         startFishState = HM.singleton startFishTypes (Path [start] (Time 0)) 
     initialStateMap = HM.update (const (Just startState)) start $ HM.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
-    initialQueue = MS.singleton (Time 0) s
+    initialQueue = singleton (Time 0) s
       where s = Opt (Time 0) start
     go :: HashMap Vertex NodeState -> PriorityQueue Time SourceOpt -> HashMap Vertex NodeState
-    go state (MS.minView -> Nothing) = state
-    go state (MS.minView -> Just ((Opt t u), rest)) | debug "u" u True = go state' queue'
+    go state (minView -> Nothing) = state
+    go state (minView -> Just ((Opt t u), rest)) | debug "u" u True = go state' queue'
       where
         (state', queue') = L.foldl f (state,rest) adjs
         f (state, queue) v | debug "v" v True = 
@@ -179,7 +212,7 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
                  where 
                    state' = HM.update (const (Just vState')) v state
                    sourceOpt = Opt (t + cost) v
-                   accQueue = MS.insert (t + cost) sourceOpt queue
+                   accQueue = insert (t + cost) sourceOpt queue
                Nothing -> (state, queue)
           where
             cost = maybe (error "no cost") id $ HM.lookup (u,v) edgeCostMap 
