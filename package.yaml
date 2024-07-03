@@ -14,10 +14,10 @@ dependencies:
   - text
   - derivingvia-extras
   - graphviz
-  - hashtables
+  - multiset
 executable:
   main: app/Main.hs
-library:
-  exposed-modules:
-    Lib
-  source-dirs: src
+# library:
+#  exposed-modules:
+#   Lib
+#  source-dirs: src

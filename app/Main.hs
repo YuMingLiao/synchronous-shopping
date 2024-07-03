@@ -22,6 +22,9 @@ import Data.Text.Lazy (unpack)
 import Data.Maybe (fromJust)
 import Control.Exception (assert)
 import Data.Ord (comparing)
+import Data.MultiSet (MultiSet)
+import qualified Data.MultiSet as MS
+
 main :: IO ()
 main = do
   interact $ processInput
@@ -172,11 +175,11 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
         startFishTypes = maybe (error "no startFishTypes") id $ M.lookup start fishTypeMap 
         startFishState = M.singleton startFishTypes (Path [start] (Time 0)) 
     initialStateMap = M.update (const (Just startState)) start $ M.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
-    initialQueue = M.singleton s s
+    initialQueue = MS.singleton s
       where s = Opt (Time 0) start
-    go :: M.Map Vertex NodeState -> M.Map SourceOpt SourceOpt -> M.Map Vertex NodeState
-    go state (M.minView -> Nothing) = state
-    go state (M.minView -> Just ((Opt t u), rest)) | debug "u" u $ debug "rest" rest True = go state' queue'Asserted
+    go :: M.Map Vertex NodeState -> MultiSet SourceOpt -> M.Map Vertex NodeState
+    go state (MS.minView -> Nothing) = state
+    go state (MS.minView -> Just ((Opt t u), rest)) | debug "u" u $ debug "rest" rest True = go state' queue'Asserted
       where
         uIsShop = u == 166 || u == 820 || u == 928
         queue'Asserted = assert shopPassedRight queue'
@@ -189,7 +192,7 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
           ||
           (if | 928 `member` rest -> 928 `member` queue'
               | otherwise -> True)
-        member shop q = M.filter (\(Opt _ v)->(v==shop)) q /= M.empty
+        member shop q = MS.filter (\(Opt _ v)->(v==shop)) q /= MS.empty
 
         (state', queue') = L.foldl f (state,rest) adjs
         f (state, queue) v | debug "v" v True = 
@@ -198,7 +201,7 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
                  where 
                    state' = M.update (const (Just vState')) v state
                    sourceOpt = Opt (t + cost) v
-                   accQueue = M.insert sourceOpt sourceOpt queue
+                   accQueue = MS.insert sourceOpt queue
                    accQueueAsserted = assert shopPassedRight accQueue
                    shopPassedRight = (if
                      | 166 `member` queue -> 166 `member` accQueue
@@ -209,7 +212,7 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
                      ||
                      (if | 928 `member` queue -> 928 `member` accQueue
                          | otherwise -> True)
-                   member shop q = M.filter (\(Opt _ v)->(v==shop)) q /= M.empty
+                   member shop q = MS.filter (\(Opt _ v)->(v==shop)) q /= MS.empty
                Nothing -> (state, queue)
           where
             cost = maybe (error "no cost") id $ M.lookup (u,v) edgeCostMap 
@@ -222,18 +225,14 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
             uState = maybe (error "no uState") id $ M.lookup u state
             vState = maybe (error "no vState") id $ M.lookup v state
             vFishTypes = maybe (error "no vFishTypes") id $ M.lookup v fishTypeMap
-            vState' = M.foldrWithKey foldFunc (vState, False) uState
+            vState' = M.foldrWithKey foldFunc vState uState
               where
-                foldFunc k path@(Path p a) (acc, improved) = 
+                foldFunc k path@(Path p a) acc = 
                   if | a /= 1/0 -> let 
                            (k', path'@(Path p' a')) = ((k `S.union` vFishTypes), (Path (v:p) (a + cost)))
-
-                           alterIfFaster k m = M.alter alterFunc k' acc
-                             where
-                               alterFunc Nothing = Just path'
-                               alterFunc (Just path@(Path p a)) = Just (minOn time path path')   
-				isFaster =  
-                         in M.alter alterFunc k' acc
+                           alterFunc Nothing = Just path'
+                           alterFunc (Just path@(Path p a)) = Just (minOn time path path')   
+                           in M.alter alterFunc k' acc
                      | otherwise -> acc
             isWorthStepping = 
               if | vState' == vState -> False
