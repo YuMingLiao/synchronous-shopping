@@ -25,11 +25,8 @@ import Data.Text.Lazy (unpack)
 import Data.Maybe (fromJust)
 import Control.Exception (assert)
 import Data.Ord (comparing)
-import Data.Hashable
-{- Hackerrank needs it.
-instance Hashable v => Hashable (S.Set v) where
-    hashWithSalt salt x = S.foldl' hashWithSalt (hashWithSalt salt (S.size x)) x 
--}
+import qualified Data.HashTable.IO as H
+
 data PriorityQueue k a = Nil | Branch k a (PriorityQueue k a) (PriorityQueue k a)
 
 empty :: Ord k => PriorityQueue k a
@@ -205,10 +202,11 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
     go state (minView -> Nothing) = state
     go state (minView -> Just ((Opt t u), rest)) | debug "u" u True = go state' queue'
       where
-        (state', queue') = L.foldl f (state,rest) adjs
+        (state', queue') = L.sequence f (state,rest) adjs
         f (state, queue) v | debug "v" v True = 
-          case genState state u v cost of
-               Just vState' -> (state', accQueue)
+          case runST (genState state u v cost) of
+               Just vState' -> do
+                 pure (state', accQueue)
                  where 
                    state' = HM.update (const (Just vState')) v state
                    sourceOpt = Opt (t + cost) v
@@ -217,34 +215,33 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
           where
             cost = maybe (error "no cost") id $ HM.lookup (u,v) edgeCostMap 
         adjs = maybe [] id $ HM.lookup u adjacencyMap
-        genState state u v cost = 
+        genState state u v cost = do
+          (isWorthStepping, vState') <- H.foldM foldFunc (False, vState) uState
           case isWorthStepping of 
-               True  -> Just vState' 
-               False -> Nothing
+               True  -> pure $ Just vState' 
+               False -> pure Nothing
            where
             uState = maybe (error "no uState") id $ HM.lookup u state
             vState = maybe (error "no vState") id $ HM.lookup v state
             vFishTypes = maybe (error "no vFishTypes") id $ HM.lookup v fishTypeMap
-            (isWorthStepping, vState') = HM.foldrWithKey foldFunc (False, vState) uState
               where
-                foldFunc k path@(Path p a) (isUpdated, acc) = 
-                  if | a /= 1/0 -> let 
-                           (k', path'@(Path p' a')) = ((k `S.union` vFishTypes), (Path (v:p) (a + cost)))
-                           maybeExist = HM.lookup k' acc
-                           shouldUpdate =
-                             case maybeExist of 
-                                  Nothing -> True
-                                  (Just origSolution) -> 
-                                    case compare origSolution path' of
-                                         LT -> False
-                                         EQ -> False
-                                         GT -> True
-                           acc' | shouldUpdate == True = HM.insert k' path' acc
-                                | otherwise = acc
-                           isUpdated' = isUpdated || shouldUpdate
-                           in (isUpdated', acc')
+                foldFunc (isUpdated, acc) (k, path@(Path p a)) = 
+                  if | a /= 1/0 -> do
+                       let (k', path'@(Path p' a')) = ((k `S.union` vFishTypes), (Path (v:p) (a + cost)))
+                       maybeExist <- H.lookup k' acc
+                       let shouldUpdate = case maybeExist of 
+                                            Nothing -> True
+                                            (Just origSolution) -> case compare origSolution path' of
+                                                                        LT -> False
+                                                                        EQ -> False
+                                                                        GT -> True
+                            mkAcc' | shouldUpdate == True = HM.insert k' path' acc
+                                   | otherwise = pure acc
+                        acc' <- mkAcc'
+                        let isUpdated' = isUpdated || shouldUpdate
+                        pure (isUpdated', acc')
                              
-                     | otherwise -> (isUpdated, acc)
+                      | otherwise -> pure (isUpdated, acc)
 
 -- TODO: [x] NodeState needs to be MonoidalMap. 
 --       [x] And Time needs to be a newtype with customized <>.
