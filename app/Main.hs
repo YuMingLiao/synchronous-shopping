@@ -16,7 +16,8 @@ import Debug.Trace
 import Data.Set (Set)
 import qualified Data.Set as S
 import Data.Map
-import qualified Data.Map as M
+import qualified Data.Map as M hiding (insertLookupWithKey)
+import qualified Data.Map.Strict as M (insertLookupWithKey)
 import Data.Tuple (swap)
 import Data.Text.Lazy (unpack)
 import Data.Maybe (fromJust)
@@ -225,18 +226,26 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
             uState = maybe (error "no uState") id $ M.lookup u state
             vState = maybe (error "no vState") id $ M.lookup v state
             vFishTypes = maybe (error "no vFishTypes") id $ M.lookup v fishTypeMap
-            vState' = M.foldrWithKey foldFunc vState uState
+            (isWorthStepping, vState') = M.foldrWithKey foldFunc (False, vState) uState
               where
-                foldFunc k path@(Path p a) acc = 
+                foldFunc k path@(Path p a) (isUpdated, acc) = 
                   if | a /= 1/0 -> let 
                            (k', path'@(Path p' a')) = ((k `S.union` vFishTypes), (Path (v:p) (a + cost)))
-                           alterFunc Nothing = Just path'
-                           alterFunc (Just path@(Path p a)) = Just (minOn time path path')   
-                           in M.alter alterFunc k' acc
-                     | otherwise -> acc
-            isWorthStepping = 
-              if | vState' == vState -> False
-                 | otherwise -> True 
+                           insertLookup' kx x t = M.insertLookupWithKey f kx x t
+                           f = \_ a' a -> minOn time a a'
+                           (maybeExist, acc') = insertLookup' k' path' acc
+                           isUpdated' | isUpdated = True
+                                      | otherwise =   
+                             case maybeExist of
+                                  Nothing -> True
+                                  (Just origSolution) -> 
+                                    case compare origSolution path' of
+                                         LT -> False
+                                         EQ -> False
+                                         GT -> True
+                           in (isUpdated', acc')
+                             
+                     | otherwise -> (isUpdated, acc)
 
 -- TODO: [x] NodeState needs to be MonoidalMap. 
 --       [x] And Time needs to be a newtype with customized <>.

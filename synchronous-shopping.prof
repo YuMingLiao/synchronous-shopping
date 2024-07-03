@@ -1,202 +1,211 @@
-	Wed Jul  3 12:06 2024 Time and Allocation Profiling Report  (Final)
+	Wed Jul  3 12:37 2024 Time and Allocation Profiling Report  (Final)
 
 	   synchronous-shopping +RTS -p -RTS
 
-	total time  =        0.02 secs   (24 ticks @ 1000 us, 1 processor)
-	total alloc =  62,373,864 bytes  (excludes profiling overheads)
+	total time  =        0.03 secs   (27 ticks @ 1000 us, 1 processor)
+	total alloc =  61,693,464 bytes  (excludes profiling overheads)
 
-COST CENTRE                                       MODULE        SRC                                %time %alloc
+COST CENTRE                                       MODULE        SRC                            %time %alloc
 
-main.processInput.testData.undirectedEdgeCostList Main          app/Main.hs:45:13-130               25.0   42.7
-dijkstra.go.genState.vState                       Main          app/Main.hs:226:13-68               12.5    0.3
-deleteMin                                         Data.MultiSet Data/MultiSet.hs:376:1-49            8.3    1.7
-main.processInput.testData                        Main          app/Main.hs:(40,9)-(48,9)            8.3    5.7
-dijkstra.go.genState.isWorthStepping              Main          app/Main.hs:(237,13)-(239,36)        8.3    8.3
-minView                                           Data.MultiSet Data/MultiSet.hs:(415,1)-(417,38)    4.2    0.3
-toAdjacencyMap                                    Main          app/Main.hs:143:1-77                 4.2    4.9
-main.processInput.inputLines                      Main          app/Main.hs:34:9-32                  4.2    5.2
-dijkstra.go.genState.vState'.foldFunc.alterFunc   Main          app/Main.hs:(233,28)-(234,90)        4.2    2.0
-dijkstra.go.genState.vState'.foldFunc             Main          app/Main.hs:(230,17)-(236,39)        4.2   12.0
-dijkstra.go.genState.vFishTypes                   Main          app/Main.hs:227:13-82                4.2    0.3
-dijkstra.go.f                                     Main          app/Main.hs:(198,9)-(218,74)         4.2    2.2
-dijkstra.go.(...)                                 Main          app/Main.hs:197:9-54                 4.2    0.1
-dijkstra.go                                       Main          app/Main.hs:(181,5)-(239,36)         4.2    0.2
-insert                                            Data.MultiSet Data/MultiSet.hs:318:1-45            0.0    2.7
-minOn                                             Main          app/Main.hs:(146,1)-(150,10)         0.0    1.8
-main                                              Main          app/Main.hs:(29,1)-(48,9)            0.0    1.6
-dijkstra.go.genState                              Main          app/Main.hs:(220,9)-(239,36)         0.0    2.7
-dijkstra.go.f.state'                              Main          app/Main.hs:202:20-67                0.0    2.2
+dijkstra.go.f.cost                                Main          app/Main.hs:219:13-74           18.5    0.3
+main.processInput.testData.undirectedEdgeCostList Main          app/Main.hs:46:13-130           14.8   43.2
+main.processInput.testData                        Main          app/Main.hs:(41,9)-(49,9)       11.1    5.8
+main.processInput.inputLines                      Main          app/Main.hs:35:9-32             11.1    5.3
+dijkstra.go.genState.vFishTypes                   Main          app/Main.hs:228:13-82            7.4    0.3
+compare                                           Main          app/Main.hs:67:17-19             7.4    0.0
+insert                                            Data.MultiSet Data/MultiSet.hs:318:1-45        3.7    2.7
+toAdjacencyMap                                    Main          app/Main.hs:144:1-77             3.7    4.9
+minOn                                             Main          app/Main.hs:(147,1)-(151,10)     3.7    1.8
+dijkstra.go.genState.vState                       Main          app/Main.hs:227:13-68            3.7    0.3
+dijkstra.go.genState.(...).foldFunc.insertLookup' Main          app/Main.hs:234:28-80            3.7    6.8
+dijkstra.go.f.state'                              Main          app/Main.hs:203:20-67            3.7    2.3
+dijkstra.go.adjs                                  Main          app/Main.hs:220:9-52             3.7    0.1
+dijkstra.go.(...)                                 Main          app/Main.hs:198:9-54             3.7    0.1
+deleteMin                                         Data.MultiSet Data/MultiSet.hs:376:1-49        0.0    1.7
+main                                              Main          app/Main.hs:(30,1)-(49,9)        0.0    1.7
+dijkstra.go.genState.(...).foldFunc               Main          app/Main.hs:(231,17)-(248,52)    0.0   15.5
+dijkstra.go.genState.(...)                        Main          app/Main.hs:(229,13)-(248,52)    0.0    1.2
+dijkstra.go.genState                              Main          app/Main.hs:(221,9)-(248,52)     0.0    1.3
+dijkstra.go.f                                     Main          app/Main.hs:(199,9)-(219,74)     0.0    2.4
 
 
-                                                                                                                                          individual      inherited
-COST CENTRE                                                  MODULE                  SRC                               no.     entries  %time %alloc   %time %alloc
+                                                                                                                                             individual      inherited
+COST CENTRE                                                     MODULE                  SRC                               no.     entries  %time %alloc   %time %alloc
 
-MAIN                                                         MAIN                    <built-in>                        403           0    0.0    0.0   100.0  100.0
- CAF                                                         GHC.Conc.Signal         <entire-module>                   754           0    0.0    0.0     0.0    0.0
- CAF                                                         GHC.IO.Encoding         <entire-module>                   719           0    0.0    0.0     0.0    0.0
- CAF                                                         GHC.IO.Encoding.Iconv   <entire-module>                   717           0    0.0    0.0     0.0    0.0
- CAF                                                         GHC.IO.Exception        <entire-module>                   711           0    0.0    0.0     0.0    0.0
- CAF                                                         GHC.IO.Handle.FD        <entire-module>                   708           0    0.0    0.1     0.0    0.1
- CAF                                                         GHC.IO.Handle.Internals <entire-module>                   707           0    0.0    0.0     0.0    0.0
- CAF                                                         GHC.Weak.Finalize       <entire-module>                   672           0    0.0    0.0     0.0    0.0
- CAF:$dEq_r6fl                                               Main                    <no location info>                546           0    0.0    0.0     0.0    0.0
- CAF:$fEqPath1                                               Main                    <no location info>                547           0    0.0    0.0     0.0    0.0
-  ==                                                         Main                    app/Main.hs:66:13-14              915           1    0.0    0.0     0.0    0.0
- CAF:$fEqTime1                                               Main                    <no location info>                548           0    0.0    0.0     0.0    0.0
-  /=                                                         Main                    app/Main.hs:66:13-14              872           1    0.0    0.0     0.0    0.0
- CAF:$fFractionalTime3                                       Main                    <no location info>                589           0    0.0    0.0     0.0    0.0
-  /                                                          Main                    app/Main.hs:66:27-36              883           1    0.0    0.0     0.0    0.0
- CAF:$fNumTime1                                              Main                    <no location info>                575           0    0.0    0.0     0.0    0.0
-  fromInteger                                                Main                    app/Main.hs:66:22-24              892           1    0.0    0.0     0.0    0.0
- CAF:$fNumTime7                                              Main                    <no location info>                569           0    0.0    0.0     0.0    0.0
-  +                                                          Main                    app/Main.hs:66:22-24              912           1    0.0    0.0     0.0    0.0
- CAF:$fOrdPath1                                              Main                    <no location info>                549           0    0.0    0.0     0.0    0.0
-  compare                                                    Main                    app/Main.hs:66:17-19              908           1    0.0    0.0     0.0    0.0
- CAF:$fOrdTime2                                              Main                    <no location info>                567           0    0.0    0.0     0.0    0.0
-  max                                                        Main                    app/Main.hs:66:17-19              946           1    0.0    0.0     0.0    0.0
- CAF:$fShowMap7                                              Main                    <no location info>                595           0    0.0    0.0     0.0    0.0
-  show                                                       Main                    app/Main.hs:(68,3)-(69,45)        951           0    0.0    0.0     0.0    0.0
- CAF:debugFlag                                               Main                    app/Main.hs:52:1-9                540           0    0.0    0.0     0.0    0.0
-  debugFlag                                                  Main                    app/Main.hs:52:1-17               836           1    0.0    0.0     0.0    0.0
- CAF:deleteFindMin1                                          Data.MultiSet           <no location info>                464           0    0.0    0.0     0.0    0.0
-  deleteMin                                                  Data.MultiSet           Data/MultiSet.hs:376:1-49         927           1    0.0    0.0     0.0    0.0
- CAF:findMin                                                 Data.MultiSet           Data/MultiSet.hs:368:1-7          426           0    0.0    0.0     0.0    0.0
-  findMin                                                    Data.MultiSet           Data/MultiSet.hs:368:1-34         832           1    0.0    0.0     0.0    0.0
- CAF:lvl10_r6dq                                              Main                    <no location info>                513           0    0.0    0.0     0.0    0.0
-  main                                                       Main                    app/Main.hs:(29,1)-(48,9)         815           0    0.0    0.0     0.0    0.0
-   main.processInput                                         Main                    app/Main.hs:(32,5)-(48,9)         816           0    0.0    0.0     0.0    0.0
-    main.processInput.firstLine'                             Main                    app/Main.hs:36:9-56               817           0    0.0    0.0     0.0    0.0
- CAF:lvl33_r6ea                                              Main                    <no location info>                525           0    0.0    0.0     0.0    0.0
-  dijkstra                                                   Main                    app/Main.hs:(169,1)-(239,36)      874           0    0.0    0.0     0.0    0.0
-   dijkstra.nodeStateDef                                     Main                    app/Main.hs:172:5-103             875           0    0.0    0.0     0.0    0.0
- CAF:lvl3_r6d4                                               Main                    <no location info>                505           0    0.0    0.0     0.0    0.0
-  main                                                       Main                    app/Main.hs:(29,1)-(48,9)         844           0    0.0    0.0     0.0    0.0
-   main.processInput                                         Main                    app/Main.hs:(32,5)-(48,9)         845           0    0.0    0.0     0.0    0.0
-    main.processInput.testData                               Main                    app/Main.hs:(40,9)-(48,9)         846           0    0.0    0.0     0.0    0.0
-     main.processInput.testData.undirectedEdgeCostList       Main                    app/Main.hs:45:13-130             847           0    0.0    0.0     0.0    0.0
- CAF:lvl65_r6fp                                              Main                    <no location info>                587           0    0.0    0.0     0.0    0.0
-  dijkstra                                                   Main                    app/Main.hs:(169,1)-(239,36)      885           0    0.0    0.0     0.0    0.0
-   dijkstra.go                                               Main                    app/Main.hs:(181,5)-(239,36)      886           0    0.0    0.0     0.0    0.0
-    dijkstra.go.(...)                                        Main                    app/Main.hs:197:9-54              887           0    0.0    0.0     0.0    0.0
-     dijkstra.go.f                                           Main                    app/Main.hs:(198,9)-(218,74)      888           0    0.0    0.0     0.0    0.0
-      dijkstra.go.genState                                   Main                    app/Main.hs:(220,9)-(239,36)      889           0    0.0    0.0     0.0    0.0
-       dijkstra.go.genState.vState'                          Main                    app/Main.hs:(228,13)-(236,39)     890           0    0.0    0.0     0.0    0.0
-        dijkstra.go.genState.vState'.foldFunc                Main                    app/Main.hs:(230,17)-(236,39)     891           0    0.0    0.0     0.0    0.0
-         fromInteger                                         Main                    app/Main.hs:66:22-24              893           0    0.0    0.0     0.0    0.0
- CAF:lvl66_r6fq                                              Main                    <no location info>                588           0    0.0    0.0     0.0    0.0
-  dijkstra                                                   Main                    app/Main.hs:(169,1)-(239,36)      894           0    0.0    0.0     0.0    0.0
-   dijkstra.go                                               Main                    app/Main.hs:(181,5)-(239,36)      895           0    0.0    0.0     0.0    0.0
-    dijkstra.go.(...)                                        Main                    app/Main.hs:197:9-54              896           0    0.0    0.0     0.0    0.0
-     dijkstra.go.f                                           Main                    app/Main.hs:(198,9)-(218,74)      897           0    0.0    0.0     0.0    0.0
-      dijkstra.go.genState                                   Main                    app/Main.hs:(220,9)-(239,36)      898           0    0.0    0.0     0.0    0.0
-       dijkstra.go.genState.vState'                          Main                    app/Main.hs:(228,13)-(236,39)     899           0    0.0    0.0     0.0    0.0
-        dijkstra.go.genState.vState'.foldFunc                Main                    app/Main.hs:(230,17)-(236,39)     900           0    0.0    0.0     0.0    0.0
-         fromInteger                                         Main                    app/Main.hs:66:22-24              901           0    0.0    0.0     0.0    0.0
- CAF:lvl67_r6fr                                              Main                    <no location info>                590           0    0.0    0.0     0.0    0.0
-  dijkstra                                                   Main                    app/Main.hs:(169,1)-(239,36)      876           0    0.0    0.0     0.0    0.0
-   dijkstra.go                                               Main                    app/Main.hs:(181,5)-(239,36)      877           0    0.0    0.0     0.0    0.0
-    dijkstra.go.(...)                                        Main                    app/Main.hs:197:9-54              878           0    0.0    0.0     0.0    0.0
-     dijkstra.go.f                                           Main                    app/Main.hs:(198,9)-(218,74)      879           0    0.0    0.0     0.0    0.0
-      dijkstra.go.genState                                   Main                    app/Main.hs:(220,9)-(239,36)      880           0    0.0    0.0     0.0    0.0
-       dijkstra.go.genState.vState'                          Main                    app/Main.hs:(228,13)-(236,39)     881           0    0.0    0.0     0.0    0.0
-        dijkstra.go.genState.vState'.foldFunc                Main                    app/Main.hs:(230,17)-(236,39)     882           0    0.0    0.0     0.0    0.0
-         /                                                   Main                    app/Main.hs:66:27-36              884           0    0.0    0.0     0.0    0.0
- CAF:lvl68_r6fF                                              Main                    <no location info>                624           0    0.0    0.0     0.0    0.0
-  dijkstra                                                   Main                    app/Main.hs:(169,1)-(239,36)      856           0    0.0    0.0     0.0    0.0
-   dijkstra.go                                               Main                    app/Main.hs:(181,5)-(239,36)      857           0    0.0    0.0     0.0    0.0
-    dijkstra.go.(...)                                        Main                    app/Main.hs:197:9-54              858           0    0.0    0.0     0.0    0.0
-     dijkstra.go.f                                           Main                    app/Main.hs:(198,9)-(218,74)      859           0    0.0    0.0     0.0    0.0
-      dijkstra.go.genState                                   Main                    app/Main.hs:(220,9)-(239,36)      860           0    0.0    0.0     0.0    0.0
-       dijkstra.go.genState.isWorthStepping                  Main                    app/Main.hs:(237,13)-(239,36)     861           0    0.0    0.0     0.0    0.0
- CAF:lvl7_r6db                                               Main                    <no location info>                508           0    0.0    0.0     0.0    0.0
-  main                                                       Main                    app/Main.hs:(29,1)-(48,9)         934           0    0.0    0.0     0.0    0.0
-   main.processInput                                         Main                    app/Main.hs:(32,5)-(48,9)         935           0    0.0    0.0     0.0    0.0
-    main.processInput.testData                               Main                    app/Main.hs:(40,9)-(48,9)         936           0    0.0    0.0     0.0    0.0
- CAF:main1                                                   Main                    <no location info>                638           0    0.0    0.0     0.0    0.0
-  main                                                       Main                    app/Main.hs:(29,1)-(48,9)         806           1    0.0    0.0     0.0    0.0
- CAF:null                                                    Data.MultiSet           Data/MultiSet.hs:278:1-4          421           0    0.0    0.0     0.0    0.0
-  null                                                       Data.MultiSet           Data/MultiSet.hs:278:1-22         825           1    0.0    0.0     0.0    0.0
- main                                                        Main                    app/Main.hs:(29,1)-(48,9)         807           0    0.0    1.6   100.0   99.9
-  main.processInput                                          Main                    app/Main.hs:(32,5)-(48,9)         808           1    0.0    0.0   100.0   98.3
-   findShortestTwoPaths                                      Main                    app/Main.hs:(153,1)-(160,54)      818           1    0.0    0.0    58.3   39.4
-    findShortestTwoPaths.completions                         Main                    app/Main.hs:157:5-72              940           1    0.0    0.0     0.0    0.0
-     findShortestTwoPaths.f                                  Main                    app/Main.hs:158:5-75              941           4    0.0    0.0     0.0    0.0
-    findShortestTwoPaths.finalState                          Main                    app/Main.hs:155:5-40              819           1    0.0    0.0    58.3   39.4
-     findFinalState                                          Main                    app/Main.hs:(163,1)-(164,76)      820           1    0.0    0.0    58.3   39.4
-      dijkstra                                               Main                    app/Main.hs:(169,1)-(239,36)      821           1    0.0    0.0    58.3   39.4
-       dijkstra.go                                           Main                    app/Main.hs:(181,5)-(239,36)      823        3024    4.2    0.2    58.3   39.1
-        debug                                                Main                    app/Main.hs:(53,1)-(54,27)        835        6046    0.0    0.0     0.0    0.0
-        minView                                              Data.MultiSet           Data/MultiSet.hs:(415,1)-(417,38) 824        3024    4.2    0.3    12.5    2.1
-         deleteFindMin                                       Data.MultiSet           Data/MultiSet.hs:396:1-48         831        3023    0.0    0.0     8.3    1.7
-          deleteMin                                          Data.MultiSet           Data/MultiSet.hs:376:1-49         928           0    8.3    1.7     8.3    1.7
-           deleteN                                           Data.MultiSet           Data/MultiSet.hs:(344,1)-(346,28) 930        3023    0.0    0.0     0.0    0.0
-           unMS                                              Data.MultiSet           Data/MultiSet.hs:193:27-30        929        3023    0.0    0.0     0.0    0.0
-          findMin                                            Data.MultiSet           Data/MultiSet.hs:368:1-34         833           0    0.0    0.0     0.0    0.0
-           unMS                                              Data.MultiSet           Data/MultiSet.hs:193:27-30        834        3023    0.0    0.0     0.0    0.0
-         null                                                Data.MultiSet           Data/MultiSet.hs:278:1-22         826           0    0.0    0.0     0.0    0.0
-          unMS                                               Data.MultiSet           Data/MultiSet.hs:193:27-30        827        3024    0.0    0.0     0.0    0.0
-        dijkstra.go.(...)                                    Main                    app/Main.hs:197:9-54              851        3023    4.2    0.1    41.7   36.7
-         dijkstra.go.f                                       Main                    app/Main.hs:(198,9)-(218,74)      852       12815    4.2    2.2    37.5   36.6
-          debug                                              Main                    app/Main.hs:(53,1)-(54,27)        853       12815    0.0    0.0     0.0    0.0
-          dijkstra.go.f.cost                                 Main                    app/Main.hs:218:13-74             914       12815    0.0    0.3     0.0    0.3
-          dijkstra.go.genState                               Main                    app/Main.hs:(220,9)-(239,36)      854       12815    0.0    2.7    33.3   29.0
-           dijkstra.go.genState.isWorthStepping              Main                    app/Main.hs:(237,13)-(239,36)     855       12815    8.3    8.3     8.3    8.3
-            ==                                               Main                    app/Main.hs:90:3-41               906       24323    0.0    0.0     0.0    0.0
-           dijkstra.go.genState.uState                       Main                    app/Main.hs:225:13-68             862       12815    0.0    0.3     0.0    0.3
-           dijkstra.go.genState.vFishTypes                   Main                    app/Main.hs:227:13-82             904       12815    4.2    0.3     4.2    0.3
-           dijkstra.go.genState.vState                       Main                    app/Main.hs:226:13-68             870       12815   12.5    0.3    12.5    0.3
-           dijkstra.go.genState.vState'                      Main                    app/Main.hs:(228,13)-(236,39)     869       12815    0.0    0.7     8.3   17.0
-            dijkstra.go.genState.vState'.foldFunc            Main                    app/Main.hs:(230,17)-(236,39)     871       25630    4.2   12.0     8.3   16.4
-             dijkstra.go.genState.vState'.foldFunc.(...)     Main                    app/Main.hs:232:28-105            902       22805    0.0    0.0     0.0    0.6
-              +                                              Main                    app/Main.hs:66:22-24              913           0    0.0    0.6     0.0    0.6
-             dijkstra.go.genState.vState'.foldFunc.alterFunc Main                    app/Main.hs:(233,28)-(234,90)     905       22805    4.2    2.0     4.2    3.8
-              minOn                                          Main                    app/Main.hs:(146,1)-(150,10)      907       22805    0.0    1.8     0.0    1.8
-               $sel:time:Path                                Main                    app/Main.hs:76:3-6                910       45610    0.0    0.0     0.0    0.0
-             dijkstra.go.genState.vState'.foldFunc.k'        Main                    app/Main.hs:232:28-105            903       22805    0.0    0.0     0.0    0.0
-             dijkstra.go.genState.vState'.foldFunc.path'     Main                    app/Main.hs:232:28-105            911       22805    0.0    0.0     0.0    0.0
-             /=                                              Main                    app/Main.hs:66:13-14              873           0    0.0    0.0     0.0    0.0
-          debugId                                            Main                    app/Main.hs:(55,1)-(56,27)        921        3022    0.0    0.0     0.0    0.0
-          dijkstra.go.f.accQueue                             Main                    app/Main.hs:204:20-55             924        3022    0.0    0.0     0.0    2.7
-           insert                                            Data.MultiSet           Data/MultiSet.hs:318:1-45         925        3022    0.0    2.7     0.0    2.7
-            compare                                          Main                    app/Main.hs:(95,3)-(98,102)       931       29697    0.0    0.0     0.0    0.0
-            unMS                                             Data.MultiSet           Data/MultiSet.hs:193:27-30        926        3022    0.0    0.0     0.0    0.0
-          dijkstra.go.f.accQueueAsserted                     Main                    app/Main.hs:205:20-69             923        3022    0.0    0.0     0.0    0.0
-          dijkstra.go.f.sourceOpt                            Main                    app/Main.hs:203:20-47             922        3022    0.0    0.0     0.0    0.1
-           +                                                 Main                    app/Main.hs:66:22-24              933           0    0.0    0.1     0.0    0.1
-          dijkstra.go.f.state'                               Main                    app/Main.hs:202:20-67             917        3022    0.0    2.2     0.0    2.2
-        dijkstra.go.adjs                                     Main                    app/Main.hs:219:9-52              837        3023    0.0    0.1     0.0    0.1
-        dijkstra.go.queue'                                   Main                    app/Main.hs:197:9-54              920        3023    0.0    0.0     0.0    0.0
-        dijkstra.go.queue'Asserted                           Main                    app/Main.hs:185:9-54              919        3023    0.0    0.0     0.0    0.0
-        dijkstra.go.state'                                   Main                    app/Main.hs:197:9-54              918        3023    0.0    0.0     0.0    0.0
-       dijkstra.initialQueue                                 Main                    app/Main.hs:(178,5)-(179,34)      828           1    0.0    0.0     0.0    0.0
-        dijkstra.initialQueue.s                              Main                    app/Main.hs:179:13-34             830           1    0.0    0.0     0.0    0.0
-        singleton                                            Data.MultiSet           Data/MultiSet.hs:310:1-36         829           1    0.0    0.0     0.0    0.0
-       dijkstra.initialStateMap                              Main                    app/Main.hs:177:5-125             822           1    0.0    0.3     0.0    0.3
-       dijkstra.nodeStateDef                                 Main                    app/Main.hs:172:5-103             867           1    0.0    0.0     0.0    0.0
-       dijkstra.startState                                   Main                    app/Main.hs:(173,5)-(176,75)      863           1    0.0    0.0     0.0    0.0
-        dijkstra.startState.startFishState                   Main                    app/Main.hs:176:9-75              864           1    0.0    0.0     0.0    0.0
-        dijkstra.startState.startFishTypes                   Main                    app/Main.hs:175:9-90              865           1    0.0    0.0     0.0    0.0
-    findShortestTwoPaths.go                                  Main                    app/Main.hs:159:5-103             943           1    0.0    0.0     0.0    0.0
-     findShortestTwoPaths.sortFunc                           Main                    app/Main.hs:160:5-54              945           3    0.0    0.0     0.0    0.0
-     findShortestTwoPaths.go.\                               Main                    app/Main.hs:159:55-63             948           1    0.0    0.0     0.0    0.0
-    findShortestTwoPaths.sortedList                          Main                    app/Main.hs:156:5-74              937           1    0.0    0.0     0.0    0.0
-     findShortestTwoPaths.sortedList.\                       Main                    app/Main.hs:156:44                939           2    0.0    0.0     0.0    0.0
-    findShortestTwoPaths.f                                   Main                    app/Main.hs:158:5-75              942           0    0.0    0.0     0.0    0.0
-   main.processInput.(...)                                   Main                    app/Main.hs:39:9-49               840           1    0.0    0.2     0.0    0.2
-   main.processInput.(...)                                   Main                    app/Main.hs:35:9-50               813           1    0.0    0.0     0.0    0.0
-   main.processInput.cityLines                               Main                    app/Main.hs:39:9-49               866           1    0.0    0.0     0.0    0.0
-   main.processInput.edgeLines                               Main                    app/Main.hs:39:9-49               839           1    0.0    0.0     0.0    0.0
-   main.processInput.firstLine                               Main                    app/Main.hs:35:9-50               811           1    0.0    0.0     0.0    0.0
-   main.processInput.firstLine'                              Main                    app/Main.hs:36:9-56               814           1    0.0    0.0     0.0    0.0
-   main.processInput.inputLines                              Main                    app/Main.hs:34:9-32               812           1    4.2    5.2     4.2    5.2
-   main.processInput.k                                       Main                    app/Main.hs:38:9-27               868           1    0.0    0.0     0.0    0.0
-   main.processInput.n                                       Main                    app/Main.hs:37:9-27               810           1    0.0    0.0     0.0    0.0
-   main.processInput.rest                                    Main                    app/Main.hs:35:9-50               841           1    0.0    0.0     0.0    0.0
-   main.processInput.testData                                Main                    app/Main.hs:(40,9)-(48,9)         809           1    8.3    5.7    37.5   53.4
-    main.processInput.testData.\                             Main                    app/Main.hs:46:72-82              848        2000    0.0    0.1     0.0    0.1
-    $sel:edgeCostMap:Test                                    Main                    app/Main.hs:119:3-13              838           1    0.0    0.0     0.0    0.0
-    main.processInput.testData.undirectedEdgeCostList        Main                    app/Main.hs:45:13-130             842           1   25.0   42.7    25.0   42.8
-     main.processInput.testData.undirectedEdgeCostList.\     Main                    app/Main.hs:45:60-88              843        2000    0.0    0.1     0.0    0.1
-    toAdjacencyMap                                           Main                    app/Main.hs:143:1-77              849           1    4.2    4.9     4.2    4.9
-     toAdjacencyMap.\                                        Main                    app/Main.hs:143:63-70             850        4000    0.0    0.0     0.0    0.0
-   show                                                      Main                    app/Main.hs:(68,3)-(69,45)        950           1    0.0    0.0     0.0    0.0
+MAIN                                                            MAIN                    <built-in>                        402           0    0.0    0.0   100.0  100.0
+ CAF                                                            GHC.Conc.Signal         <entire-module>                   752           0    0.0    0.0     0.0    0.0
+ CAF                                                            GHC.IO.Encoding         <entire-module>                   717           0    0.0    0.0     0.0    0.0
+ CAF                                                            GHC.IO.Encoding.Iconv   <entire-module>                   715           0    0.0    0.0     0.0    0.0
+ CAF                                                            GHC.IO.Exception        <entire-module>                   709           0    0.0    0.0     0.0    0.0
+ CAF                                                            GHC.IO.Handle.FD        <entire-module>                   706           0    0.0    0.1     0.0    0.1
+ CAF                                                            GHC.IO.Handle.Internals <entire-module>                   705           0    0.0    0.0     0.0    0.0
+ CAF                                                            GHC.Weak.Finalize       <entire-module>                   670           0    0.0    0.0     0.0    0.0
+ CAF:$fEqTime1                                                  Main                    <no location info>                546           0    0.0    0.0     0.0    0.0
+  /=                                                            Main                    app/Main.hs:67:13-14              863           1    0.0    0.0     0.0    0.0
+ CAF:$fFractionalTime3                                          Main                    <no location info>                588           0    0.0    0.0     0.0    0.0
+  /                                                             Main                    app/Main.hs:67:27-36              874           1    0.0    0.0     0.0    0.0
+ CAF:$fNumTime1                                                 Main                    <no location info>                574           0    0.0    0.0     0.0    0.0
+  fromInteger                                                   Main                    app/Main.hs:67:22-24              883           1    0.0    0.0     0.0    0.0
+ CAF:$fNumTime7                                                 Main                    <no location info>                568           0    0.0    0.0     0.0    0.0
+  +                                                             Main                    app/Main.hs:67:22-24              916           1    0.0    0.0     0.0    0.0
+ CAF:$fOrdPath1                                                 Main                    <no location info>                547           0    0.0    0.0     0.0    0.0
+  compare                                                       Main                    app/Main.hs:67:17-19              912           1    0.0    0.0     0.0    0.0
+ CAF:$fOrdTime2                                                 Main                    <no location info>                566           0    0.0    0.0     0.0    0.0
+  max                                                           Main                    app/Main.hs:67:17-19              952           1    0.0    0.0     0.0    0.0
+ CAF:$fShowMap7                                                 Main                    <no location info>                594           0    0.0    0.0     0.0    0.0
+  show                                                          Main                    app/Main.hs:(69,3)-(70,45)        957           0    0.0    0.0     0.0    0.0
+ CAF:debugFlag                                                  Main                    app/Main.hs:53:1-9                539           0    0.0    0.0     0.0    0.0
+  debugFlag                                                     Main                    app/Main.hs:53:1-17               834           1    0.0    0.0     0.0    0.0
+ CAF:deleteFindMin1                                             Data.MultiSet           <no location info>                463           0    0.0    0.0     0.0    0.0
+  deleteMin                                                     Data.MultiSet           Data/MultiSet.hs:376:1-49         931           1    0.0    0.0     0.0    0.0
+ CAF:f_r6ht                                                     Main                    app/Main.hs:235:28                560           0    0.0    0.0     0.0    0.0
+  dijkstra                                                      Main                    app/Main.hs:(170,1)-(248,52)      901           0    0.0    0.0     0.0    0.0
+   dijkstra.go                                                  Main                    app/Main.hs:(182,5)-(248,52)      902           0    0.0    0.0     0.0    0.0
+    dijkstra.go.(...)                                           Main                    app/Main.hs:198:9-54              903           0    0.0    0.0     0.0    0.0
+     dijkstra.go.f                                              Main                    app/Main.hs:(199,9)-(219,74)      904           0    0.0    0.0     0.0    0.0
+      dijkstra.go.genState                                      Main                    app/Main.hs:(221,9)-(248,52)      905           0    0.0    0.0     0.0    0.0
+       dijkstra.go.genState.(...)                               Main                    app/Main.hs:(229,13)-(248,52)     906           0    0.0    0.0     0.0    0.0
+        dijkstra.go.genState.(...).foldFunc                     Main                    app/Main.hs:(231,17)-(248,52)     907           0    0.0    0.0     0.0    0.0
+         dijkstra.go.genState.(...).foldFunc.f                  Main                    app/Main.hs:235:28-57             908           1    0.0    0.0     0.0    0.0
+ CAF:findMin                                                    Data.MultiSet           Data/MultiSet.hs:368:1-7          425           0    0.0    0.0     0.0    0.0
+  findMin                                                       Data.MultiSet           Data/MultiSet.hs:368:1-34         830           1    0.0    0.0     0.0    0.0
+ CAF:lvl10_r6fy                                                 Main                    <no location info>                512           0    0.0    0.0     0.0    0.0
+  main                                                          Main                    app/Main.hs:(30,1)-(49,9)         813           0    0.0    0.0     0.0    0.0
+   main.processInput                                            Main                    app/Main.hs:(33,5)-(49,9)         814           0    0.0    0.0     0.0    0.0
+    main.processInput.firstLine'                                Main                    app/Main.hs:37:9-56               815           0    0.0    0.0     0.0    0.0
+ CAF:lvl33_r6gi                                                 Main                    <no location info>                524           0    0.0    0.0     0.0    0.0
+  dijkstra                                                      Main                    app/Main.hs:(170,1)-(248,52)      865           0    0.0    0.0     0.0    0.0
+   dijkstra.nodeStateDef                                        Main                    app/Main.hs:173:5-103             866           0    0.0    0.0     0.0    0.0
+ CAF:lvl3_r6fc                                                  Main                    <no location info>                504           0    0.0    0.0     0.0    0.0
+  main                                                          Main                    app/Main.hs:(30,1)-(49,9)         842           0    0.0    0.0     0.0    0.0
+   main.processInput                                            Main                    app/Main.hs:(33,5)-(49,9)         843           0    0.0    0.0     0.0    0.0
+    main.processInput.testData                                  Main                    app/Main.hs:(41,9)-(49,9)         844           0    0.0    0.0     0.0    0.0
+     main.processInput.testData.undirectedEdgeCostList          Main                    app/Main.hs:46:13-130             845           0    0.0    0.0     0.0    0.0
+ CAF:lvl65_r6hx                                                 Main                    <no location info>                586           0    0.0    0.0     0.0    0.0
+  dijkstra                                                      Main                    app/Main.hs:(170,1)-(248,52)      876           0    0.0    0.0     0.0    0.0
+   dijkstra.go                                                  Main                    app/Main.hs:(182,5)-(248,52)      877           0    0.0    0.0     0.0    0.0
+    dijkstra.go.(...)                                           Main                    app/Main.hs:198:9-54              878           0    0.0    0.0     0.0    0.0
+     dijkstra.go.f                                              Main                    app/Main.hs:(199,9)-(219,74)      879           0    0.0    0.0     0.0    0.0
+      dijkstra.go.genState                                      Main                    app/Main.hs:(221,9)-(248,52)      880           0    0.0    0.0     0.0    0.0
+       dijkstra.go.genState.(...)                               Main                    app/Main.hs:(229,13)-(248,52)     881           0    0.0    0.0     0.0    0.0
+        dijkstra.go.genState.(...).foldFunc                     Main                    app/Main.hs:(231,17)-(248,52)     882           0    0.0    0.0     0.0    0.0
+         fromInteger                                            Main                    app/Main.hs:67:22-24              884           0    0.0    0.0     0.0    0.0
+ CAF:lvl66_r6hy                                                 Main                    <no location info>                587           0    0.0    0.0     0.0    0.0
+  dijkstra                                                      Main                    app/Main.hs:(170,1)-(248,52)      885           0    0.0    0.0     0.0    0.0
+   dijkstra.go                                                  Main                    app/Main.hs:(182,5)-(248,52)      886           0    0.0    0.0     0.0    0.0
+    dijkstra.go.(...)                                           Main                    app/Main.hs:198:9-54              887           0    0.0    0.0     0.0    0.0
+     dijkstra.go.f                                              Main                    app/Main.hs:(199,9)-(219,74)      888           0    0.0    0.0     0.0    0.0
+      dijkstra.go.genState                                      Main                    app/Main.hs:(221,9)-(248,52)      889           0    0.0    0.0     0.0    0.0
+       dijkstra.go.genState.(...)                               Main                    app/Main.hs:(229,13)-(248,52)     890           0    0.0    0.0     0.0    0.0
+        dijkstra.go.genState.(...).foldFunc                     Main                    app/Main.hs:(231,17)-(248,52)     891           0    0.0    0.0     0.0    0.0
+         fromInteger                                            Main                    app/Main.hs:67:22-24              892           0    0.0    0.0     0.0    0.0
+ CAF:lvl67_r6hz                                                 Main                    <no location info>                589           0    0.0    0.0     0.0    0.0
+  dijkstra                                                      Main                    app/Main.hs:(170,1)-(248,52)      867           0    0.0    0.0     0.0    0.0
+   dijkstra.go                                                  Main                    app/Main.hs:(182,5)-(248,52)      868           0    0.0    0.0     0.0    0.0
+    dijkstra.go.(...)                                           Main                    app/Main.hs:198:9-54              869           0    0.0    0.0     0.0    0.0
+     dijkstra.go.f                                              Main                    app/Main.hs:(199,9)-(219,74)      870           0    0.0    0.0     0.0    0.0
+      dijkstra.go.genState                                      Main                    app/Main.hs:(221,9)-(248,52)      871           0    0.0    0.0     0.0    0.0
+       dijkstra.go.genState.(...)                               Main                    app/Main.hs:(229,13)-(248,52)     872           0    0.0    0.0     0.0    0.0
+        dijkstra.go.genState.(...).foldFunc                     Main                    app/Main.hs:(231,17)-(248,52)     873           0    0.0    0.0     0.0    0.0
+         /                                                      Main                    app/Main.hs:67:27-36              875           0    0.0    0.0     0.0    0.0
+ CAF:lvl7_r6fj                                                  Main                    <no location info>                507           0    0.0    0.0     0.0    0.0
+  main                                                          Main                    app/Main.hs:(30,1)-(49,9)         940           0    0.0    0.0     0.0    0.0
+   main.processInput                                            Main                    app/Main.hs:(33,5)-(49,9)         941           0    0.0    0.0     0.0    0.0
+    main.processInput.testData                                  Main                    app/Main.hs:(41,9)-(49,9)         942           0    0.0    0.0     0.0    0.0
+ CAF:main1                                                      Main                    <no location info>                636           0    0.0    0.0     0.0    0.0
+  main                                                          Main                    app/Main.hs:(30,1)-(49,9)         804           1    0.0    0.0     0.0    0.0
+ CAF:null                                                       Data.MultiSet           Data/MultiSet.hs:278:1-4          420           0    0.0    0.0     0.0    0.0
+  null                                                          Data.MultiSet           Data/MultiSet.hs:278:1-22         823           1    0.0    0.0     0.0    0.0
+ main                                                           Main                    app/Main.hs:(30,1)-(49,9)         805           0    0.0    1.7   100.0   99.9
+  main.processInput                                             Main                    app/Main.hs:(33,5)-(49,9)         806           1    0.0    0.0   100.0   98.2
+   findShortestTwoPaths                                         Main                    app/Main.hs:(154,1)-(161,54)      816           1    0.0    0.0    59.3   38.7
+    findShortestTwoPaths.completions                            Main                    app/Main.hs:158:5-72              946           1    0.0    0.0     0.0    0.0
+     findShortestTwoPaths.f                                     Main                    app/Main.hs:159:5-75              947           4    0.0    0.0     0.0    0.0
+    findShortestTwoPaths.finalState                             Main                    app/Main.hs:156:5-40              817           1    0.0    0.0    59.3   38.7
+     findFinalState                                             Main                    app/Main.hs:(164,1)-(165,76)      818           1    0.0    0.0    59.3   38.7
+      dijkstra                                                  Main                    app/Main.hs:(170,1)-(248,52)      819           1    0.0    0.0    59.3   38.7
+       dijkstra.go                                              Main                    app/Main.hs:(182,5)-(248,52)      821        3024    0.0    0.2    59.3   38.4
+        debug                                                   Main                    app/Main.hs:(54,1)-(55,27)        833        6046    0.0    0.0     0.0    0.0
+        minView                                                 Data.MultiSet           Data/MultiSet.hs:(415,1)-(417,38) 822        3024    0.0    0.4     0.0    2.1
+         deleteFindMin                                          Data.MultiSet           Data/MultiSet.hs:396:1-48         829        3023    0.0    0.0     0.0    1.7
+          deleteMin                                             Data.MultiSet           Data/MultiSet.hs:376:1-49         932           0    0.0    1.7     0.0    1.7
+           deleteN                                              Data.MultiSet           Data/MultiSet.hs:(344,1)-(346,28) 934        3023    0.0    0.0     0.0    0.0
+           unMS                                                 Data.MultiSet           Data/MultiSet.hs:193:27-30        933        3023    0.0    0.0     0.0    0.0
+          findMin                                               Data.MultiSet           Data/MultiSet.hs:368:1-34         831           0    0.0    0.0     0.0    0.0
+           unMS                                                 Data.MultiSet           Data/MultiSet.hs:193:27-30        832        3023    0.0    0.0     0.0    0.0
+         null                                                   Data.MultiSet           Data/MultiSet.hs:278:1-22         824           0    0.0    0.0     0.0    0.0
+          unMS                                                  Data.MultiSet           Data/MultiSet.hs:193:27-30        825        3024    0.0    0.0     0.0    0.0
+        dijkstra.go.(...)                                       Main                    app/Main.hs:198:9-54              849        3023    3.7    0.1    55.6   36.0
+         dijkstra.go.f                                          Main                    app/Main.hs:(199,9)-(219,74)      850       12815    0.0    2.4    51.9   35.9
+          debug                                                 Main                    app/Main.hs:(54,1)-(55,27)        851       12815    0.0    0.0     0.0    0.0
+          dijkstra.go.f.cost                                    Main                    app/Main.hs:219:13-74             918       12815   18.5    0.3    18.5    0.3
+          dijkstra.go.genState                                  Main                    app/Main.hs:(221,9)-(248,52)      852       12815    0.0    1.3    22.2   28.1
+           dijkstra.go.genState.(...)                           Main                    app/Main.hs:(229,13)-(248,52)     861       12815    0.0    1.2    11.1   25.8
+            dijkstra.go.genState.(...).foldFunc                 Main                    app/Main.hs:(231,17)-(248,52)     862       25630    0.0   15.5    11.1   24.6
+             dijkstra.go.genState.(...).foldFunc.(...)          Main                    app/Main.hs:236:28-74             898       22805    0.0    0.0     3.7    6.8
+              dijkstra.go.genState.(...).foldFunc.insertLookup' Main                    app/Main.hs:234:28-80             899       22805    3.7    6.8     3.7    6.8
+             dijkstra.go.genState.(...).foldFunc.(...)          Main                    app/Main.hs:233:28-105            896       22805    0.0    0.0     0.0    0.6
+              +                                                 Main                    app/Main.hs:67:22-24              917           0    0.0    0.6     0.0    0.6
+             dijkstra.go.genState.(...).foldFunc.isUpdated'     Main                    app/Main.hs:(237,28)-(245,51)     893       22805    0.0    0.0     0.0    0.0
+              compare                                           Main                    app/Main.hs:93:3-49               919       20957    0.0    0.0     0.0    0.0
+             dijkstra.go.genState.(...).foldFunc.k'             Main                    app/Main.hs:233:28-105            895       22805    0.0    0.0     0.0    0.0
+             dijkstra.go.genState.(...).foldFunc.path'          Main                    app/Main.hs:233:28-105            915       22805    0.0    0.0     0.0    0.0
+             dijkstra.go.genState.(...).foldFunc.maybeExist     Main                    app/Main.hs:236:28-74             894       20957    0.0    0.0     0.0    0.0
+             dijkstra.go.genState.(...).foldFunc.acc'           Main                    app/Main.hs:236:28-74             939       13012    0.0    0.0     0.0    0.0
+             /=                                                 Main                    app/Main.hs:67:13-14              864           0    0.0    0.0     0.0    0.0
+             dijkstra.go.genState.(...).foldFunc.f              Main                    app/Main.hs:235:28-57             909           0    0.0    0.0     7.4    1.8
+              dijkstra.go.genState.(...).foldFunc.f.\           Main                    app/Main.hs:235:43-57             910       22805    0.0    0.0     7.4    1.8
+               minOn                                            Main                    app/Main.hs:(147,1)-(151,10)      911       22805    3.7    1.8     7.4    1.8
+                $sel:time:Path                                  Main                    app/Main.hs:77:3-6                914       45610    0.0    0.0     0.0    0.0
+                compare                                         Main                    app/Main.hs:67:17-19              913           0    3.7    0.0     3.7    0.0
+           dijkstra.go.genState.isWorthStepping                 Main                    app/Main.hs:(229,13)-(248,52)     860       12815    0.0    0.0     0.0    0.0
+           dijkstra.go.genState.uState                          Main                    app/Main.hs:226:13-68             853       12815    0.0    0.3     0.0    0.3
+           dijkstra.go.genState.vFishTypes                      Main                    app/Main.hs:228:13-82             897       12815    7.4    0.3     7.4    0.3
+           dijkstra.go.genState.vState                          Main                    app/Main.hs:227:13-68             900       12815    3.7    0.3     3.7    0.3
+           dijkstra.go.genState.vState'                         Main                    app/Main.hs:(229,13)-(248,52)     938        3022    0.0    0.0     0.0    0.0
+          debugId                                               Main                    app/Main.hs:(56,1)-(57,27)        925        3022    0.0    0.0     0.0    0.0
+          dijkstra.go.f.accQueue                                Main                    app/Main.hs:205:20-55             928        3022    0.0    0.0     7.4    2.7
+           insert                                               Data.MultiSet           Data/MultiSet.hs:318:1-45         929        3022    3.7    2.7     7.4    2.7
+            compare                                             Main                    app/Main.hs:(96,3)-(99,102)       935       29697    0.0    0.0     3.7    0.0
+             compare                                            Main                    app/Main.hs:67:17-19              936           0    3.7    0.0     3.7    0.0
+            unMS                                                Data.MultiSet           Data/MultiSet.hs:193:27-30        930        3022    0.0    0.0     0.0    0.0
+          dijkstra.go.f.accQueueAsserted                        Main                    app/Main.hs:206:20-69             927        3022    0.0    0.0     0.0    0.0
+          dijkstra.go.f.sourceOpt                               Main                    app/Main.hs:204:20-47             926        3022    0.0    0.0     0.0    0.1
+           +                                                    Main                    app/Main.hs:67:22-24              937           0    0.0    0.1     0.0    0.1
+          dijkstra.go.f.state'                                  Main                    app/Main.hs:203:20-67             921        3022    3.7    2.3     3.7    2.3
+        dijkstra.go.adjs                                        Main                    app/Main.hs:220:9-52              835        3023    3.7    0.1     3.7    0.1
+        dijkstra.go.queue'                                      Main                    app/Main.hs:198:9-54              924        3023    0.0    0.0     0.0    0.0
+        dijkstra.go.queue'Asserted                              Main                    app/Main.hs:186:9-54              923        3023    0.0    0.0     0.0    0.0
+        dijkstra.go.state'                                      Main                    app/Main.hs:198:9-54              922        3023    0.0    0.0     0.0    0.0
+       dijkstra.initialQueue                                    Main                    app/Main.hs:(179,5)-(180,34)      826           1    0.0    0.0     0.0    0.0
+        dijkstra.initialQueue.s                                 Main                    app/Main.hs:180:13-34             828           1    0.0    0.0     0.0    0.0
+        singleton                                               Data.MultiSet           Data/MultiSet.hs:310:1-36         827           1    0.0    0.0     0.0    0.0
+       dijkstra.initialStateMap                                 Main                    app/Main.hs:178:5-125             820           1    0.0    0.3     0.0    0.3
+       dijkstra.nodeStateDef                                    Main                    app/Main.hs:173:5-103             858           1    0.0    0.0     0.0    0.0
+       dijkstra.startState                                      Main                    app/Main.hs:(174,5)-(177,75)      854           1    0.0    0.0     0.0    0.0
+        dijkstra.startState.startFishState                      Main                    app/Main.hs:177:9-75              855           1    0.0    0.0     0.0    0.0
+        dijkstra.startState.startFishTypes                      Main                    app/Main.hs:176:9-90              856           1    0.0    0.0     0.0    0.0
+    findShortestTwoPaths.go                                     Main                    app/Main.hs:160:5-103             949           1    0.0    0.0     0.0    0.0
+     findShortestTwoPaths.sortFunc                              Main                    app/Main.hs:161:5-54              951           3    0.0    0.0     0.0    0.0
+     findShortestTwoPaths.go.\                                  Main                    app/Main.hs:160:55-63             954           1    0.0    0.0     0.0    0.0
+    findShortestTwoPaths.sortedList                             Main                    app/Main.hs:157:5-74              943           1    0.0    0.0     0.0    0.0
+     findShortestTwoPaths.sortedList.\                          Main                    app/Main.hs:157:44                945           2    0.0    0.0     0.0    0.0
+    findShortestTwoPaths.f                                      Main                    app/Main.hs:159:5-75              948           0    0.0    0.0     0.0    0.0
+   main.processInput.(...)                                      Main                    app/Main.hs:40:9-49               838           1    0.0    0.2     0.0    0.2
+   main.processInput.(...)                                      Main                    app/Main.hs:36:9-50               811           1    0.0    0.0     0.0    0.0
+   main.processInput.cityLines                                  Main                    app/Main.hs:40:9-49               857           1    0.0    0.0     0.0    0.0
+   main.processInput.edgeLines                                  Main                    app/Main.hs:40:9-49               837           1    0.0    0.0     0.0    0.0
+   main.processInput.firstLine                                  Main                    app/Main.hs:36:9-50               809           1    0.0    0.0     0.0    0.0
+   main.processInput.firstLine'                                 Main                    app/Main.hs:37:9-56               812           1    0.0    0.0     0.0    0.0
+   main.processInput.inputLines                                 Main                    app/Main.hs:35:9-32               810           1   11.1    5.3    11.1    5.3
+   main.processInput.k                                          Main                    app/Main.hs:39:9-27               859           1    0.0    0.0     0.0    0.0
+   main.processInput.n                                          Main                    app/Main.hs:38:9-27               808           1    0.0    0.0     0.0    0.0
+   main.processInput.rest                                       Main                    app/Main.hs:36:9-50               839           1    0.0    0.0     0.0    0.0
+   main.processInput.testData                                   Main                    app/Main.hs:(41,9)-(49,9)         807           1   11.1    5.8    29.6   54.0
+    main.processInput.testData.\                                Main                    app/Main.hs:47:72-82              846        2000    0.0    0.1     0.0    0.1
+    $sel:edgeCostMap:Test                                       Main                    app/Main.hs:120:3-13              836           1    0.0    0.0     0.0    0.0
+    main.processInput.testData.undirectedEdgeCostList           Main                    app/Main.hs:46:13-130             840           1   14.8   43.2    14.8   43.2
+     main.processInput.testData.undirectedEdgeCostList.\        Main                    app/Main.hs:46:60-88              841        2000    0.0    0.1     0.0    0.1
+    toAdjacencyMap                                              Main                    app/Main.hs:144:1-77              847           1    3.7    4.9     3.7    4.9
+     toAdjacencyMap.\                                           Main                    app/Main.hs:144:63-70             848        4000    0.0    0.0     0.0    0.0
+   show                                                         Main                    app/Main.hs:(69,3)-(70,45)        956           1    0.0    0.0     0.0    0.0
