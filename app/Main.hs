@@ -25,7 +25,11 @@ import Data.Text.Lazy (unpack)
 import Data.Maybe (fromJust)
 import Control.Exception (assert)
 import Data.Ord (comparing)
-import qualified Data.HashTable.IO as H
+import qualified Data.HashTable.ST.Basic as H
+import qualified Data.HashTable.Class as H (toList, fromList)
+import qualified Data.HashTable.IO as H (BasicHashTable)
+import Control.Monad.ST
+import Control.Monad (foldM)
 
 data PriorityQueue k a = Nil | Branch k a (PriorityQueue k a) (PriorityQueue k a)
 
@@ -134,10 +138,6 @@ instance {-# OVERLAPPING #-} Show a => Show (HashMap (Set FishType) a) where
 instance {-# OVERLAPPING #-} Show (Set FishType) where
   show s = show $ S.toList s
  
-instance {-# OVERLAPPING #-} Show (HashMap Vertex NodeState) where
-  show m = show $ HM.toList m
-
-
 type FishType = Int
 type Vertex = Int
 
@@ -173,42 +173,46 @@ toAdjacencyMap edges = HM.fromListWith (++) $ L.map (\(a,b) -> (a,b:[])) edges
 
 findShortestTwoPaths testData@(Test {..}) = go sortedList 
   where
-    finalState = findFinalState testData
+    finalState = runST $ findFinalState testData
     sortedList = L.sortOn ((\(Path _ t) -> t) . snd) $ HM.toList finalState
     completions = L.filter f [(x,y) |  x <- sortedList, y <- sortedList]
     f ((s1,_),(s2,_)) = (s1 `S.union` s2) == (S.fromList [1..numFishTypes])
     go sortedList = (\((_,Path _ t1),(_,Path _ t2))-> max t1 t2) $ head $ L.sortOn sortFunc completions
     sortFunc ((_,Path _ t1),(_,Path _ t2)) = max t1 t2 
 
-findFinalState :: Test -> HashMap (Set FishType) Path
-findFinalState testData@(Test {..}) = 
- maybe (error "no final state") id $ HM.lookup numNodes $ dijkstra testData 1
+findFinalState :: Test -> ST s (HashMap (Set FishType) Path)
+findFinalState testData@(Test {..}) = do 
+  r <- dijkstra testData 1
+  let finalStateHT = maybe (error "no final state") id $ HM.lookup numNodes
+  finalStateHM <- HM.fromList <$> H.toList finalStateHT
+  pure finalStateHM 
 
     
-type NodeState = HashMap (Set FishType) Path
+type NodeState = H.BasicHashTable (Set FishType) Path
 
-dijkstra (Test {..}) start = go initialStateMap initialQueue 
+dijkstra (Test {..}) start = do
+  let indivNodeState = HM.fromList $ L.map (,Path [] (Time (1/0))) $ allFishTypesCombination
+      startFishTypes = maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
+      startNodeState = HM.insert startFishTypes (Path [start] (Time 0)) indivNodeState  
+      nodeState = HM.fromList $ zipWith (,) [1..numNodes] $ take numNodes $ repeat indivNodeState 
+      nodeState' = HM.insert nodeState start startNodeState 
+      initalState = mapM mkIndivNodeStateHT startNodeState' 
+      mkIndivNodeStateHT a = H.fromList $ HM.toList a
+  go initialState initialQueue 
   where
-    nodeStateDef :: NodeState 
-    nodeStateDef = HM.fromList $ L.map (,Path [] (Time (1/0))) $ S.toList $ S.powerSet [1..numFishTypes] 
-    startState = mconcat (startFishState:nodeStateDef:[]) 
-      where
-        startFishTypes = maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
-        startFishState = HM.singleton startFishTypes (Path [start] (Time 0)) 
-    initialStateMap = HM.update (const (Just startState)) start $ HM.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
     initialQueue = singleton (Time 0) s
       where s = Opt (Time 0) start
     go :: HashMap Vertex NodeState -> PriorityQueue Time SourceOpt -> HashMap Vertex NodeState
     go state (minView -> Nothing) = state
     go state (minView -> Just ((Opt t u), rest)) | debug "u" u True = go state' queue'
       where
-        (state', queue') = L.sequence f (state,rest) adjs
+        (state', queue') = foldM f (state,rest) adjs
         f (state, queue) v | debug "v" v True = 
-          case runST (genState state u v cost) of
+          case genState state u v cost of
                Just vState' -> do
-                 pure (state', accQueue)
+                 pure (accState, accQueue)
                  where 
-                   state' = HM.update (const (Just vState')) v state
+                   accState = HM.update (const (Just vState')) v state
                    sourceOpt = Opt (t + cost) v
                    accQueue = insert (t + cost) sourceOpt queue
                Nothing -> (state, queue)
@@ -216,7 +220,7 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
             cost = maybe (error "no cost") id $ HM.lookup (u,v) edgeCostMap 
         adjs = maybe [] id $ HM.lookup u adjacencyMap
         genState state u v cost = do
-          (isWorthStepping, vState') <- H.foldM foldFunc (False, vState) uState
+          (isWorthStepping, vState') <- foldM foldFunc (False, vState) uState
           case isWorthStepping of 
                True  -> pure $ Just vState' 
                False -> pure Nothing
@@ -224,24 +228,22 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
             uState = maybe (error "no uState") id $ HM.lookup u state
             vState = maybe (error "no vState") id $ HM.lookup v state
             vFishTypes = maybe (error "no vFishTypes") id $ HM.lookup v fishTypeMap
-              where
-                foldFunc (isUpdated, acc) (k, path@(Path p a)) = 
-                  if | a /= 1/0 -> do
-                       let (k', path'@(Path p' a')) = ((k `S.union` vFishTypes), (Path (v:p) (a + cost)))
-                       maybeExist <- H.lookup k' acc
-                       let shouldUpdate = case maybeExist of 
-                                            Nothing -> True
-                                            (Just origSolution) -> case compare origSolution path' of
-                                                                        LT -> False
-                                                                        EQ -> False
-                                                                        GT -> True
-                            mkAcc' | shouldUpdate == True = HM.insert k' path' acc
-                                   | otherwise = pure acc
-                        acc' <- mkAcc'
-                        let isUpdated' = isUpdated || shouldUpdate
-                        pure (isUpdated', acc')
+            foldFunc (isUpdated, acc) (k, path@(Path p a)) =  
+              if | a /= 1/0 -> do
+                   let (k', path'@(Path p' a')) = ((k `S.union` vFishTypes), (Path (v:p) (a + cost)))
+                   maybeExist <- H.lookup k' acc
+                   let shouldUpdate = case maybeExist of 
+                                        Nothing -> True
+                                        (Just origSolution) -> case compare origSolution path' of
+                                                                 LT -> False
+                                                                 EQ -> False
+                                                                 GT -> True
+                   let acc' | shouldUpdate == True = HM.insert k' path' acc
+                            | otherwise = acc
+                   let isUpdated' = isUpdated || shouldUpdate
+                   pure (isUpdated', acc')
                              
-                      | otherwise -> pure (isUpdated, acc)
+                 | otherwise -> pure (isUpdated, acc)
 
 -- TODO: [x] NodeState needs to be MonoidalMap. 
 --       [x] And Time needs to be a newtype with customized <>.

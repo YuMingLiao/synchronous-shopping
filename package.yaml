@@ -16,7 +16,7 @@ dependencies:
   - graphviz
   - multiset
   - unordered-containers
-  - hashable
+  - hashtables
 executable:
   dependencies:
     - synchronous-shopping
