@@ -213,7 +213,7 @@ dijkstra (Test {..}) start = do
       nodeState = HM.fromList $ zipWith (,) [1..numNodes] $ take numNodes $ repeat indivNodeState 
       nodeState' :: HashMap Vertex NodeStateHM
       nodeState' = HM.insert start startNodeState nodeState 
-      mkIndivNodeStateHT a = H.fromListWithSizeHint numCombinations $ HM.toList a
+      mkIndivNodeStateHT a = H.fromList $ HM.toList a
   initialState <- sequence $ fmap mkIndivNodeStateHT nodeState' 
   go initialState initialQueue 
   where
