@@ -7,17 +7,12 @@ copyright:           "MIT"
 dependencies:
   - base
   - containers
-  - PSQueue
-  - extra
-  - monoidal-containers
-  - pretty-simple
   - text
-  - derivingvia-extras
-  - graphviz
-  - multiset
   - unordered-containers
-  - hashtables
   - bytestring
+  - array
+  - hashable
+  - graphviz
 executable:
   dependencies:
     - synchronous-shopping
