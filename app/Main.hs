@@ -33,6 +33,13 @@ import qualified Data.HashTable.Class as H
 import Control.Monad.ST
 import Control.Monad (foldM, when)
 import Data.Functor (fmap)
+{- hackerrank needs it 
+import Data.Hashable
+
+instance Hashable v => Hashable (S.Set v) where 
+    hashWithSalt salt x = S.foldl' hashWithSalt (hashWithSalt salt (S.size x)) x 
+-}
+
 
 data PriorityQueue k a = Nil | Branch k a (PriorityQueue k a) (PriorityQueue k a)
 
@@ -198,13 +205,14 @@ type NodeState s = B.HashTable s (Set FishType) Path
 
 dijkstra (Test {..}) start = do 
   let allFishTypesCombination = S.toList . S.powerSet $ [1..numFishTypes] 
+      numCombinations = length allFishTypesCombination
       indivNodeState = HM.fromList $ L.map (,Path [] (Time (1/0))) $ allFishTypesCombination
       startFishTypes = maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
       startNodeState = HM.insert startFishTypes (Path [start] (Time 0)) indivNodeState  
       nodeState = HM.fromList $ zipWith (,) [1..numNodes] $ take numNodes $ repeat indivNodeState 
       nodeState' :: HashMap Vertex NodeStateHM
       nodeState' = HM.insert start startNodeState nodeState 
-      mkIndivNodeStateHT a = H.fromList $ HM.toList a
+      mkIndivNodeStateHT a = H.fromListWithSizeHint numCombinations $ HM.toList a
   initialState <- sequence $ fmap mkIndivNodeStateHT nodeState' 
   go initialState initialQueue 
   where
