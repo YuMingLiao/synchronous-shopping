@@ -17,6 +17,7 @@ dependencies:
   - multiset
   - unordered-containers
   - hashtables
+  - bytestring
 executable:
   dependencies:
     - synchronous-shopping

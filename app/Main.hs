@@ -10,9 +10,10 @@
 {-# LANGUAGE ScopedTypeVariables#-}
 
 module Main where
-import Prelude hiding (foldl)
+import Prelude hiding (foldl, read)
 import Data.Monoid
 import qualified Data.List as L
+import qualified Data.ByteString.Char8 as BS
 import Debug.Trace
 import Data.Set (Set)
 import qualified Data.Set as S
@@ -63,24 +64,26 @@ link (Branch k a ll lr) r = Branch k a lr (union ll r)
 insert :: Ord k => k -> a -> PriorityQueue k a -> PriorityQueue k a
 insert k a q = union (singleton k a) q
 
+read = fst . fromJust . BS.readInt
+
 main :: IO ()
 main = do
-  interact $ processInput
+  BS.interact $ processInput
   where
-    processInput input = show $ findShortestTwoPaths testData 
+    processInput input = BS.pack . show $ findShortestTwoPaths testData 
       where
-        inputLines = lines input
+        inputLines = BS.lines input
         (firstLine, rest) = L.splitAt 1 inputLines
-        firstLine' = L.map read . words $ head firstLine
+        firstLine' = L.map read . BS.words $ head firstLine
         n = firstLine' !! 0
         k = firstLine' !! 2
         (cityLines, edgeLines) = L.splitAt n rest
         testData = Test {
           numNodes = n,
           numFishTypes = k,
-          fishTypeMap = HM.fromList . zipWith (,) [1..n] . L.map (S.fromList . L.drop 1 . L.map read) . L.map words $ cityLines,
+          fishTypeMap = HM.fromList . zipWith (,) [1..n] . L.map (S.fromList . L.drop 1 . L.map read) . L.map BS.words $ cityLines,
           edgeCostMap = let 
-            undirectedEdgeCostList = L.map (\(u:v:c:[]) -> ((u,v),Time (fromIntegral c))) . L.map (L.map read . words) $ edgeLines
+            undirectedEdgeCostList = L.map (\(u:v:c:[]) -> ((u,v),Time (fromIntegral c))) . L.map (L.map read . BS.words) $ edgeLines
             in HM.fromList $ undirectedEdgeCostList ++ L.map (\(e,t) -> (swap e, t)) undirectedEdgeCostList,
           adjacencyMap = toAdjacencyMap (HM.keys (edgeCostMap testData))
         } 
