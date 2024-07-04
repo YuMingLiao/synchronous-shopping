@@ -29,11 +29,12 @@ import Data.Maybe (fromJust)
 import Control.Exception (assert)
 import Data.Ord (comparing)
 import qualified Data.HashTable.ST.Basic as B
+import qualified Data.HashTable.ST.Cuckoo as C
 import qualified Data.HashTable.Class as H 
 import Control.Monad.ST
 import Control.Monad (foldM, when)
 import Data.Functor (fmap)
-{- hackerrank needs it 
+{- hackerrank needs  
 import Data.Hashable
 
 instance Hashable v => Hashable (S.Set v) where 
@@ -201,7 +202,7 @@ findFinalState testData@(Test {..}) = runST $ do
 
 
 type NodeStateHM = HashMap (Set FishType) Path
-type NodeState s = B.HashTable s (Set FishType) Path
+type NodeState s = C.HashTable s (Set FishType) Path
 
 dijkstra (Test {..}) start = do 
   let allFishTypesCombination = S.toList . S.powerSet $ [1..numFishTypes] 
