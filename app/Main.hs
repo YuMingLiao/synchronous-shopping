@@ -28,7 +28,7 @@ import Data.Ord (comparing)
 import Data.Hashable
 import Data.Array (Array, (!), (//))
 import qualified Data.Array as A
-import Data.Foldable (foldl)
+import Data.Foldable (foldl')
 import Data.Bits
 
 {- Hackerrank needs it.
@@ -89,14 +89,15 @@ main = do
  
 -- print $ findShortestTwoPaths example 
 
-debugFlag = False
+debugFlag = True
 debug s a b | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) b 
             | otherwise = b   
 debugId s a | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) a 
             | otherwise = a   
 debugView s f a | debugFlag = Debug.Trace.trace (s ++ ": " ++ show (f a)) a 
                 | otherwise = a
-
+debugHere s a | debugFlag = Debug.Trace.trace s a
+              | otherwise = a
 debugWhen pred | pred && debugFlag == True = debug
                | otherwise = \_ _ b -> b 
 
@@ -197,15 +198,16 @@ type NodeState = Array Combination Path
 
 dijkstra (Test {..}) start = go initialStateMap initialQueue 
   where
-    numCombination = length $ S.powerSet [1..numNodes]
+    numCombination = debugId "numCombination" $ 2^numNodes 
     nodeStateDef :: NodeState 
-    nodeStateDef = A.listArray (0,numCombination-1) $ take numCombination $ repeat (Path [] (Time (1/0)))
+    nodeStateDef = debugHere "nodeStateDef" $ A.listArray (0,debugId "numCombination-1" $ numCombination-1) $ debugHere "replicate" $ replicate numCombination (Path [] (Time (1/0)))
     
-    startState = nodeStateDef // [startFishState] 
+    startState = debugHere "startStaet" $ nodeStateDef // [startFishState] 
       where
-        startFishTypes = foldl1 (.|.) $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
-        startFishState = (startFishTypes, (Path [start] (Time 0))) 
-    initialStateMap = HM.update (const (Just startState)) start $ HM.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
+        startFishTypes = foldl1 f $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
+        f a b = bit a .|. bit b
+        startFishState = debugHere "startFishState" $ (startFishTypes, (Path [start] (Time 0))) 
+    initialStateMap = debugHere "initialStateMap" $ HM.update (const (Just startState)) start $ HM.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
     initialQueue = singleton (Time 0) s
       where s = Opt (Time 0) start
     go :: HashMap Vertex NodeState -> PriorityQueue Time SourceOpt -> HashMap Vertex NodeState
@@ -224,20 +226,21 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
           where
             cost = maybe (error "no cost") id $ HM.lookup (u,v) edgeCostMap 
         adjs = maybe [] id $ HM.lookup u adjacencyMap
-        genState state u v cost = 
-          case isWorthStepping of 
+        genState state u v cost | debugHere "genState" True = 
+          case debugHere "isWorthStepping" isWorthStepping of 
                True  -> Just vState' 
                False -> Nothing
            where
-            uState = maybe (error "no uState") id $ HM.lookup u state
-            vState = maybe (error "no vState") id $ HM.lookup v state
-            vFishTypes =  foldl1 (.|.) $ maybe (error "no vFishTypes") id $ HM.lookup v fishTypeMap
-            (isWorthStepping, vState',_) = foldl foldFunc (False, vState,0) uState
+            uState = debugHere "uState" $ maybe (error "no uState") id $ HM.lookup u state
+            vState = debugHere "vState" $ maybe (error "no vState") id $ HM.lookup v state
+            vFishTypes =  foldl1 f $ maybe (error "no vFishTypes") id $ HM.lookup v fishTypeMap
+            f a b = bit a .|. bit b
+            (isWorthStepping, vState') = debugHere "foldl'" $ foldl' (debugHere "enter f" foldFunc) (False, debugHere "vState" vState) $ A.assocs $ debugId "uState" uState
               where
-                foldFunc (isUpdated, acc, k) path@(Path p a) = 
+                foldFunc (isUpdated, acc) (k, path@(Path p a)) | debugHere "foldFunc" True = 
                   if | a /= 1/0 -> let 
                            (k', path'@(Path p' a')) = ((k .|. vFishTypes), (Path (v:p) (a + cost)))
-                           origSolution = acc ! k' 
+                           origSolution = debugId "acc ! k'" $ acc ! k' 
                            shouldUpdate =
                                     case compare origSolution path' of
                                          LT -> False
@@ -246,9 +249,9 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
                            acc' | shouldUpdate == True = acc // [(k', path')]
                                 | otherwise = acc
                            isUpdated' = isUpdated || shouldUpdate
-                           in (isUpdated', acc', k+1)
+                           in (isUpdated', acc')
                              
-                     | otherwise -> (isUpdated, acc,k+1)
+                     | otherwise -> (isUpdated, acc)
 
 -- TODO: [x] NodeState needs to be MonoidalMap. 
 --       [x] And Time needs to be a newtype with customized <>.
