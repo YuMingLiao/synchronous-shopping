@@ -79,7 +79,7 @@ main = do
         (cityLines, edgeLines) = L.splitAt n rest
         testData = Test {
           numNodes = n,
-          numFishTypes = k,
+          numFishTypes = toInteger k,
           fishTypeMap = HM.fromList . zipWith (,) [1..n] . L.map (S.fromList . L.drop 1 . L.map read) . L.map words $ cityLines,
           edgeCostMap = let 
             undirectedEdgeCostList = L.map (\(u:v:c:[]) -> ((u,v),Time (fromIntegral c))) . L.map (L.map read . words) $ edgeLines
@@ -147,7 +147,7 @@ instance {-# OVERLAPPING #-} Show (HashMap Vertex NodeState) where
   show m = show $ HM.toList m
 
 
-type FishType = Int
+type FishType = Integer
 type Vertex = Int
 
 data Test = Test {
@@ -193,19 +193,22 @@ findFinalState :: Test -> Array Combination Path
 findFinalState testData@(Test {..}) = 
  maybe (error "no final state") id $ HM.lookup numNodes $ dijkstra testData 1
 
-type Combination = Int -- binary    
+type Combination = Integer -- binary    
 type NodeState = Array Combination Path 
 
 dijkstra (Test {..}) start = go initialStateMap initialQueue 
   where
-    numCombination = debugId "numCombination" $ 2^numFishTypes 
+    numCombination :: Integer
+    numCombination = debugId "numCombination" $ 2^numFishTypes
     nodeStateDef :: NodeState 
     nodeStateDef = debugHere "nodeStateDef" $ A.listArray (0, debugId "numCombination-1" $ numCombination-1) $ debugHere "repeat" $ repeat (Path [] (Time (1/0)))
     
     startState = debugHere "startStaet" $ nodeStateDef // [startFishState] 
       where
+        startFishTypes :: Integer
         startFishTypes = foldl f zeroBits $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
-        f b a = bit b .|. bit a
+        f :: Integer -> Integer -> Integer
+        f b a =  bit b .|. bit a
         startFishState = debugHere "startFishState" $ (startFishTypes, (Path [start] (Time 0))) 
     initialStateMap = debugHere "initialStateMap" $ HM.update (const (Just startState)) start $ HM.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
     initialQueue = singleton (Time 0) s
