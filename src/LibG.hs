@@ -32,14 +32,9 @@ main = do
         firstLine' = L.map read' . TL.words $ head firstLine
         n = firstLine' !! 0
         k = firstLine' !! 2
-        (cityLines, edgeLines) = L.splitAt n rest
-        fishTypeMap = M.fromList . zipWith (,) [1..n] . L.map (L.drop 1 . L.map read') . L.map TL.words $ cityLines
-        undirectedEdgeCostList = L.map (\(u:v:c:[]) -> ((u,v),c)) . L.map (L.map read' . TL.words) $ edgeLines
-        -- edgeCostMap = let 
-        --    undirectedEdgeCostList = L.map (\(u:v:c:[]) -> ((u,v),c)) . L.map (L.map read' . TL.words) $ edgeLines
-        --    in M.fromList $ undirectedEdgeCostList ++ L.map (\(e,t) -> (swap e, t)) undirectedEdgeCostList
-        vs = M.toList fishTypeMap
-        es = (\((a,b),c) -> (a,b,c)) <$> undirectedEdgeCostList 
+        undirectedEdges = rest & debugId "rest" & L.map ((L.map read) . words) & debugId "words and reads" & L.map (\(v:u:[]) -> (v, u)),
+        vs = zipWith [0..(n-1)] [0..(n-1)]
+        es = undirectedEdges & L.map \(a,b) -> (a,b,"")
  
 {-
 main :: IO ()

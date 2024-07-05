@@ -256,12 +256,8 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
                              
                      | otherwise -> (isUpdated, acc)
 
--- TODO: [x] NodeState needs to be MonoidalMap. 
---       [x] And Time needs to be a newtype with customized <>.
---       [x] gonna need a function (foldMapWithKey) of uState -> (vFishTypes, t) -> vState' 
---       [x] if vState' updates vState then put v into Q, otherwise don't.
---       [] hackerrank uses multiset instead of heap or piority queue
---       [] hackerrank uses Map (unionWith) insead of monoidal-containers 
+data STrie a b = STrie (Maybe b) (M.Map a (STrie a b))
+
 --function Dijkstra(Graph, source):
 --
 --      for each vertex v in Graph.Vertices:
