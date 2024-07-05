@@ -28,7 +28,7 @@ import Data.Ord (comparing)
 import Data.Hashable
 import Data.Array (Array, (!), (//))
 import qualified Data.Array as A
-import Data.Foldable (foldl')
+import Data.Foldable (foldl)
 import Data.Bits
 
 {- Hackerrank needs it.
@@ -185,7 +185,7 @@ findShortestTwoPaths testData@(Test {..}) = go sortedList
     finalState = findFinalState testData
     sortedList = L.sortOn ((\(Path _ t) -> t) . snd) $ A.assocs finalState
     completions = L.filter f [(x,y) |  x <- sortedList, y <- sortedList]
-    f ((s1,_),(s2,_)) = (s1 .|. s2) == length (S.fromList [1..numFishTypes]) - 1
+    f ((s1,_),(s2,_)) = (s1 .|. s2) == numFishTypes - 1
     go sortedList = (\((_,Path _ t1),(_,Path _ t2))-> max t1 t2) $ head $ L.sortOn sortFunc completions
     sortFunc ((_,Path _ t1),(_,Path _ t2)) = max t1 t2 
 
@@ -198,14 +198,14 @@ type NodeState = Array Combination Path
 
 dijkstra (Test {..}) start = go initialStateMap initialQueue 
   where
-    numCombination = debugId "numCombination" $ 2^numNodes 
+    numCombination = debugId "numCombination" $ 2^numFishTypes 
     nodeStateDef :: NodeState 
-    nodeStateDef = debugHere "nodeStateDef" $ A.listArray (0,debugId "numCombination-1" $ numCombination-1) $ debugHere "replicate" $ replicate numCombination (Path [] (Time (1/0)))
+    nodeStateDef = debugHere "nodeStateDef" $ A.listArray (0, debugId "numCombination-1" $ numCombination-1) $ debugHere "repeat" $ repeat (Path [] (Time (1/0)))
     
     startState = debugHere "startStaet" $ nodeStateDef // [startFishState] 
       where
-        startFishTypes = foldl1 f $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
-        f a b = bit a .|. bit b
+        startFishTypes = foldl f zeroBits $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
+        f b a = bit b .|. bit a
         startFishState = debugHere "startFishState" $ (startFishTypes, (Path [start] (Time 0))) 
     initialStateMap = debugHere "initialStateMap" $ HM.update (const (Just startState)) start $ HM.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
     initialQueue = singleton (Time 0) s
@@ -233,9 +233,9 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
            where
             uState = debugHere "uState" $ maybe (error "no uState") id $ HM.lookup u state
             vState = debugHere "vState" $ maybe (error "no vState") id $ HM.lookup v state
-            vFishTypes =  foldl1 f $ maybe (error "no vFishTypes") id $ HM.lookup v fishTypeMap
-            f a b = bit a .|. bit b
-            (isWorthStepping, vState') = debugHere "foldl'" $ foldl' (debugHere "enter f" foldFunc) (False, debugHere "vState" vState) $ A.assocs $ debugId "uState" uState
+            vFishTypes =  foldl f zeroBits $ maybe (error "no vFishTypes") id $ HM.lookup v fishTypeMap
+            f b a = bit b .|. bit a
+            (isWorthStepping, vState') = debugHere "foldl" $ foldl (debugHere "enter f" foldFunc) (False, debugHere "vState" vState) $ A.assocs $ debugId "uState" uState
               where
                 foldFunc (isUpdated, acc) (k, path@(Path p a)) | debugHere "foldFunc" True = 
                   if | a /= 1/0 -> let 
