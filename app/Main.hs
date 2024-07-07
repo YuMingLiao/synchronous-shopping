@@ -26,6 +26,11 @@ import Data.Maybe (fromJust)
 import Control.Exception (assert)
 import Data.Ord (comparing)
 import Data.Hashable
+import Data.Array (Array, (!), (//))
+import qualified Data.Array as A
+import Data.Foldable (foldl)
+import Data.Bits
+
 {- Hackerrank needs it.
 instance Hashable v => Hashable (S.Set v) where
     hashWithSalt salt x = S.foldl' hashWithSalt (hashWithSalt salt (S.size x)) x 
@@ -84,14 +89,15 @@ main = do
  
 -- print $ findShortestTwoPaths example 
 
-debugFlag = False
+debugFlag = True
 debug s a b | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) b 
             | otherwise = b   
 debugId s a | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) a 
             | otherwise = a   
 debugView s f a | debugFlag = Debug.Trace.trace (s ++ ": " ++ show (f a)) a 
                 | otherwise = a
-
+debugHere s a | debugFlag = Debug.Trace.trace s a
+              | otherwise = a
 debugWhen pred | pred && debugFlag == True = debug
                | otherwise = \_ _ b -> b 
 
@@ -177,28 +183,34 @@ toAdjacencyMap edges = HM.fromListWith (++) $ L.map (\(a,b) -> (a,b:[])) edges
 findShortestTwoPaths testData@(Test {..}) = go sortedList 
   where
     finalState = findFinalState testData
-    sortedList = L.sortOn ((\(Path _ t) -> t) . snd) $ HM.toList finalState
+    sortedList = L.sortOn ((\(Path _ t) -> t) . snd) $ A.assocs finalState
     completions = L.filter f [(x,y) |  x <- sortedList, y <- sortedList]
-    f ((s1,_),(s2,_)) = (s1 `S.union` s2) == (S.fromList [1..numFishTypes])
+    f ((s1,_),(s2,_)) = (s1 .|. s2) == (bit numFishTypes) - 1
     go sortedList = (\((_,Path _ t1),(_,Path _ t2))-> max t1 t2) $ head $ L.sortOn sortFunc completions
     sortFunc ((_,Path _ t1),(_,Path _ t2)) = max t1 t2 
 
-findFinalState :: Test -> HashMap (Set FishType) Path
+findFinalState :: Test -> Array Combination Path
 findFinalState testData@(Test {..}) = 
  maybe (error "no final state") id $ HM.lookup numNodes $ dijkstra testData 1
 
-    
-type NodeState = HashMap (Set FishType) Path
+type Combination = Integer -- binary    
+type NodeState = Array Combination Path 
 
 dijkstra (Test {..}) start = go initialStateMap initialQueue 
   where
+    numCombination :: Integer
+    numCombination = debugId "numCombination" $ 2^numFishTypes
     nodeStateDef :: NodeState 
-    nodeStateDef = HM.fromList $ L.map (,Path [] (Time (1/0))) $ S.toList $ S.powerSet [1..numFishTypes] 
-    startState = mconcat (startFishState:nodeStateDef:[]) 
+    nodeStateDef = debugHere "nodeStateDef" $ A.listArray (0, debugId "numCombination-1" $ numCombination-1) $ debugHere "repeat" $ repeat (Path [] (Time (1/0)))
+    
+    startState = debugHere "startStaet" $ nodeStateDef // [startFishState] 
       where
-        startFishTypes = maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
-        startFishState = HM.singleton startFishTypes (Path [start] (Time 0)) 
-    initialStateMap = HM.update (const (Just startState)) start $ HM.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
+        startFishTypes :: Integer
+        startFishTypes = foldl f zeroBits $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
+        f :: Integer -> Int -> Integer
+        f b a =  b .|. bit (a - 1)
+        startFishState = debugHere "startFishState" $ (startFishTypes, (Path [start] (Time 0))) 
+    initialStateMap = debugHere "initialStateMap" $ HM.update (const (Just startState)) start $ HM.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
     initialQueue = singleton (Time 0) s
       where s = Opt (Time 0) start
     go :: HashMap Vertex NodeState -> PriorityQueue Time SourceOpt -> HashMap Vertex NodeState
@@ -217,29 +229,27 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
           where
             cost = maybe (error "no cost") id $ HM.lookup (u,v) edgeCostMap 
         adjs = maybe [] id $ HM.lookup u adjacencyMap
-        genState state u v cost = 
-          case isWorthStepping of 
+        genState state u v cost | debugHere "genState" True = 
+          case debugHere "isWorthStepping" isWorthStepping of 
                True  -> Just vState' 
                False -> Nothing
            where
             uState = maybe (error "no uState") id $ HM.lookup u state
             vState = maybe (error "no vState") id $ HM.lookup v state
-            vFishTypes = maybe (error "no vFishTypes") id $ HM.lookup v fishTypeMap
-            (isWorthStepping, vState') = HM.foldrWithKey foldFunc (False, vState) uState
+            vFishTypes =  foldl f zeroBits $ debugId "vFishTypes" $ maybe (error "no vFishTypes") id $ HM.lookup v fishTypeMap
+            f b a = b .|. bit (a - 1)
+            (isWorthStepping, vState') = foldl foldFunc (False, vState) $ A.assocs $ uState
               where
-                foldFunc k path@(Path p a) (isUpdated, acc) = 
+                foldFunc (isUpdated, acc) (k, path@(Path p a)) = 
                   if | a /= 1/0 -> let 
-                           (k', path'@(Path p' a')) = ((k `S.union` vFishTypes), (Path (v:p) (a + cost)))
-                           maybeExist = HM.lookup k' acc
+                           (k', path'@(Path p' a')) = (((debugId "k " k) .|. (debugId "vFishTypes" vFishTypes)), (Path (v:p) (a + cost)))
+                           origSolution = acc ! (debugId "index k'" k') 
                            shouldUpdate =
-                             case maybeExist of 
-                                  Nothing -> True
-                                  (Just origSolution) -> 
                                     case compare origSolution path' of
                                          LT -> False
                                          EQ -> False
                                          GT -> True
-                           acc' | shouldUpdate == True = HM.insert k' path' acc
+                           acc' | shouldUpdate == True = acc // [(k', path')]
                                 | otherwise = acc
                            isUpdated' = isUpdated || shouldUpdate
                            in (isUpdated', acc')
