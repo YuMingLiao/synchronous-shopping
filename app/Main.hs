@@ -82,7 +82,8 @@ main = do
           numFishTypes = k,
           fishTypeMap = HM.fromList . zipWith (,) [1..n] . L.map (S.fromList . L.drop 1 . L.map read) . L.map words $ cityLines,
           edgeCostMap = let 
-            undirectedEdgeCostList = L.map (\(u:v:c:[]) -> ((u,v),Time (fromIntegral c))) . L.map (L.map read . words) $ edgeLines
+            undirectedEdgeCostList = L.map f . L.map (L.map read . words) $ edgeLines
+            f = \(u:v:c:[]) -> ((u,v),Time (fromIntegral c))
             in HM.fromList $ undirectedEdgeCostList ++ L.map (\(e,t) -> (swap e, t)) undirectedEdgeCostList,
           adjacencyMap = toAdjacencyMap (HM.keys (edgeCostMap testData))
         } 
