@@ -13,6 +13,7 @@ dependencies:
   - array
   - hashable
   - graphviz
+  - hashtables
 executable:
   dependencies:
     - synchronous-shopping
