@@ -256,7 +256,8 @@ dijkstra (Test {..}) start = do
             f b a = b .|. bit (a-1)
             loopFunc !isUpdated !k !a =  
               if | a < 1/0 -> do
-                   let (k', a') = ((k .|. vFishTypes), (a + cost))
+                   let !k' = k .|. vFishTypes
+                       !a' = a + cost
                    origSolution <- A.readArray vState k'
                    let shouldUpdate = case compare origSolution a' of
                                         LT -> False
