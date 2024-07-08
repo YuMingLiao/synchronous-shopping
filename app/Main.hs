@@ -7,10 +7,12 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE ScopedTypeVariables#-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE BangPatterns #-}
 
 module Main where
 import Prelude 
+import Data.Foldable (foldl')
 import qualified Data.List as L
 import Debug.Trace
 import Data.Set (Set)
@@ -75,7 +77,7 @@ main :: IO ()
 main = do
   interact $ processInput
   where
-    processInput input = show $ findShortestTwoPaths testData 
+    processInput input = show . round $ findShortestTwoPaths testData 
       where
         inputLines = lines input
         (firstLine, rest) = L.splitAt 1 inputLines
@@ -115,7 +117,8 @@ newtype Time = Time {
   unTime :: Float
 } deriving (Eq, Ord, Num, Fractional, RealFrac, Real)
 -}
-type Time = Double 
+type Time = Float 
+
 {-
 instance {-# Overlapping #-} Show Float where
   show t | t == 1/0 = "Infinity"
@@ -202,7 +205,7 @@ dijkstra (Test {..}) start = do
   let universalSet :: Integer
       universalSet = 2^numFishTypes - 1 
       startFishTypes :: Integer
-      startFishTypes = foldl f zeroBits $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
+      startFishTypes = foldl' f zeroBits $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
       f :: Integer -> Int -> Integer
       f b a = b .|. bit (a-1)
       initIndivNodeState = A.newArray (0, universalSet) (1/0)
@@ -240,18 +243,18 @@ dijkstra (Test {..}) start = do
            where
             universalSet :: Integer
             universalSet = 2^numFishTypes - 1
-            loopU i acc | i > universalSet = pure acc
+            loopU !i !acc | i > universalSet = pure acc
                         | otherwise = do
                           timeUsed <- A.readArray uState i
-                          acc' <- loopFunc acc (i, timeUsed)  
+                          acc' <- loopFunc acc i timeUsed  
                           loopU (i+1) acc'
 
             uState = fromMaybe (error "no uState") $ HM.lookup u state
             vState = fromMaybe (error "no vState") $ HM.lookup v state
-            vFishTypes = foldl f zeroBits $ fromMaybe (error "no vFishTypes") $ HM.lookup v fishTypeMap
+            vFishTypes = foldl' f zeroBits $ fromMaybe (error "no vFishTypes") $ HM.lookup v fishTypeMap
             f :: Integer -> Int -> Integer
             f b a = b .|. bit (a-1)
-            loopFunc isUpdated (k, a) =  
+            loopFunc !isUpdated !k !a =  
               if | a < 1/0 -> do
                    let (k', a') = ((k .|. vFishTypes), (a + cost))
                    origSolution <- A.readArray vState k'
