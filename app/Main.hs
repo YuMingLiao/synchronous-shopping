@@ -183,7 +183,7 @@ findShortestTwoPaths testData@(Test {..}) = go sortedList
 findFinalState :: Test -> HashMap Combination Time
 findFinalState testData@(Test {..}) = runST $ do 
   result <- (dijkstra testData 1 :: ST s (HashMap Vertex (NodeState s)))
-  let finalStateSTA = fromMaybe (error "no finalState") $ HM.lookup numNodes $ result
+  let finalStateSTA = fromMaybe (error "no finalState") $ HM.lookup numNodes result
   finalStateHM <- HM.fromList <$> loopF 0 [] finalStateSTA
   pure finalStateHM 
   where
@@ -196,7 +196,7 @@ findFinalState testData@(Test {..}) = runST $ do
 
 
 type Combination = Integer
-type NodeState s = STArray s Combination Time
+type NodeState s = STUArray s Combination Time
 
 dijkstra (Test {..}) start = do 
   let universalSet :: Integer
@@ -252,7 +252,7 @@ dijkstra (Test {..}) start = do
             f :: Integer -> Int -> Integer
             f b a = b .|. bit (a-1)
             loopFunc isUpdated (k, a) =  
-              if | a /= 1/0 -> do
+              if | a < 1/0 -> do
                    let (k', a') = ((k .|. vFishTypes), (a + cost))
                    origSolution <- A.readArray vState k'
                    let shouldUpdate = case compare origSolution a' of
