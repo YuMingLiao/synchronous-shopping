@@ -88,7 +88,7 @@ main = do
           numFishTypes = k,
           fishTypeMap = HM.fromList . zipWith (,) [1..n] . L.map (S.fromList . L.drop 1 . L.map read) . L.map words $ cityLines,
           edgeCostMap = let 
-            undirectedEdgeCostList = L.map (\(u:v:c:[]) -> ((u,v),Time (fromIntegral c))) . L.map (L.map read . words) $ edgeLines
+            undirectedEdgeCostList = L.map (\(u:v:c:[]) -> ((u,v),fromIntegral c)) . L.map (L.map read . words) $ edgeLines
             in HM.fromList $ undirectedEdgeCostList ++ L.map (\(e,t) -> (swap e, t)) undirectedEdgeCostList,
           adjacencyMap = toAdjacencyMap (HM.keys (edgeCostMap testData))
         } 
@@ -110,21 +110,17 @@ debugWhenId pred s a | pred a && debugFlag == True = debugId s a
                      | otherwise = a
 
 
-
+{-
 newtype Time = Time {
   unTime :: Float
 } deriving (Eq, Ord, Num, Fractional, RealFrac, Real)
-instance Show Time where
-  show (Time t) | t == 1/0 = "Infinity"
-                | otherwise =  show $ round t
-instance Semigroup Time where
-  a <> b | a <= b = a
-  a <> b | a >  b = b 
-
-data Path = Path {
-  path :: [Vertex],
-  time :: Time
-}
+-}
+type Time = Float
+{-
+instance {-# Overlapping #-} Show Float where
+  show t | t == 1/0 = "Infinity"
+         | otherwise =  show $ round t
+-}
 
 data SourceOpt = Opt {
   timeUsed :: Time,
@@ -133,13 +129,6 @@ data SourceOpt = Opt {
 instance Show SourceOpt where
   show (Opt t s) | s == 166 || s == 820 || s == 928 = show (t,s)
                  | otherwise = show (t,s)
-
-instance Show Path where
-  show (Path path time) = show (time, path)
-instance Eq Path where
-  (==) (Path _ t1) (Path _ t2) = t1 == t2
-instance Ord Path where
-  compare (Path _ t1) (Path _ t2) = compare t1 t2
 
 instance Ord SourceOpt where
   compare (Opt t1 v1) (Opt t2 v2) | compare t1 t2 == EQ = compare v1 v2
@@ -183,15 +172,15 @@ toAdjacencyMap edges = HM.fromListWith (++) $ L.map (\(a,b) -> (a,b:[])) edges
 findShortestTwoPaths testData@(Test {..}) = go sortedList 
   where
     finalState = findFinalState testData
-    sortedList = L.sortOn ((\(Path _ t) -> t) . snd) $ HM.toList finalState
+    sortedList = L.sortOn snd $ HM.toList finalState
     completions = L.filter f [(x,y) |  x <- sortedList, y <- sortedList]
     universalSet :: Integer
     universalSet = 2^numFishTypes - 1
     f ((s1,_),(s2,_)) = (s1 .|. s2) == universalSet
-    go sortedList = (\((_,Path _ t1),(_,Path _ t2))-> max t1 t2) $ head $ L.sortOn sortFunc completions
-    sortFunc ((_,Path _ t1),(_,Path _ t2)) = max t1 t2 
+    go sortedList = (\((_,t1),(_,t2))-> max t1 t2) $ head $ L.sortOn sortFunc completions
+    sortFunc ((_,t1),(_,t2)) = max t1 t2 
 
-findFinalState :: Test -> HashMap Combination Path
+findFinalState :: Test -> HashMap Combination Time
 findFinalState testData@(Test {..}) = runST $ do 
   result <- (dijkstra testData 1 :: ST s (HashMap Vertex (NodeState s)))
   let finalStateSTA = fromMaybe (error "no finalState") $ HM.lookup numNodes $ result
@@ -207,7 +196,7 @@ findFinalState testData@(Test {..}) = runST $ do
 
 
 type Combination = Integer
-type NodeState s = STArray s Combination Path
+type NodeState s = STArray s Combination Time
 
 dijkstra (Test {..}) start = do 
   let universalSet :: Integer
@@ -216,19 +205,19 @@ dijkstra (Test {..}) start = do
       startFishTypes = foldl f zeroBits $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
       f :: Integer -> Int -> Integer
       f b a = b .|. bit (a-1)
-      initIndivNodeState = A.newArray (0, universalSet) (Path [] (Time (1/0)))
+      initIndivNodeState = A.newArray (0, universalSet) (1/0)
   let loopHM i hm | i == numNodes + 1 = pure hm 
                 | otherwise = do
                   initialNodeState <- initIndivNodeState
-                  when (i==start) $ A.writeArray initialNodeState startFishTypes (Path [start] (Time 0))
+                  when (i==start) $ A.writeArray initialNodeState startFishTypes 0
                   let hm' = HM.insert i initialNodeState hm
                   loopHM (i+1) hm'
  
   state <- loopHM 1 HM.empty 
   go state initialQueue 
   where
-    initialQueue = singleton (Time 0) s
-      where s = Opt (Time 0) start
+    initialQueue = singleton 0 s
+      where s = Opt 0 start
     go state (minView -> Nothing) = pure state
     go state (minView -> Just ((Opt t u), rest)) = do
       queue' <- foldM f rest adjs
@@ -253,8 +242,8 @@ dijkstra (Test {..}) start = do
             universalSet = 2^numFishTypes - 1
             loopU i acc | i > universalSet = pure acc
                         | otherwise = do
-                          path <- A.readArray uState i
-                          acc' <- loopFunc acc (i, path)  
+                          timeUsed <- A.readArray uState i
+                          acc' <- loopFunc acc (i, timeUsed)  
                           loopU (i+1) acc'
 
             uState = fromMaybe (error "no uState") $ HM.lookup u state
@@ -262,16 +251,16 @@ dijkstra (Test {..}) start = do
             vFishTypes = foldl f zeroBits $ fromMaybe (error "no vFishTypes") $ HM.lookup v fishTypeMap
             f :: Integer -> Int -> Integer
             f b a = b .|. bit (a-1)
-            loopFunc isUpdated (k, path@(Path p a)) =  
+            loopFunc isUpdated (k, a) =  
               if | a /= 1/0 -> do
-                   let (k', path'@(Path p' a')) = ((k .|. vFishTypes), (Path (v:p) (a + cost)))
+                   let (k', a') = ((k .|. vFishTypes), (a + cost))
                    origSolution <- A.readArray vState k'
-                   let shouldUpdate = case compare origSolution path' of
+                   let shouldUpdate = case compare origSolution a' of
                                         LT -> False
                                         EQ -> False
                                         GT -> True
                        isUpdated' = isUpdated || shouldUpdate
-                   when shouldUpdate $ A.writeArray vState k' path'
+                   when shouldUpdate $ A.writeArray vState k' a'
                    pure isUpdated'
                              
                  | otherwise -> pure isUpdated
