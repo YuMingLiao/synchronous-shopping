@@ -35,6 +35,7 @@ import Control.Monad (foldM, when)
 import Data.Functor (fmap)
 import Data.Array.ST as A
 import Data.Array.MArray as A
+import Data.Array.Unboxed as A
 import Data.Bits
 import Numeric (showIntAtBase)
 import Data.Char (intToDigit)
@@ -184,22 +185,21 @@ findShortestTwoPaths testData@(Test {..}) = go sortedList
     sortFunc ((_,t1),(_,t2)) = max t1 t2 
 
 findFinalState :: Test -> HashMap Combination Time
-findFinalState testData@(Test {..}) = runST $ do 
-  result <- (dijkstra testData 1 :: ST s (HashMap Vertex (NodeState s)))
-  let finalStateSTA = fromMaybe (error "no finalState") $ HM.lookup numNodes result
-  finalStateHM <- HM.fromList <$> loopF 0 [] finalStateSTA
-  pure finalStateHM 
+findFinalState testData@(Test {..}) =  
+  let r = runSTUArray (dijkstra testData 1 :: ST s (NodeState s))
+      finalStateHM = HM.fromList $ loopF 0 [] r
+  in finalStateHM 
   where
     universalSet = 2^numFishTypes - 1
-    loopF i acc arr | i > universalSet = pure acc
-                   | otherwise = do
-                     e <- A.readArray arr i
-                     loopF (i+1) ((i,e) : acc) arr
+    loopF i acc arr | i > universalSet = acc
+                    | otherwise =
+                      let e = arr A.! (numNodes,i)
+                      in loopF (i+1) ((i,e) : acc) arr
 
 
 
 type Combination = Integer
-type NodeState s = STUArray s Combination Time
+type NodeState s = STUArray s (Vertex,Combination) Time
 
 dijkstra (Test {..}) start = do 
   let universalSet :: Integer
@@ -208,15 +208,8 @@ dijkstra (Test {..}) start = do
       startFishTypes = foldl' f zeroBits $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
       f :: Integer -> Int -> Integer
       f b a = b .|. bit (a-1)
-      initIndivNodeState = A.newArray (0, universalSet) (1/0)
-  let loopHM i hm | i == numNodes + 1 = pure hm 
-                | otherwise = do
-                  initialNodeState <- initIndivNodeState
-                  when (i==start) $ A.writeArray initialNodeState startFishTypes 0
-                  let hm' = HM.insert i initialNodeState hm
-                  loopHM (i+1) hm'
- 
-  state <- loopHM 1 HM.empty 
+  state <- A.newArray ((1,0),(numNodes,universalSet)) (1/0)
+  A.writeArray state (start,startFishTypes) 0 
   go state initialQueue 
   where
     initialQueue = singleton 0 s
@@ -243,14 +236,12 @@ dijkstra (Test {..}) start = do
            where
             universalSet :: Integer
             universalSet = 2^numFishTypes - 1
-            loopU !i !acc | i > universalSet = pure acc
-                        | otherwise = do
-                          timeUsed <- A.readArray uState i
-                          acc' <- loopFunc acc i timeUsed  
-                          loopU (i+1) acc'
+            loopU !comb !isUpdated | comb > universalSet = pure isUpdated
+                                   | otherwise = do
+                                     timeUsed <- A.readArray state (u,comb)
+                                     isUpdated' <- loopFunc isUpdated comb timeUsed  
+                                     loopU (comb+1) isUpdated'
 
-            uState = fromMaybe (error "no uState") $ HM.lookup u state
-            vState = fromMaybe (error "no vState") $ HM.lookup v state
             vFishTypes = foldl' f zeroBits $ fromMaybe (error "no vFishTypes") $ HM.lookup v fishTypeMap
             f :: Integer -> Int -> Integer
             f b a = b .|. bit (a-1)
@@ -258,37 +249,15 @@ dijkstra (Test {..}) start = do
               if | a < 1/0 -> do
                    let !k' = k .|. vFishTypes
                        !a' = a + cost
-                   origSolution <- A.readArray vState k'
+                   origSolution <- A.readArray state (v,k')
                    let shouldUpdate = case compare origSolution a' of
                                         LT -> False
                                         EQ -> False
                                         GT -> True
                        isUpdated' = isUpdated || shouldUpdate
-                   when shouldUpdate $ A.writeArray vState k' a'
+                   when shouldUpdate $ A.writeArray state (v,k') a'
                    pure isUpdated'
                              
                  | otherwise -> pure isUpdated
 
--- TODO: [x] NodeState needs to be MonoidalMap. 
---       [x] And Time needs to be a newtype with customized <>.
---       [x] gonna need a function (foldMapWithKey) of uState -> (vFishTypes, t) -> vState' 
---       [x] if vState' updates vState then put v into Q, otherwise don't.
---       [] hackerrank uses multiset instead of heap or piority queue
---       [] hackerrank uses Map (unionWith) insead of monoidal-containers 
---function Dijkstra(Graph, source):
---
---      for each vertex v in Graph.Vertices:
---          dist[v] <- INFINITY
---          add v to Q
---      dist[source] <- 0
---
---      while Q is not empty:
---          u <- vertex in Q with min dist[u]
---
---          for each neighbor v of u:
---              alt <- dist[u] + Graph.Edges(u, v)
---              if alt < dist[v] and dist[u] is not INFINITY:
---                  dist[v] <- alt
---                  put v into Q.
---          
---      return dist[]
+
