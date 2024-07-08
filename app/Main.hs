@@ -115,7 +115,7 @@ newtype Time = Time {
   unTime :: Float
 } deriving (Eq, Ord, Num, Fractional, RealFrac, Real)
 -}
-type Time = Float
+type Time = Double 
 {-
 instance {-# Overlapping #-} Show Float where
   show t | t == 1/0 = "Infinity"
