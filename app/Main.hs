@@ -39,6 +39,13 @@ import Data.Array.Unboxed as A
 import Data.Bits
 import Numeric (showIntAtBase)
 import Data.Char (intToDigit)
+import Data.Hashable
+{-
+instance Hashable v => Hashable (S.Set v) where                                                                                                             
+    hashWithSalt salt x = S.foldl' hashWithSalt (hashWithSalt salt (S.size x)) x
+-}
+
+
 showBits i = "0b" ++ (replicate (3 - length bits) ' ') ++ bits
   where
     bits = showIntAtBase 2 intToDigit i ""
@@ -128,18 +135,14 @@ instance {-# Overlapping #-} Show Float where
 
 data SourceOpt = Opt {
   timeUsed :: Time,
-  source :: Vertex
+  source :: Vertex,
+  bought :: Combination
 } deriving Eq 
-instance Show SourceOpt where
-  show (Opt t s) | s == 166 || s == 820 || s == 928 = show (t,s)
-                 | otherwise = show (t,s)
 
 instance Ord SourceOpt where
-  compare (Opt t1 v1) (Opt t2 v2) | compare t1 t2 == EQ = compare v1 v2
+  compare (Opt t1 v1 _) (Opt t2 v2 _) | compare t1 t2 == EQ = compare v1 v2
                                   | otherwise = compare t1 t2
  
-    where eiShop v1 v2 =v1 `elem` ([166,820,928] :: [Vertex]) || v2 `elem` ([166,820,928] :: [Vertex])
-
 type FishType = Int
 type Vertex = Int
 
@@ -208,56 +211,35 @@ dijkstra (Test {..}) start = do
       startFishTypes = foldl' f zeroBits $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
       f :: Integer -> Int -> Integer
       f b a = b .|. bit (a-1)
+      s = Opt 0 start startFishTypes
+      initialQueue = singleton 0 s
   state <- A.newArray ((1,0),(numNodes,universalSet)) (1/0)
   A.writeArray state (start,startFishTypes) 0 
   go state initialQueue 
   where
-    initialQueue = singleton 0 s
-      where s = Opt 0 start
     go state (minView -> Nothing) = pure state
-    go state (minView -> Just ((Opt t u), rest)) = do
-      queue' <- foldM f rest adjs
-      go state queue'
+    go state (minView -> Just ((Opt t u mask), pq)) = do
+      pq' <- foldM step pq adjs
+      go state pq'
       where
-        f queue v = do 
-          stepped <- step u v cost 
-          case stepped of
-               True -> 
+        adjs = fromMaybe [] $ HM.lookup u adjacencyMap
+        step queue v = do 
+          let !mask' = mask .|. vFishTypes
+              !tmp = t + cost
+          orig <- A.readArray state (v,mask')
+          case (tmp < orig) of
+               True -> do
+                 A.writeArray state (v,mask') tmp
                  pure accQueue
                  where 
-                   sourceOpt = Opt (t + cost) v
-                   accQueue = insert (t + cost) sourceOpt queue
-               False -> pure queue
+                   sourceOpt = Opt tmp v mask'
+                   accQueue = insert tmp sourceOpt queue
+               False -> do
+                 pure queue
           where
             cost = fromMaybe (error "no cost") $ HM.lookup (u,v) edgeCostMap 
-        adjs = fromMaybe [] $ HM.lookup u adjacencyMap
-        step u v cost = do
-          loopU 0 False
-           where
-            universalSet :: Integer
-            universalSet = 2^numFishTypes - 1
-            loopU !comb !isUpdated | comb > universalSet = pure isUpdated
-                                   | otherwise = do
-                                     timeUsed <- A.readArray state (u,comb)
-                                     isUpdated' <- loopFunc isUpdated comb timeUsed  
-                                     loopU (comb+1) isUpdated'
-
             vFishTypes = foldl' f zeroBits $ fromMaybe (error "no vFishTypes") $ HM.lookup v fishTypeMap
             f :: Integer -> Int -> Integer
             f b a = b .|. bit (a-1)
-            loopFunc !isUpdated !k !a =  
-              if | a < 1/0 -> do
-                   let !k' = k .|. vFishTypes
-                       !a' = a + cost
-                   origSolution <- A.readArray state (v,k')
-                   let shouldUpdate = case compare origSolution a' of
-                                        LT -> False
-                                        EQ -> False
-                                        GT -> True
-                       isUpdated' = isUpdated || shouldUpdate
-                   when shouldUpdate $ A.writeArray state (v,k') a'
-                   pure isUpdated'
-                             
-                 | otherwise -> pure isUpdated
-
+            
 
