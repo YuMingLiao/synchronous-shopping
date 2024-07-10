@@ -93,19 +93,25 @@ main = do
         n = firstLine' !! 0
         k = firstLine' !! 2
         (cityLines, edgeLines) = L.splitAt n rest
+        undirectedEdgeCostList = L.map (\(u:v:c:[]) -> ((u,v),Just (fromIntegral c))) . L.map (L.map read . words) $ edgeLines
+        edgeCostAL = undirectedEdgeCostList ++ L.map (\(e,t) -> (swap e, t)) undirectedEdgeCostList
         testData = Test {
           numNodes = n,
           numFishTypes = k,
-          fishTypeMap = A.array (1,n) . zipWith (,) [1..n] . L.map (S.fromList . L.drop 1 . L.map read) . L.map words $ cityLines,
-          edgeCostMap = let 
-            undirectedEdgeCostList = L.map (\(u:v:c:[]) -> ((u,v),fromIntegral c)) . L.map (L.map read . words) $ edgeLines
-            in HM.fromList $ undirectedEdgeCostList ++ L.map (\(e,t) -> (swap e, t)) undirectedEdgeCostList,
-          adjacencyMap = toAdjacencyMap (HM.keys (edgeCostMap testData))
+          fishTypeMap = debugId "fishTypeMap" $ A.array (1,n) . zipWith (,) [1..n] . L.map (S.fromList . L.drop 1 . L.map read) . L.map words $ cityLines,
+          edgeCostMap = debugId "edgeCostMap" $ (A.listArray ((1,1),(n,n)) $ take (n*n) $ repeat Nothing) // edgeCostAL,
+          adjacencyMap = debugId "adjacencyMap" $ (A.listArray (1,n) $ take n (repeat [])) // groupOn edgeCostAL 
         } 
- 
--- print $ findShortestTwoPaths example 
 
-debugFlag = True 
+groupOn l = go (debugId "sortOn" $ L.sortOn (fst.fst) l) []
+  where
+    go [] acc = acc
+    go (((a,b),Just c):xs) [] = go xs [(a,[(b,c)])] 
+    go (((a,b),Nothing):xs) acc = go xs acc 
+    go (((a,b),Just c):xs) acc@(((a',elems):ys)) | a == a' = debugId "group" $ go xs ((a', (b,c):elems) :ys)
+                                                 | a /= a' = debugId "not group" $ go xs ((a,[(b,c)]):acc)
+
+debugFlag = False 
 debug s a b | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) b 
             | otherwise = b   
 debugId s a | debugFlag = Debug.Trace.trace (s ++ ": " ++ show a) a 
@@ -149,32 +155,11 @@ type Vertex = Int
 data Test = Test {
   numNodes :: Int,
   numFishTypes :: FishType,
-  fishTypeMap :: HashMap Vertex (Set FishType),
-  edgeCostMap :: HashMap (Vertex, Vertex) Time,
-  adjacencyMap :: HashMap Vertex [Vertex]
-  -- ans :: Time
+  fishTypeMap :: A.Array Vertex (Set FishType),
+  edgeCostMap :: A.Array (Vertex, Vertex) (Maybe Time),
+  adjacencyMap :: A.Array Vertex [(Vertex, Time)]
  }
 
-example = Test {
-  numNodes = 5,
-  numFishTypes = 3,
-  fishTypeMap = [(1,[1]),(2,[2]),(3,[2,3]),(4,[2]),(5,[2])],
-  edgeCostMap = let 
-      undirectedEdgeCostList = [((1,2),10),((1,3),15),((1,4),1),((3,5),5)]
-    in HM.fromList $ undirectedEdgeCostList ++ L.map (\(e,t) -> (swap e, t)) undirectedEdgeCostList,
-  adjacencyMap = toAdjacencyMap (HM.keys (edgeCostMap example)) --, ans = Time 20
-}
-sample = Test {
-  numNodes = 5,
-  numFishTypes = 5,
-  fishTypeMap = [(1,[1]),(2,[1,2]),(3,[3]),(4,[4]),(5,[5])],
-  edgeCostMap = let 
-      undirectedEdgeCostList = [((1,2),10), ((1,3),10), ((2,4),10), ((3,5),10), ((4,5),10)]
-    in HM.fromList $ undirectedEdgeCostList ++ L.map (\(e,t) -> (swap e, t)) undirectedEdgeCostList,
-  adjacencyMap = toAdjacencyMap (HM.keys (edgeCostMap sample)) --, ans = Time 30
-}
-
-toAdjacencyMap edges = HM.fromListWith (++) $ L.map (\(a,b) -> (a,b:[])) edges
 
 findShortestTwoPaths testData@(Test {..}) = go sortedList 
   where
@@ -208,7 +193,7 @@ dijkstra (Test {..}) start = do
   let universalSet :: Integer
       universalSet = 2^numFishTypes - 1 
       startFishTypes :: Integer
-      startFishTypes = foldl' f zeroBits $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
+      startFishTypes = foldl' f zeroBits $ fishTypeMap A.! start
       f :: Integer -> Int -> Integer
       f b a = b .|. bit (a-1)
       s = Opt 0 start startFishTypes
@@ -222,7 +207,7 @@ dijkstra (Test {..}) start = do
       pq' <- foldM step pq adjs
       go state pq'
       where
-        adjs = fromMaybe [] $ HM.lookup u adjacencyMap
+        adjs = fst <$> adjacencyMap A.! u
         step queue v = do 
           let !mask' = mask .|. vFishTypes
               !tmp = t + cost
@@ -237,8 +222,8 @@ dijkstra (Test {..}) start = do
                False -> do
                  pure queue
           where
-            cost = fromMaybe (error "no cost") $ HM.lookup (u,v) edgeCostMap 
-            vFishTypes = foldl' f zeroBits $ fromMaybe (error "no vFishTypes") $ HM.lookup v fishTypeMap
+            cost = fromMaybe (error "no cost") $ edgeCostMap A.! (u,v)
+            vFishTypes = foldl' f zeroBits $ fishTypeMap A.! v
             f :: Integer -> Int -> Integer
             f b a = b .|. bit (a-1)
             
