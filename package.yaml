@@ -19,6 +19,6 @@ executable:
     - synchronous-shopping
   main: app/Main.hs
 library:
-#  exposed-modules:
-#    PiorityQueue
+  #  exposed-modules:
+  #  PairHeap
   source-dirs: src

@@ -44,42 +44,43 @@ import Data.Hashable
 instance Hashable v => Hashable (S.Set v) where                                                                                                             
     hashWithSalt salt x = S.foldl' hashWithSalt (hashWithSalt salt (S.size x)) x
 -}
+data Heap a = Empty | Heap a [(Heap a)]
+    deriving Show
 
+singleton :: Ord a => a -> Heap a
+singleton a = Heap a []
+
+findMin :: Heap a -> a
+findMin (Heap h _) = h
+
+minView :: Ord a => Heap a -> Maybe (a, Heap a)
+minView (Heap x hs) = Just (x, mergePairs hs)
+minView Empty = Nothing
+
+merge :: Ord a => Heap a -> Heap a -> Heap a
+merge Empty h = h
+merge h Empty = h
+merge h1@(Heap x hs1) h2@(Heap y hs2)
+    | x < y     = Heap x (h2:hs1)
+    | otherwise = Heap y (h1:hs2)
+
+mergePairs :: Ord a => [Heap a] -> Heap a
+mergePairs []           = Empty
+mergePairs [h]          = h
+mergePairs (h1:h2:hs)   = merge (merge h1 h2) (mergePairs hs)
+
+insert :: Ord a => a -> Heap a -> Heap a
+insert x = merge (Heap x [])
+
+deleteMin :: Ord a => Heap a -> Heap a
+deleteMin (Heap x hs) = mergePairs hs
 
 showBits i = "0b" ++ (replicate (3 - length bits) ' ') ++ bits
   where
     bits = showIntAtBase 2 intToDigit i ""
 
 
-data PriorityQueue k a = Nil | Branch k a (PriorityQueue k a) (PriorityQueue k a)
 
-empty :: Ord k => PriorityQueue k a
-empty = Nil
-
-singleton :: Ord k => k -> a -> PriorityQueue k a
-singleton k a = Branch k a Nil Nil
-
-minKeyValue :: Ord k => PriorityQueue k a -> (k, a)
-minKeyValue Nil              = error "empty queue"
-minKeyValue (Branch k a _ _) = (k, a)
-
-
-minView :: Ord k => PriorityQueue k a -> Maybe (a, PriorityQueue k a)
-minView Nil              = Nothing
-minView (Branch _ a l r) = Just (a, union l r)
-
-union :: Ord k => PriorityQueue k a -> PriorityQueue k a -> PriorityQueue k a
-union l Nil = l
-union Nil r = r
-union l@(Branch kl _ _ _) r@(Branch kr _ _ _)
-    | kl <= kr  = link l r
-    | otherwise = link r l
-
-link (Branch k a Nil m) r = Branch k a r m
-link (Branch k a ll lr) r = Branch k a lr (union ll r)
-
-insert :: Ord k => k -> a -> PriorityQueue k a -> PriorityQueue k a
-insert k a q = union (singleton k a) q
 
 main :: IO ()
 main = do
@@ -126,11 +127,7 @@ debugWhenId pred s a | pred a && debugFlag == True = debugId s a
                      | otherwise = a
 
 
-{-
-newtype Time = Time {
-  unTime :: Float
-} deriving (Eq, Ord, Num, Fractional, RealFrac, Real)
--}
+
 type Time = Float 
 
 {-
@@ -197,7 +194,7 @@ dijkstra (Test {..}) start = do
       f :: Integer -> Int -> Integer
       f b a = b .|. bit (a-1)
       s = Opt 0 start startFishTypes
-      initialQueue = singleton 0 s
+      initialQueue = singleton s
   state <- A.newArray ((1,0),(numNodes,universalSet)) (1/0)
   A.writeArray state (start,startFishTypes) 0 
   go state initialQueue 
@@ -218,7 +215,7 @@ dijkstra (Test {..}) start = do
                  pure accQueue
                  where 
                    sourceOpt = Opt tmp v mask'
-                   accQueue = insert tmp sourceOpt queue
+                   accQueue = insert sourceOpt queue
                False -> do
                  pure queue
           where
