@@ -207,8 +207,8 @@ dijkstra (Test {..}) start = do
       pq' <- foldM step pq adjs
       go state pq'
       where
-        adjs = fst <$> adjacencyMap A.! u
-        step queue v = do 
+        adjs = adjacencyMap A.! u
+        step queue (v,cost) = do 
           let !mask' = mask .|. vFishTypes
               !tmp = t + cost
           orig <- A.readArray state (v,mask')
@@ -222,7 +222,6 @@ dijkstra (Test {..}) start = do
                False -> do
                  pure queue
           where
-            cost = fromMaybe (error "no cost") $ edgeCostMap A.! (u,v)
             vFishTypes = foldl' f zeroBits $ fishTypeMap A.! v
             f :: Integer -> Int -> Integer
             f b a = b .|. bit (a-1)
