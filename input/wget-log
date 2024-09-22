@@ -1,0 +1,6 @@
+--2024-06-30 09:41:13--  https://hr-testcases-us-east-1.s3.amazonaws.com/19049/input18.txt?response-content-type=text%2Fplain
+Resolving hr-testcases-us-east-1.s3.amazonaws.com (hr-testcases-us-east-1.s3.amazonaws.com)... 3.5.16.19, 52.216.219.129, 52.217.85.172, ...
+Connecting to hr-testcases-us-east-1.s3.amazonaws.com (hr-testcases-us-east-1.s3.amazonaws.com)|3.5.16.19|:443... connected.
+HTTP request sent, awaiting response... 400 Bad Request
+2024-06-30 09:41:16 ERROR 400: Bad Request.
+
