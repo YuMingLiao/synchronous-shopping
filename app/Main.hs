@@ -199,26 +199,26 @@ type NodeState = Array Combination Path
 dijkstra (Test {..}) start = go initialStateMap initialQueue 
   where
     numCombination :: Integer
-    numCombination = debugId "numCombination" $ 2^numFishTypes
+    numCombination = 2^numFishTypes
     nodeStateDef :: NodeState 
-    nodeStateDef = debugHere "nodeStateDef" $ A.listArray (0, debugId "numCombination-1" $ numCombination-1) $ debugHere "repeat" $ repeat (Path [] (Time (1/0)))
+    nodeStateDef = A.listArray (0, numCombination-1) $ repeat (Path [] (Time (1/0)))
     
-    startState = debugHere "startStaet" $ nodeStateDef // [startFishState] 
+    startState = nodeStateDef // [startFishState] 
       where
         startFishTypes :: Integer
         startFishTypes = foldl f zeroBits $ maybe (error "no startFishTypes") id $ HM.lookup start fishTypeMap 
         f :: Integer -> Int -> Integer
         f b a =  b .|. bit (a - 1)
-        startFishState = debugHere "startFishState" $ (startFishTypes, (Path [start] (Time 0))) 
-    initialStateMap = debugHere "initialStateMap" $ HM.update (const (Just startState)) start $ HM.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
+        startFishState = (startFishTypes, (Path [start] (Time 0))) 
+    initialStateMap = HM.update (const (Just startState)) start $ HM.fromList $ zipWith (,) [1..numNodes] (repeat nodeStateDef)
     initialQueue = singleton (Time 0) s
       where s = Opt (Time 0) start
     go :: HashMap Vertex NodeState -> PriorityQueue Time SourceOpt -> HashMap Vertex NodeState
     go state (minView -> Nothing) = state
-    go state (minView -> Just ((Opt t u), rest)) | debug "u" u True = go state' queue'
+    go state (minView -> Just ((Opt t u), rest)) = go state' queue'
       where
         (state', queue') = L.foldl f (state,rest) adjs
-        f (state, queue) v | debug "v" v True = 
+        f (state, queue) v = 
           case genState state u v cost of
                Just vState' -> (state', accQueue)
                  where 
@@ -229,21 +229,21 @@ dijkstra (Test {..}) start = go initialStateMap initialQueue
           where
             cost = maybe (error "no cost") id $ HM.lookup (u,v) edgeCostMap 
         adjs = maybe [] id $ HM.lookup u adjacencyMap
-        genState state u v cost | debugHere "genState" True = 
-          case debugHere "isWorthStepping" isWorthStepping of 
+        genState state u v cost = 
+          case isWorthStepping of 
                True  -> Just vState' 
                False -> Nothing
            where
             uState = maybe (error "no uState") id $ HM.lookup u state
             vState = maybe (error "no vState") id $ HM.lookup v state
-            vFishTypes =  foldl f zeroBits $ debugId "vFishTypes" $ maybe (error "no vFishTypes") id $ HM.lookup v fishTypeMap
+            vFishTypes =  foldl f zeroBits $ maybe (error "no vFishTypes") id $ HM.lookup v fishTypeMap
             f b a = b .|. bit (a - 1)
             (isWorthStepping, vState') = foldl foldFunc (False, vState) $ A.assocs $ uState
               where
                 foldFunc (isUpdated, acc) (k, path@(Path p a)) = 
                   if | a /= 1/0 -> let 
-                           (k', path'@(Path p' a')) = (((debugId "k " k) .|. (debugId "vFishTypes" vFishTypes)), (Path (v:p) (a + cost)))
-                           origSolution = acc ! (debugId "index k'" k') 
+                           (k', path'@(Path p' a')) = ((k .|. vFishTypes), (Path (v:p) (a + cost)))
+                           origSolution = acc ! k' 
                            shouldUpdate =
                                     case compare origSolution path' of
                                          LT -> False
